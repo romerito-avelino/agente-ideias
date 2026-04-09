@@ -1,0 +1,213 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #0f0f0f;
+  color: #f1f1f1;
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 48px 24px;
+}
+
+.container {
+  width: 100%;
+  max-width: 720px;
+}
+
+h1 {
+  font-size: 2.2rem;
+  color: #ff0000;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  color: #aaa;
+  margin-bottom: 32px;
+  font-size: 1rem;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+label {
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid #333;
+  background-color: #1a1a1a;
+  color: #f1f1f1;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+input[type="text"]:focus {
+  border-color: #ff0000;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  background-color: #ff0000;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+button:hover {
+  background-color: #cc0000;
+}
+
+button:disabled {
+  background-color: #555;
+  cursor: not-allowed;
+}
+
+/* Loading */
+.loading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+  color: #aaa;
+  font-size: 0.95rem;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid #333;
+  border-top-color: #ff0000;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Erro */
+.erro {
+  margin-top: 20px;
+  padding: 14px 16px;
+  background-color: #2a0a0a;
+  border: 1px solid #660000;
+  border-radius: 8px;
+  color: #ff6b6b;
+  font-size: 0.95rem;
+}
+
+/* Resultado */
+.resultado {
+  margin-top: 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.secao {
+  background-color: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  padding: 20px 24px;
+}
+
+.secao h2 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ff4444;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Títulos */
+.lista-titulos {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  counter-reset: titulo-counter;
+}
+
+.lista-titulos li {
+  counter-increment: titulo-counter;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+.lista-titulos li::before {
+  content: counter(titulo-counter);
+  background-color: #ff0000;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: bold;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* Abordagens */
+.lista-abordagens {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lista-abordagens li {
+  padding-left: 16px;
+  border-left: 3px solid #ff0000;
+  line-height: 1.5;
+  font-size: 0.95rem;
+  color: #ddd;
+}
+
+/* Sinopse */
+.sinopse {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sinopse p {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: #ddd;
+}
+
+/* Ideia de capa */
+.ideia-capa {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: #ddd;
+  font-style: italic;
+}

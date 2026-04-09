@@ -1,0 +1,30 @@
+{
+  "name": "agente-ideias",
+  "version": "1.0.0",
+  "description": "Agente de criação de ideias para vídeos do YouTube",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/romerito-avelino/agente-ideias.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/romerito-avelino/agente-ideias/issues"
+  },
+  "homepage": "https://github.com/romerito-avelino/agente-ideias#readme",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.82.0",
+    "@distube/ytdl-core": "^4.16.12",
+    "axios": "^1.14.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1"
+  }
+}

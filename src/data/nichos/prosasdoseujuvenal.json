@@ -1,0 +1,53 @@
+{
+  "canal": "Prosas do Seu Juvenal",
+  "nicho": "Histórias cotidianas de sabedoria - crônicas da terceira idade",
+  "avatar": {
+    "nome": "Seu Juvenal",
+    "idade": 70,
+    "personalidade": "É um senhor, alegre, sábio, mais pensativo",
+    "historia": {
+      "profissao": "Ex Agente da SUCAM / aposentado",
+      "familia": "Divorciado, com a primeira esposa, e casado com a atual/2 filhos do primeiro casamento e 2 filhos da união atual",
+      "estiloDeVida": "Mora numa chácara no interior de Rio Verde GO, vive de sua aposentadoria, mais cria tilápias em tanques elevados para consumo.",
+      "biografia": "Seu Juvenal, em sua mocidade, prestou serviços para a Superintendência de Campanhas de Saúde Pública (Sucam), criada em 1970. Tratava-se de um órgão federal brasileiro responsável pelo combate a endemias como malária, varíola, doença de Chagas e febre amarela, sendo bastante conhecido por seus agentes, os chamados “sucaneiros”, que pulverizavam casas com DDT.\n\nSeu Juvenal começou a trabalhar na Sucam em 1982, sendo, na época, lotado na cidade de Carolina, no Maranhão. Em suas andanças prestando serviço para o órgão, ele se apaixonou por Cleonice. Não demorou muito para que se casassem, formando uma família que, com o tempo, cresceu com a chegada de dois filhos: Kaline e Vinícios.\n\nPor motivos de baixo efetivo, Seu Juvenal frequentemente precisava prestar serviços fora de sua cidade de lotação. Em um desses deslocamentos, acabou se envolvendo em relacionamentos extraconjugais com garotas mais novas. E isso passou a se repetir sempre que ele se ausentava de casa.\n\nNaquela época, Seu Juvenal não dimensionava o peso de suas escolhas. Para ele, eram apenas deslizes passageiros, erros que acreditava poder esconder atrás da distância e do silêncio. Mas, como quase sempre acontece, a verdade encontrou caminhos para se revelar.\n\nCleonice, mulher firme e dedicada, acabou descobrindo as traições. O que antes era um lar estruturado, cheio de sonhos e planos, começou a ruir. A confiança foi quebrada e, com ela, o respeito que sustentava o casamento. Mesmo diante das tentativas de justificar seus atos, Seu Juvenal não conseguiu reconstruir o que havia destruído. O casamento chegou ao fim, deixando marcas profundas, principalmente nos filhos, Kaline e Vinícios, que cresceram testemunhando a dor da mãe.\n\nCom o passar dos anos, Seu Juvenal tentou recomeçar. Formou uma nova família, acreditando que poderia, de alguma forma, corrigir o rumo da própria história. Casou-se novamente e teve outros filhos. No entanto, a vida já não lhe oferecia a mesma paz e tranquilidade de antes. Havia sempre um vazio difícil de explicar, uma sensação constante de que algo essencial havia se perdido no caminho.\n\nSua nova esposa, embora presente, não tinha o mesmo cuidado e cumplicidade que Cleonice demonstrava nos tempos antigos. O lar que construiu não possuía o mesmo calor, e as relações pareciam mais frágeis, menos profundas. Seus filhos da nova família, por sua vez, não despertavam nele o mesmo orgulho que sentia pelos primeiros — talvez não por falta de amor, mas pelo peso das comparações e das lembranças.\n\nE o mais doloroso veio com o tempo: o distanciamento de Kaline e Vinícios. Marcados pelas escolhas do pai e pela dor causada à mãe, eles passaram a vê-lo com outros olhos. O respeito deu lugar à mágoa, e a presença dele em suas vidas tornou-se cada vez mais rara e protocolar. Não havia mais a admiração de antes, apenas uma relação fria, construída sobre feridas que nunca cicatrizaram completamente.\n\nAssim, Seu Juvenal seguiu vivendo — não sem conquistas, nem sem momentos de alegria —, mas carregando consigo o peso silencioso de suas decisões. Aprendeu, talvez tarde demais, que certas escolhas não apenas mudam o presente, mas ecoam por toda uma vida, alterando destinos e deixando marcas que o tempo, sozinho, não consegue apagar."
+    },
+    "jeitoDeFalar": []
+  },
+  "publicoAlvo": {
+    "faixaEtaria": "35-45",
+    "perfil": "Adultos 35-65 anos (especialmente mulheres) que sentem falta de figuras paternas/maternas sábias, buscam conforto em histórias genuínas, e valorizam a sabedoria dos mais velhos. Também idosos que se identificam e se sentem representados.",
+    "dores": [],
+    "desejos": []
+  },
+  "tom": {
+    "permitido": [
+      "calmo",
+      "emocional"
+    ],
+    "proibido": [
+      "fantasia",
+      "promessas falsa"
+    ]
+  },
+  "formatoDeVideo": {
+    "duracaoIdeal": "Vídeos de 8-15 minutos estruturados assim: (1) Gancho cotidiano intrigante, (2) História que se desenrola com detalhes sensoriais e emocionais, (3) Conexão com uma memória ou experiência passada, (4) Reflexão/lição que emerge naturalmente da história, (5) Fechamento contemplativo. Imagens: fotos antigas, paisagens calmas, mãos envelhecidas, objetos com história.",
+    "estrutura": [],
+    "estiloDeNarracao": "Voz calma, pausada, com a cadência de quem não tem pressa. Tom de quem está contando para um neto querido, não palestrando. Deve soar como alguém refletindo em voz alta, com pausas naturais e pequenos suspiros. Evitar tom professoral ou de autoajuda."
+  },
+  "temasFuncionaram": [],
+  "temasProibidos": [],
+  "videosPublicados": [],
+  "padroesDosComentarios": [],
+  "palavrasQueEngajam": [],
+  "gatilhosQueConvertem": [],
+  "estruturasDeTitulos": {
+    "instrucao": "Use essas estruturas como moldes.",
+    "confissaoVulnerabilidade": [],
+    "consequenciaVirada": [],
+    "endereçamentoDireto": [],
+    "revelacaoSegredo": [],
+    "tempoArrependimento": [],
+    "gatilhoDeIdentidade": []
+  },
+  "historicoGeracoes": []
+}

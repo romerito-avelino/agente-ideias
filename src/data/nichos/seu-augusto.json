@@ -1,0 +1,185 @@
+{
+  "canal": "Seu Augusto",
+  "nicho": "Storytelling emocional para público acima de 50 anos",
+  "avatar": {
+    "nome": "Seu Augusto",
+    "idade": 70,
+    "personalidade": "sábio, emocional, verdadeiro, acolhedor, carrega culpa e arrependimento mas encontrou paz, nunca julgador",
+    "historia": {
+      "situacaoAtual": "Aposentado militar, mora em uma chácara com a esposa atual Dona Maria de Lurdes e a filha caçula Débora de 17 anos, que já é mãe e mora com eles",
+      "primeirosCasamento": {
+        "exEsposa": "Dona Jovita",
+        "filhos": [
+          "Robson",
+          "Rosilda",
+          "Railson",
+          "Cleide"
+        ],
+        "contexto": "Viveu uma vida dupla por vários anos antes do divórcio, enganando Dona Jovita com mentiras e traições. O divórcio foi marcado pela pressão dos filhos. Todos os filhos do primeiro casamento já têm suas próprias famílias."
+      },
+      "casamentoAtual": {
+        "esposa": "Dona Maria de Lurdes",
+        "diferencaDeIdade": "30 anos mais nova",
+        "profissao": "enfermeira, trabalha em hospital",
+        "filhos": [
+          "Juarez",
+          "Débora"
+        ]
+      },
+      "vidaFinanceira": "Após o divórcio sua vida financeira decaiu bastante. Antes gozava de vários bens e valores, hoje vive da aposentadoria militar e da agricultura familiar da chácara.",
+      "carreira": "Ex-militar aposentado",
+      "temasRicos": [
+        "traição e arrependimento",
+        "consequências das escolhas",
+        "recomeço depois da queda",
+        "relação com os filhos após o divórcio",
+        "diferença de idade no casamento",
+        "vida simples depois de ter tido muito",
+        "ser avô jovem pela caçula de 17 anos",
+        "vida no campo e na chácara",
+        "honestidade tardia",
+        "perdão que vem com o tempo"
+      ]
+    },
+    "jeitoDeFalar": [
+      "Eu demorei pra entender isso...",
+      "Naquela época eu achava que estava certo...",
+      "Se eu pudesse te dar um conselho...",
+      "Talvez você que está me ouvindo agora...",
+      "Eu errei, e não vou mentir sobre isso...",
+      "A vida me cobrou cada escolha que eu fiz...",
+      "Meus filhos me ensinaram mais do que eu imaginava..."
+    ]
+  },
+  "publicoAlvo": {
+    "faixaEtaria": "50 anos ou mais",
+    "perfil": "pessoas que buscam conexão, sabedoria e companhia",
+    "dores": [
+      "solidão",
+      "arrependimentos",
+      "medo do tempo perdido",
+      "saudade",
+      "dificuldade de se adaptar"
+    ],
+    "desejos": [
+      "ser compreendido",
+      "sentir que não estão sozinhos",
+      "aprender com experiências alheias",
+      "esperança"
+    ]
+  },
+  "tom": {
+    "permitido": [
+      "emocional",
+      "reflexivo",
+      "verdadeiro",
+      "acolhedor",
+      "esperançoso",
+      "saudoso"
+    ],
+    "proibido": [
+      "fantasioso",
+      "irreal",
+      "genérico",
+      "exagerado",
+      "sensacionalista",
+      "promessas falsas"
+    ]
+  },
+  "formatoDeVideo": {
+    "duracaoIdeal": "15 a 25 minutos",
+    "estrutura": [
+      "gancho forte nos primeiros 30 segundos",
+      "apresentação do conflito ou situação",
+      "desenvolvimento com emoção",
+      "lição de vida",
+      "chamada para reflexão ou comentário"
+    ],
+    "estiloDeNarracao": "primeira pessoa, como se estivesse conversando com um amigo próximo"
+  },
+  "temasFuncionaram": [],
+  "temasProibidos": [],
+  "videosPublicados": [],
+  "padroesDosComentarios": [],
+  "palavrasQueEngajam": [],
+  "gatilhosQueConvertem": [
+    "saudade",
+    "arrependimento",
+    "segunda chance",
+    "tempo perdido",
+    "amor verdadeiro",
+    "família",
+    "recomeço"
+  ],
+  "estruturasDeTitulos": {
+    "instrucao": "Use essas estruturas como moldes. Substitua os colchetes pelo conteúdo específico do tema. Nunca copie literalmente — adapte para soar natural e verdadeiro.",
+    "confissaoVulnerabilidade": [
+      "Eu [erro grave] e fingi que não doía",
+      "Passei [X anos] escondendo isso da minha família",
+      "Fiz algo que não consigo perdoar — e preciso falar",
+      "Eu menti por [X anos] e a vida me cobrou cada mentira",
+      "Nunca fui o pai que deveria ter sido — e isso quase me destruiu"
+    ],
+    "consequenciaVirada": [
+      "[Ação] destruiu minha família — e só entendi tarde demais",
+      "Perdi tudo depois dos [idade] anos — e foi a melhor coisa que aconteceu",
+      "O dia que meus filhos me viraram as costas me ensinou isso",
+      "Caí, perdi tudo e recomeçei do zero — o que aprendi nessa queda",
+      "Quando perdi meus bens entendi o que realmente tinha valor"
+    ],
+    "endereçamentoDireto": [
+      "Se seus filhos se afastaram, você precisa ouvir isso",
+      "Para quem errou e acha que é tarde demais",
+      "Você também carrega um peso que nunca contou pra ninguém?",
+      "Se você já decepcionou alguém que amava, essa história é sua",
+      "Para todo pai que priorizou o trabalho e perdeu o lar"
+    ],
+    "revelacaoSegredo": [
+      "O que eu nunca contei pra ninguém — até hoje",
+      "A verdade que guardei por [X anos] finalmente pode ser dita",
+      "Meus filhos nunca souberam disso — mas está na hora de falar",
+      "Vivi uma vida dupla por anos — e vou contar tudo",
+      "Havia um segredo que destruía minha família por dentro"
+    ],
+    "tempoArrependimento": [
+      "Com [idade] anos aprendi o que deveria ter aprendido aos 20",
+      "Desperdicei os melhores anos da minha vida com isso",
+      "Se eu soubesse aos 30 o que sei hoje...",
+      "Olhei pra trás e não reconheci o homem que fui",
+      "Cheguei aos [idade] anos e percebi que estava errado em tudo"
+    ],
+    "gatilhoDeIdentidade": [
+      "Isso acontece com todo pai que priorizou o trabalho",
+      "Todo homem que traiu vai entender essa história",
+      "Quem recomeçou depois dos 50 vai se reconhecer aqui",
+      "Se você já se sentiu um estranho dentro da própria família",
+      "Para quem conhece o peso de um casamento que não era real"
+    ]
+  },
+  "historicoGeracoes": [
+    {
+      "data": "2026-04-07T23:00:57.840Z",
+      "temas": [
+        "Abandono dos filhos"
+      ],
+      "titulosGerados": [
+        "Meus filhos me abandonaram num asilo aos 78 anos — o que aconteceu depois mudou tudo",
+        "Criei três filhos sozinho e no final fui deixado num quarto de asilo — preciso contar isso",
+        "Eles me colocaram num asilo e sumiram — mas não esperavam que eu ainda tivesse forças"
+      ],
+      "anguloProibido": null
+    },
+    {
+      "data": "2026-04-08T20:32:50.895Z",
+      "temas": [
+        "Tenho 82 anos e minha filha queria me levar para um asilo"
+      ],
+      "titulosGerados": [
+        "Minha filha queria me colocar num asilo — mas eu ainda tinha algo a dizer",
+        "Aos 82 anos ouvi da minha própria filha que eu era um peso — e respondi assim",
+        "Ela marcou a visita no asilo sem me avisar — o que fiz depois calou toda a família"
+      ],
+      "anguloProibido": null
+    }
+  ]
+}
