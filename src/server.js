@@ -4,8 +4,9 @@ const path = require('path');
 const fs = require('fs');
 const { gerarIdeias } = require('./agente-ideias');
 const { coletarDadosVideo } = require('./coletor-youtube');
-const { analisarCanal } = require('./agente-sessao-a');
+const { analisarCanal, revisarCanal } = require('./agente-sessao-a');
 const { coletarDadosCanal } = require('./coletor-youtube');
+const { minerarCanais } = require('./agente-minerador');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -190,7 +191,13 @@ app.put('/api/nicho/:nichoId', (req, res) => {
   if (!fs.existsSync(nichoPath)) return res.status(404).json({ error: 'Nicho não encontrado.' });
   try {
     const nichoAtual = JSON.parse(fs.readFileSync(nichoPath, 'utf-8'));
-    const atualizado = { ...nichoAtual, ...req.body };
+    const atualizado = {
+      ...nichoAtual,
+      ...req.body,
+      historicoGeracoes: nichoAtual.historicoGeracoes || [],
+      estrategia: nichoAtual.estrategia || req.body.estrategia || {},
+      estruturasDeTitulos: nichoAtual.estruturasDeTitulos || req.body.estruturasDeTitulos || {}
+    };
     fs.writeFileSync(nichoPath, JSON.stringify(atualizado, null, 2), 'utf-8');
     res.json({ sucesso: true });
   } catch (err) {
@@ -210,6 +217,34 @@ app.delete('/api/nicho/:nichoId', (req, res) => {
     res.json({ sucesso: true });
   } catch (err) {
     res.status(500).json({ error: 'Falha ao deletar nicho.' });
+  }
+});
+
+app.post('/api/revisar-canal', async (req, res) => {
+  const dadosRevisao = req.body;
+  if (!dadosRevisao.propostaEscolhida || !dadosRevisao.avatar?.nome) {
+    return res.status(400).json({ error: 'Selecione uma proposta e preencha os dados do avatar antes de revisar.' });
+  }
+  try {
+    const revisao = await revisarCanal(dadosRevisao);
+    res.json(revisao);
+  } catch (err) {
+    console.error('Erro na revisão:', err.message);
+    res.status(500).json({ error: 'Falha na revisão. Tente novamente.' });
+  }
+});
+
+app.post('/api/mineracao', async (req, res) => {
+  const { input } = req.body;
+  if (!input || input.trim() === '') {
+    return res.status(400).json({ error: 'Digite um tema, título ou cole uma URL para iniciar a mineração.' });
+  }
+  try {
+    const resultado = await minerarCanais(input.trim());
+    res.json(resultado);
+  } catch (err) {
+    console.error('[minerador] Erro:', err.message);
+    res.status(500).json({ error: err.message });
   }
 });
 

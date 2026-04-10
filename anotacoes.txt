@@ -1,0 +1,21 @@
+A busca iria seguir alguns parâmetros:
+    1-O agente não iria se limitar somente em procurar canais de histórias propriamente ditos. Se dentro do nicho
+    tiver algum canal que de alguma forma tem um bom contéudo e que esse conteúdo seja replicável em forma de 
+    história, o agente deverá analisar ele da mesma maneira dos demais;
+
+    2-Os canais analisados deverão ter até 100 mil inscritos (canal recente);
+
+    3-Os canais analisados deverão ter até no máximo 8 meses desde a publicação mais antiga. Não da data 
+    de sua criação (canal recente);
+
+    4-Os canais analisados deverão ter quantidade significativas de vizualizaçãos mais sendo proporcional
+    aos vídeos (vizualização/vídeo = Demanda);
+
+    5-Os canais analisados deverão ter constância de views nos vídes mais recentes (isso prova que a ideia do 
+    canal não vai morrer com o tempo, se os vídeos recentes ainda estão pegando visualizações espressivas);
+
+    6-Os canais analisados deverão ter margem para a recriabilidade, ou seja, devem ter a possibilidade de 
+    serem modelados e adaptados para o nicho de histórias com avatar;
+
+    7-E por fim, os canais analisados deverão ser revisados para garantir que exista margem para novas abordagens,
+    temas e perspectivas.  

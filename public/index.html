@@ -781,6 +781,354 @@
   transition: all 0.2s;
 }
 .btn-danger:hover { background: rgba(226,75,74,0.2); }
+.proposta-card {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  cursor: pointer;
+  margin-bottom: 12px;
+  padding: 20px;
+  transition: all 0.2s;
+}
+.proposta-card:hover { border-color: var(--blue-dim); }
+.proposta-card.selecionada {
+  border-color: var(--blue);
+  background: var(--blue-glow);
+}
+.proposta-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.proposta-card-titulo {
+  color: var(--blue);
+  font-size: 13px;
+  font-weight: 500;
+}
+.proposta-badge-selecionada {
+  display: none;
+  background: var(--blue);
+  border-radius: 20px;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  padding: 3px 10px;
+  text-transform: uppercase;
+}
+.proposta-card.selecionada .proposta-badge-selecionada { display: inline-block; }
+.proposta-campo {
+  font-size: 12px;
+  margin-bottom: 6px;
+  line-height: 1.5;
+}
+.proposta-campo span:first-child {
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 10px;
+  margin-right: 6px;
+}
+.proposta-campo span:last-child { color: var(--white); }
+.gap-editavel {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  line-height: 1.7;
+  outline: none;
+  padding: 12px 16px;
+  resize: vertical;
+  transition: border-color 0.2s;
+  width: 100%;
+}
+.gap-editavel:focus { border-color: var(--blue); }
+.revisao-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.revisao-item:last-child { border-bottom: none; }
+.status-ok { color: #1D9E75; font-size: 16px; }
+.status-atencao { color: #EF9F27; font-size: 16px; }
+.status-critico { color: #E24B4A; font-size: 16px; }
+.probabilidade-box {
+  border-radius: 12px;
+  margin-bottom: 20px;
+  padding: 20px 24px;
+  text-align: center;
+}
+.probabilidade-box.alta, .probabilidade-box.muito-alta {
+  background: rgba(29,158,117,0.1);
+  border: 1px solid rgba(29,158,117,0.3);
+}
+.probabilidade-box.media {
+  background: rgba(239,159,39,0.1);
+  border: 1px solid rgba(239,159,39,0.3);
+}
+.probabilidade-box.baixa {
+  background: rgba(226,75,74,0.1);
+  border: 1px solid rgba(226,75,74,0.3);
+}
+.probabilidade-percentual {
+  font-family: 'Playfair Display', serif;
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.probabilidade-box.alta .probabilidade-percentual,
+.probabilidade-box.muito-alta .probabilidade-percentual { color: #1D9E75; }
+.probabilidade-box.media .probabilidade-percentual { color: #EF9F27; }
+.probabilidade-box.baixa .probabilidade-percentual { color: #E24B4A; }
+.probabilidade-classificacao {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  color: var(--muted);
+}
+.veredicto-badge {
+  border-radius: 20px;
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  margin-top: 10px;
+  padding: 5px 16px;
+  text-transform: uppercase;
+}
+.veredicto-aprovado {
+  background: rgba(29,158,117,0.15);
+  border: 1px solid rgba(29,158,117,0.3);
+  color: #1D9E75;
+}
+.veredicto-ressalvas {
+  background: rgba(239,159,39,0.15);
+  border: 1px solid rgba(239,159,39,0.3);
+  color: #EF9F27;
+}
+.veredicto-ajustes {
+  background: rgba(226,75,74,0.15);
+  border: 1px solid rgba(226,75,74,0.3);
+  color: #E24B4A;
+}
+.btn-revisar {
+  width: 100%;
+  padding: 16px;
+  background: var(--bg3);
+  border: 1px solid var(--blue);
+  border-radius: var(--radius);
+  color: var(--blue);
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  margin-top: 8px;
+  transition: all 0.2s;
+}
+.btn-revisar:hover { background: var(--blue-glow); }
+.btn-revisar:disabled { opacity: 0.5; cursor: not-allowed; }
+.mineracao-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.mineracao-card:hover { border-color: var(--blue-dim); }
+.mineracao-card.adicionado { border-color: #1D9E75; }
+.mineracao-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px 12px;
+  border-bottom: 1px solid var(--border);
+}
+.mineracao-canal-info { flex: 1; }
+.mineracao-canal-nome {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--white);
+  margin-bottom: 4px;
+}
+.mineracao-canal-stats {
+  font-size: 12px;
+  color: var(--muted);
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.mineracao-canal-acoes {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  margin-left: 16px;
+}
+.btn-visitar {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  padding: 6px 12px;
+  text-decoration: none;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.btn-visitar:hover { border-color: var(--blue); color: var(--blue); }
+.btn-adicionar-validacao {
+  background: var(--blue-glow);
+  border: 1px solid var(--blue);
+  border-radius: 6px;
+  color: var(--blue);
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 6px 12px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.btn-adicionar-validacao:hover { background: var(--blue); color: #fff; }
+.btn-adicionar-validacao.adicionado {
+  background: rgba(29,158,117,0.15);
+  border-color: #1D9E75;
+  color: #1D9E75;
+  cursor: default;
+}
+.mineracao-scores {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border-bottom: 1px solid var(--border);
+}
+@media (max-width: 600px) { .mineracao-scores { grid-template-columns: repeat(2, 1fr); } }
+.score-item {
+  background: var(--bg2);
+  padding: 10px 14px;
+  text-align: center;
+}
+.score-label {
+  font-size: 10px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+.score-valor {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
+}
+.score-alto { color: #1D9E75; }
+.score-medio { color: #EF9F27; }
+.score-baixo { color: #E24B4A; }
+.score-potencial-alto { color: var(--blue); }
+.mineracao-detalhes {
+  padding: 14px 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+@media (max-width: 600px) { .mineracao-detalhes { grid-template-columns: 1fr; } }
+.mineracao-detalhe-bloco { font-size: 12px; line-height: 1.6; }
+.mineracao-detalhe-label {
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+.mineracao-detalhe-texto { color: var(--white); }
+.mineracao-modelagem {
+  grid-column: 1 / -1;
+  background: var(--blue-glow);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--blue);
+  border-radius: 0 8px 8px 0;
+  padding: 10px 14px;
+  font-size: 12px;
+  color: var(--white);
+  line-height: 1.6;
+}
+.mineracao-videos {
+  padding: 0 20px 16px;
+}
+.mineracao-videos-label {
+  font-size: 10px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+.mineracao-video-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--white);
+  line-height: 1.4;
+}
+.mineracao-video-item:last-child { border-bottom: none; }
+.mineracao-video-views {
+  color: var(--muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+.mineracao-resumo {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 14px 18px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.mineracao-resumo-num {
+  color: var(--blue);
+  font-weight: 500;
+  font-size: 15px;
+}
+.btn-ir-validacao {
+  background: #1D9E75;
+  border: none;
+  border-radius: var(--radius);
+  color: #fff;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 18px;
+  transition: all 0.2s;
+  display: none;
+}
+.btn-ir-validacao.visivel { display: inline-block; }
+.btn-ir-validacao:hover { background: #0F6E56; }
 </style>
 </head>
 <body>
@@ -791,11 +1139,53 @@
 
 <main>
 <div class="abas">
-  <button class="aba-btn ativa" onclick="trocarAba('a')">Sessão A — Validação</button>
-  <button class="aba-btn" onclick="trocarAba('b')">Sessão B — Vídeos</button>
+  <button class="aba-btn" onclick="trocarAba('mineracao')">Mineração</button>
+  <button class="aba-btn" onclick="trocarAba('validacao')">Validação</button>
+  <button class="aba-btn" onclick="trocarAba('videos')">Vídeos</button>
 </div>
 
-<div class="aba-conteudo ativa" id="aba-a">
+<div class="aba-conteudo" id="aba-mineracao">
+
+  <div class="greeting">
+    <h1>Minerar <span>canais</span></h1>
+    <p>Digite um tema, título ou cole uma URL. O agente varre o YouTube e encontra canais com potencial de modelagem para histórias.</p>
+  </div>
+
+  <div class="input-section">
+    <div class="section-label">O que você quer explorar?</div>
+    <div class="input-wrap" style="margin-bottom:8px">
+      <input type="text" id="mineracaoInput" placeholder="Ex: idoso sábio cotidiano, superação financeira, histórias de família..." />
+      <button class="btn-add" onclick="adicionarInputMineracao()">+ Adicionar</button>
+    </div>
+    <div class="tags-area" id="tagsMineracao" style="margin-top:8px"></div>
+    <div style="font-size:12px;color:var(--muted)">O agente não se limita a canais de histórias — analisa qualquer canal com potencial de modelagem</div>
+    <button class="btn-gerar" id="btnMinerar" onclick="iniciarMineracao()" style="margin-top:16px">
+      Iniciar Mineração com IA
+    </button>
+    <div class="loading" id="loadingMineracao">
+      <div class="spinner"></div>
+      <span id="loadingMineracaoTexto">Gerando termos de busca e varrendo o YouTube...</span>
+    </div>
+    <div class="erro" id="erroMineracao"></div>
+  </div>
+
+  <div id="resultadoMineracao" style="display:none;margin-top:28px">
+    <div id="resumoMineracao" class="mineracao-resumo">
+      <div>
+        <span class="mineracao-resumo-num" id="totalQualificados">0</span>
+        <span> canais qualificados encontrados</span>
+        <span style="margin-left:12px;font-size:12px" id="termosUsados"></span>
+      </div>
+      <button class="btn-ir-validacao" id="btnIrValidacao" onclick="irParaValidacao()">
+        Validar selecionados →
+      </button>
+    </div>
+    <div id="canaisMinerados"></div>
+  </div>
+
+</div>
+
+<div class="aba-conteudo" id="aba-validacao">
 
   <div class="greeting">
     <h1>Validar <span>canal</span> e ideia</h1>
@@ -871,10 +1261,6 @@
       </div>
     </div>
 
-    <!-- Propostas -->
-    <div class="resultado-divider">Escolha uma proposta</div>
-    <div id="propostasArea"></div>
-
     <!-- Guia -->
     <div class="relatorio-card">
       <div class="relatorio-titulo">Guia de implementação</div>
@@ -896,70 +1282,136 @@
       </div>
     </div>
 
-    <!-- Formulário do Avatar -->
-    <div class="resultado-divider">Criar avatar do canal</div>
-    <div class="relatorio-card">
-      <div class="relatorio-titulo">Dados do canal e avatar</div>
-      <div class="form-grid">
-        <div class="form-field">
-          <label>Nome do canal *</label>
-          <input type="text" id="f_canal" placeholder="Ex: Histórias do Sargento" />
-        </div>
-        <div class="form-field">
-          <label>ID do canal (sem espaços) *</label>
-          <input type="text" id="f_id" placeholder="Ex: historias-do-sargento" />
-        </div>
-        <div class="form-field full">
-          <label>Descrição do nicho</label>
-          <input type="text" id="f_nicho" placeholder="Ex: Storytelling emocional de militares para público 40+" />
-        </div>
-        <div class="form-field">
-          <label>Nome do avatar *</label>
-          <input type="text" id="f_avatar_nome" placeholder="Ex: Sargento Menezes" />
-        </div>
-        <div class="form-field">
-          <label>Idade do avatar</label>
-          <input type="number" id="f_avatar_idade" placeholder="Ex: 65" />
-        </div>
-        <div class="form-field">
-          <label>Profissão / histórico</label>
-          <input type="text" id="f_avatar_profissao" placeholder="Ex: Ex-militar, aposentado" />
-        </div>
-        <div class="form-field">
-          <label>Estado civil / família</label>
-          <input type="text" id="f_avatar_familia" placeholder="Ex: Viúvo, 3 filhos" />
-        </div>
-        <div class="form-field full">
-          <label>Estilo de vida atual</label>
-          <input type="text" id="f_avatar_estilo" placeholder="Ex: Mora no interior, vive da aposentadoria, cultiva horta" />
-        </div>
-        <div class="form-field full">
-          <label>Personalidade</label>
-          <input type="text" id="f_avatar_personalidade" placeholder="Ex: Sábio, direto, carrega peso do passado mas encontrou paz" />
-        </div>
-        <div class="form-field full">
-          <label>Biografia completa</label>
-          <textarea id="f_avatar_bio" rows="5" placeholder="Escreva livremente a história completa do avatar — suas experiências, conflitos, aprendizados, o que o torna único..."></textarea>
-        </div>
-        <div class="form-field full">
-          <label>Tom permitido (separado por vírgulas)</label>
-          <input type="text" id="f_tom_permitido" placeholder="Ex: emocional, verdadeiro, reflexivo, esperançoso" />
-        </div>
-        <div class="form-field full">
-          <label>Tom proibido (separado por vírgulas)</label>
-          <input type="text" id="f_tom_proibido" placeholder="Ex: fantasioso, sensacionalista, promessas falsas" />
-        </div>
-        <div class="form-field">
-          <label>Duração ideal dos vídeos</label>
-          <input type="text" id="f_duracao" placeholder="Ex: 15 a 25 minutos" />
-        </div>
-        <div class="form-field">
-          <label>Faixa etária do público</label>
-          <input type="text" id="f_publico_idade" placeholder="Ex: 45 anos ou mais" />
-        </div>
+  </div>
+
+</div>
+
+<!-- BLOCO DE ESCOLHAS — aparece após o relatório de análise -->
+<div id="blocoEscolhas" style="display:none">
+
+  <div class="resultado-divider">Suas escolhas</div>
+
+  <!-- Escolha da proposta -->
+  <div class="relatorio-card">
+    <div class="relatorio-titulo">Escolha uma das 3 propostas</div>
+    <div id="propostasEscolha"></div>
+  </div>
+
+  <!-- Gap de edição editável -->
+  <div class="relatorio-card">
+    <div class="relatorio-titulo" style="margin-bottom:10px">Gap de edição — confirme ou edite</div>
+    <textarea id="gapEdicaoEditavel" class="gap-editavel" rows="4"></textarea>
+  </div>
+
+  <!-- Formulário do avatar -->
+  <div class="resultado-divider">Criar avatar do canal</div>
+  <div class="relatorio-card">
+    <div class="relatorio-titulo">Dados do canal e avatar</div>
+    <div class="form-grid">
+      <div class="form-field">
+        <label>Nome do canal *</label>
+        <input type="text" id="f_canal" placeholder="Ex: Histórias do Sargento" />
       </div>
-      <button class="btn-salvar" id="btnSalvarCanal" onclick="salvarCanal()">
-        Salvar canal e criar banco de dados
+      <div class="form-field">
+        <label>ID do canal (sem espaços) *</label>
+        <input type="text" id="f_id" placeholder="Ex: historias-do-sargento" />
+      </div>
+      <div class="form-field full">
+        <label>Descrição do nicho</label>
+        <input type="text" id="f_nicho" placeholder="Ex: Storytelling emocional de militares para público 40+" />
+      </div>
+      <div class="form-field">
+        <label>Nome do avatar *</label>
+        <input type="text" id="f_avatar_nome" placeholder="Ex: Sargento Menezes" />
+      </div>
+      <div class="form-field">
+        <label>Idade do avatar</label>
+        <input type="number" id="f_avatar_idade" placeholder="Ex: 65" />
+      </div>
+      <div class="form-field">
+        <label>Profissão / histórico</label>
+        <input type="text" id="f_avatar_profissao" placeholder="Ex: Ex-militar, aposentado" />
+      </div>
+      <div class="form-field">
+        <label>Estado civil / família</label>
+        <input type="text" id="f_avatar_familia" placeholder="Ex: Viúvo, 3 filhos" />
+      </div>
+      <div class="form-field full">
+        <label>Estilo de vida atual</label>
+        <input type="text" id="f_avatar_estilo" placeholder="Ex: Mora no interior, vive da aposentadoria, cultiva horta" />
+      </div>
+      <div class="form-field full">
+        <label>Personalidade</label>
+        <input type="text" id="f_avatar_personalidade" placeholder="Ex: Sábio, direto, carrega peso do passado mas encontrou paz" />
+      </div>
+      <div class="form-field full">
+        <label>Biografia completa</label>
+        <textarea id="f_avatar_bio" rows="5" placeholder="Escreva livremente a história completa do avatar..."></textarea>
+      </div>
+      <div class="form-field full">
+        <label>Tom permitido (separado por vírgulas)</label>
+        <input type="text" id="f_tom_permitido" placeholder="Ex: emocional, verdadeiro, reflexivo, esperançoso" />
+      </div>
+      <div class="form-field full">
+        <label>Tom proibido (separado por vírgulas)</label>
+        <input type="text" id="f_tom_proibido" placeholder="Ex: fantasioso, sensacionalista, promessas falsas" />
+      </div>
+      <div class="form-field">
+        <label>Duração ideal dos vídeos</label>
+        <input type="text" id="f_duracao" placeholder="Ex: 15 a 25 minutos" />
+      </div>
+      <div class="form-field">
+        <label>Faixa etária do público</label>
+        <input type="text" id="f_publico_idade" placeholder="Ex: 45 anos ou mais" />
+      </div>
+    </div>
+
+    <button class="btn-revisar" id="btnRevisar" onclick="revisarCanal()">
+      Revisar tudo com IA antes de salvar
+    </button>
+    <div class="loading" id="loadingRevisao" style="margin-top:16px">
+      <div class="spinner"></div>
+      <span>O agente está revisando e cruzando todas as informações...</span>
+    </div>
+    <div class="erro" id="erroRevisao" style="margin-top:12px"></div>
+  </div>
+
+  <!-- Resultado da revisão -->
+  <div id="blocoRevisao" style="display:none">
+    <div class="resultado-divider">Revisão do agente</div>
+    <div class="relatorio-card">
+
+      <!-- Probabilidade -->
+      <div id="probabilidadeBox"></div>
+
+      <!-- Avaliação por categoria -->
+      <div class="relatorio-titulo" style="margin-bottom:12px">Avaliação detalhada</div>
+      <div id="avaliacaoDetalhada"></div>
+
+      <!-- Conflitos -->
+      <div id="conflitosArea" style="display:none;margin-top:16px">
+        <div class="relatorio-titulo" style="color:#E24B4A;margin-bottom:8px">Conflitos identificados</div>
+        <div id="conflitosLista"></div>
+      </div>
+
+      <!-- Pontos fortes -->
+      <div style="margin-top:16px">
+        <div class="relatorio-titulo" style="margin-bottom:8px">Pontos fortes do canal</div>
+        <div id="pontosFortes"></div>
+      </div>
+
+      <!-- Recomendações -->
+      <div style="margin-top:16px">
+        <div class="relatorio-titulo" style="margin-bottom:8px">Recomendações finais</div>
+        <div id="recomendacoes"></div>
+      </div>
+
+      <!-- Mensagem final -->
+      <div id="mensagemFinal" class="relatorio-destaque" style="margin-top:16px"></div>
+
+      <!-- Botão confirmar -->
+      <button class="btn-salvar" id="btnConfirmarSalvar" onclick="confirmarESalvar()" style="margin-top:20px">
+        Confirmar e salvar canal
       </button>
       <div class="erro" id="erroFormulario" style="margin-top:12px"></div>
       <div id="sucessoFormulario" style="display:none;margin-top:12px;background:rgba(29,158,117,0.1);border:1px solid rgba(29,158,117,0.3);border-radius:var(--radius);padding:14px 18px;color:#1D9E75;font-size:13px"></div>
@@ -967,7 +1419,7 @@
   </div>
 </div>
 
-<div class="aba-conteudo" id="aba-b">
+<div class="aba-conteudo" id="aba-videos">
   <div class="greeting">
     <h1>O que vamos <span>criar</span> hoje?</h1>
     <p>Insira um tema ou vídeo de referência e o agente gera ideias únicas para o seu canal</p>
@@ -1404,12 +1856,207 @@
   let canais = [];
   let relatorioAtual = null;
 
+  let canaisSelecionadosParaValidacao = [];
+
   function trocarAba(aba) {
+    const abas = ['mineracao', 'validacao', 'videos'];
     document.querySelectorAll('.aba-btn').forEach((btn, i) => {
-      btn.classList.toggle('ativa', (i === 0 && aba === 'a') || (i === 1 && aba === 'b'));
+      btn.classList.toggle('ativa', abas[i] === aba);
     });
-    document.getElementById('aba-a').classList.toggle('ativa', aba === 'a');
-    document.getElementById('aba-b').classList.toggle('ativa', aba === 'b');
+    abas.forEach(id => {
+      const el = document.getElementById(`aba-${id}`);
+      if (el) el.classList.toggle('ativa', id === aba);
+    });
+  }
+
+  function scoreClass(score) {
+    if (score >= 75) return 'score-alto';
+    if (score >= 50) return 'score-medio';
+    return 'score-baixo';
+  }
+
+  function adicionarInputMineracao() {
+    const input = document.getElementById('mineracaoInput');
+    const val = input.value.trim();
+    if (!val) return;
+    if (!window.inputsMineracao) window.inputsMineracao = [];
+    if (!window.inputsMineracao.includes(val)) {
+      window.inputsMineracao.push(val);
+      renderTagsMineracao();
+    }
+    input.value = '';
+    input.focus();
+  }
+
+  function renderTagsMineracao() {
+    const container = document.getElementById('tagsMineracao');
+    if (!container) return;
+    container.innerHTML = (window.inputsMineracao || []).map((item, i) => `
+      <div class="tag">
+        🔍 ${item.length > 40 ? item.substring(0, 40) + '...' : item}
+        <button onclick="removerInputMineracao(${i})">×</button>
+      </div>
+    `).join('');
+  }
+
+  function removerInputMineracao(idx) {
+    window.inputsMineracao.splice(idx, 1);
+    renderTagsMineracao();
+  }
+
+  async function iniciarMineracao() {
+    const inputDireto = document.getElementById('mineracaoInput').value.trim();
+    if (inputDireto) {
+      if (!window.inputsMineracao) window.inputsMineracao = [];
+      window.inputsMineracao.push(inputDireto);
+      document.getElementById('mineracaoInput').value = '';
+      renderTagsMineracao();
+    }
+    const inputs = window.inputsMineracao || [];
+    if (inputs.length === 0) {
+      document.getElementById('erroMineracao').textContent = '⚠️ Adicione pelo menos um tema, título ou URL.';
+      document.getElementById('erroMineracao').classList.add('visivel');
+      return;
+    }
+    const input = inputs.join(', ');
+
+    const btn = document.getElementById('btnMinerar');
+    const loading = document.getElementById('loadingMineracao');
+    btn.disabled = true;
+    loading.classList.add('ativo');
+    document.getElementById('resultadoMineracao').style.display = 'none';
+    document.getElementById('erroMineracao').classList.remove('visivel');
+    canaisSelecionadosParaValidacao = [];
+
+    const mensagens = [
+      'Gerando termos de busca inteligentes...',
+      'Varrendo o YouTube em busca de canais...',
+      'Aplicando filtros de qualificação...',
+      'Calculando scores de potencial com IA...',
+      'Quase lá — finalizando análise...'
+    ];
+    let mi = 0;
+    const intervalo = setInterval(() => {
+      mi = (mi + 1) % mensagens.length;
+      document.getElementById('loadingMineracaoTexto').textContent = mensagens[mi];
+    }, 4000);
+
+    try {
+      const res = await fetch('/api/mineracao', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ input })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Erro na mineração');
+      renderMineracao(data);
+      document.getElementById('resultadoMineracao').style.display = 'block';
+      window.inputsMineracao = [];
+      renderTagsMineracao();
+    } catch (err) {
+      document.getElementById('erroMineracao').textContent = '⚠️ ' + err.message;
+      document.getElementById('erroMineracao').classList.add('visivel');
+    } finally {
+      clearInterval(intervalo);
+      btn.disabled = false;
+      loading.classList.remove('ativo');
+    }
+  }
+
+  function renderMineracao(data) {
+    document.getElementById('totalQualificados').textContent = data.canais.length;
+    document.getElementById('termosUsados').textContent = `Termos: ${data.termos?.join(', ')}`;
+
+    document.getElementById('canaisMinerados').innerHTML = data.canais.map((canal, i) => {
+      const urlCanal = canal.urlHandle || canal.url;
+      return `
+      <div class="mineracao-card" id="mcard-${i}">
+        <div class="mineracao-card-header">
+          <div class="mineracao-canal-info">
+            <div class="mineracao-canal-nome">${canal.nomeCanal}</div>
+            <div class="mineracao-canal-stats">
+              <span>👥 ${Number(canal.inscritos).toLocaleString()} inscritos</span>
+              <span>📅 ${canal.mesesAtivo} meses ativo</span>
+              <span>🎬 ${canal.totalVideos} vídeos</span>
+              <span>👁️ ${Number(canal.mediaViewsPorVideo).toLocaleString()} views/vídeo</span>
+            </div>
+          </div>
+          <div class="mineracao-canal-acoes">
+            <a href="${urlCanal}" target="_blank" class="btn-visitar">↗ Visitar</a>
+            <button class="btn-adicionar-validacao" id="btnadd-${i}" onclick="adicionarParaValidacao(${i}, '${urlCanal}', '${canal.nomeCanal.replace(/'/g, "\\'")}')">
+              + Validar
+            </button>
+          </div>
+        </div>
+        <div class="mineracao-scores">
+          <div class="score-item">
+            <div class="score-label">Potencial</div>
+            <div class="score-valor score-potencial-alto">${canal.scorePotencial}</div>
+          </div>
+          <div class="score-item">
+            <div class="score-label">Demanda</div>
+            <div class="score-valor ${scoreClass(canal.scoreDemanda)}">${canal.scoreDemanda}</div>
+          </div>
+          <div class="score-item">
+            <div class="score-label">Constância</div>
+            <div class="score-valor ${scoreClass(canal.scoreConstancia)}">${canal.scoreConstancia}</div>
+          </div>
+          <div class="score-item">
+            <div class="score-label">Recriabilidade</div>
+            <div class="score-valor ${scoreClass(canal.scoreRecriabilidade)}">${canal.scoreRecriabilidade}</div>
+          </div>
+        </div>
+        <div class="mineracao-detalhes">
+          <div class="mineracao-detalhe-bloco">
+            <div class="mineracao-detalhe-label">Recriabilidade</div>
+            <div class="mineracao-detalhe-texto">${canal.justificativaRecriabilidade}</div>
+          </div>
+          <div class="mineracao-detalhe-bloco">
+            <div class="mineracao-detalhe-label">Oportunidade</div>
+            <div class="mineracao-detalhe-texto">${canal.justificativaOportunidade}</div>
+          </div>
+          <div class="mineracao-modelagem">
+            💡 ${canal.potencialModelagem}
+          </div>
+        </div>
+        <div class="mineracao-videos">
+          <div class="mineracao-videos-label">Vídeos em alta</div>
+          ${canal.emAlta?.slice(0, 3).map(v => `
+            <div class="mineracao-video-item">
+              <span>📈</span>
+              <a href="${v.url}" target="_blank" style="color:var(--white);text-decoration:none;flex:1">${v.titulo}</a>
+              <span class="mineracao-video-views">${Number(v.views).toLocaleString()} views</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  function adicionarParaValidacao(idx, url, nome) {
+    const btn = document.getElementById(`btnadd-${idx}`);
+    const card = document.getElementById(`mcard-${idx}`);
+    if (btn.classList.contains('adicionado')) return;
+
+    canaisSelecionadosParaValidacao.push({ url, nome });
+    btn.textContent = '✓ Adicionado';
+    btn.classList.add('adicionado');
+    card.classList.add('adicionado');
+
+    const btnIr = document.getElementById('btnIrValidacao');
+    btnIr.classList.add('visivel');
+    btnIr.textContent = `Validar ${canaisSelecionadosParaValidacao.length} selecionado${canaisSelecionadosParaValidacao.length > 1 ? 's' : ''} →`;
+  }
+
+  function irParaValidacao() {
+    canaisSelecionadosParaValidacao.forEach(c => {
+      if (!canais.includes(c.url)) {
+        canais.push(c.url);
+      }
+    });
+    renderCanaisTags();
+    trocarAba('validacao');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function adicionarCanal() {
@@ -1437,10 +2084,11 @@
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    const canalInput = document.getElementById('canalInput');
-    if (canalInput) {
-      canalInput.addEventListener('keydown', e => { if (e.key === 'Enter') adicionarCanal(); });
-    }
+    trocarAba('mineracao');
+    const mi = document.getElementById('mineracaoInput');
+    if (mi) mi.addEventListener('keydown', e => { if (e.key === 'Enter') adicionarInputMineracao(); });
+    const ci = document.getElementById('canalInput');
+    if (ci) ci.addEventListener('keydown', e => { if (e.key === 'Enter') adicionarCanal(); });
   });
 
   async function analisarCanais() {
@@ -1473,19 +2121,12 @@
   }
 
   let propostaEscolhida = null;
-
-  function selecionarProposta(idx, propostas) {
-    propostaEscolhida = propostas[idx];
-    document.querySelectorAll('.proposta-card').forEach((el, i) => {
-      el.style.borderColor = i === idx ? 'var(--blue)' : 'var(--border)';
-      el.querySelector('.proposta-badge').style.display = i === idx ? 'inline-block' : 'none';
-    });
-    document.getElementById('f_nicho').value = propostaEscolhida.subnicho || '';
-  }
+  let relatorioCompleto = null;
 
   function renderRelatorio(data) {
+    relatorioCompleto = data;
     const { dadosCanais, relatorio } = data;
-    // Canais
+
     document.getElementById('canaisColetados').innerHTML = dadosCanais.map(c => `
       <div class="canal-card">
         <div class="canal-nome">${c.nomeCanal}</div>
@@ -1498,58 +2139,57 @@
         </div>
       </div>
     `).join('');
-    // Validação
+
     const v = relatorio.validacao;
     document.getElementById('badgeValidacao').innerHTML = `<span class="badge-validacao ${v.existeEspaco ? 'badge-sim' : 'badge-nao'}">${v.existeEspaco ? 'Espaço identificado' : 'Mercado saturado'}</span>`;
     document.getElementById('justificativaValidacao').textContent = v.justificativa;
     document.getElementById('nivelConcorrencia').textContent = v.nivelConcorrencia;
     document.getElementById('tempoCrescer').textContent = v.tempoMedioParaCrescer;
-    // Padrões
+
     const p = relatorio.padroesDosCanais;
     document.getElementById('oQueFunciona').innerHTML = p.oQueFunciona?.map(i => `<div class="relatorio-item">✓ ${i}</div>`).join('') || '';
     document.getElementById('oQueNaoFunciona').innerHTML = p.oQueNaoFunciona?.map(i => `<div class="relatorio-item">✗ ${i}</div>`).join('') || '';
-    document.getElementById('gapEdicao').textContent = p.gapEdicao || '';
     document.getElementById('gapIdentificado').textContent = p.gapIdentificado;
-    // Propostas
-    const propostas = relatorio.propostas || [];
-    propostaEscolhida = null;
-    document.getElementById('propostasArea').innerHTML = propostas.map((pr, i) => `
-      <div class="relatorio-card proposta-card" style="border-color:var(--border);transition:border-color 0.2s;margin-bottom:16px">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-          <div style="font-size:13px;font-weight:500;color:var(--blue)">${pr.titulo || 'Proposta ' + (i+1)}</div>
-          <span class="proposta-badge badge-validacao badge-sim" style="display:none">Selecionada</span>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px">
-          <div>
-            <div style="font-size:11px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">Ângulo único</div>
-            <div style="font-size:13px;color:var(--white);line-height:1.6">${pr.anguloUnico}</div>
-          </div>
-          <div>
-            <div style="font-size:11px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">Subnicho</div>
-            <div style="font-size:13px;color:var(--white);line-height:1.6">${pr.subnicho}</div>
-          </div>
-          <div>
-            <div style="font-size:11px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">Público-alvo</div>
-            <div style="font-size:13px;color:var(--white);line-height:1.6">${pr.publicoAlvo}</div>
-          </div>
-          <div>
-            <div style="font-size:11px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">Diferencial</div>
-            <div style="font-size:13px;color:var(--white);line-height:1.6">${pr.diferencialCompetitivo}</div>
-          </div>
-        </div>
-        <button class="btn-salvar" style="margin-top:0;background:var(--bg3);border:1px solid var(--border);color:var(--blue);font-size:13px;padding:10px" onclick="selecionarProposta(${i}, ${JSON.stringify(propostas).replace(/"/g, '&quot;')})">
-          Usar esta proposta
-        </button>
-      </div>
-    `).join('');
-    // Guia
+    document.getElementById('gapEdicao').textContent = p.gapEdicao || '';
+
     const g = relatorio.guiaImplementacao;
     document.getElementById('formatoSugerido').textContent = g.formatoSugerido;
     document.getElementById('tomNarrativo').textContent = g.tomNarrativo;
     document.getElementById('frequenciaSugerida').textContent = g.frequenciaSugerida;
-    document.getElementById('primeirosPassos').innerHTML = g.primeirosPasso?.map((p, i) => `<div class="relatorio-item">${i+1}. ${p}</div>`).join('') || '';
-    // Preenche o formulário com sugestões do guia
+    document.getElementById('primeirosPassos').innerHTML = g.primeirosPasso?.map((passo, i) => `<div class="relatorio-item">${i+1}. ${passo}</div>`).join('') || '';
+
+    // Renderiza as 3 propostas clicáveis no blocoEscolhas
+    const propostas = relatorio.propostas || [];
+    document.getElementById('propostasEscolha').innerHTML = propostas.map((prop, i) => `
+      <div class="proposta-card" id="proposta-${i}" onclick="selecionarProposta(${i})">
+        <div class="proposta-card-header">
+          <div class="proposta-card-titulo">${prop.titulo || 'Proposta ' + (i+1)}</div>
+          <span class="proposta-badge-selecionada">Selecionada</span>
+        </div>
+        <div class="proposta-campo"><span>Ângulo único</span><span>${prop.anguloUnico}</span></div>
+        <div class="proposta-campo"><span>Subnicho</span><span>${prop.subnicho}</span></div>
+        <div class="proposta-campo"><span>Público</span><span>${prop.publicoAlvo}</span></div>
+        <div class="proposta-campo"><span>Diferencial</span><span>${prop.diferencialCompetitivo}</span></div>
+      </div>
+    `).join('');
+
+    // Preenche gap de edição editável
+    document.getElementById('gapEdicaoEditavel').value = p.gapEdicao || '';
+    document.getElementById('f_nicho').value = '';
     document.getElementById('f_duracao').value = g.formatoSugerido?.includes('min') ? g.formatoSugerido : '';
+
+    document.getElementById('blocoEscolhas').style.display = 'block';
+    document.getElementById('blocoRevisao').style.display = 'none';
+    propostaEscolhida = null;
+  }
+
+  function selecionarProposta(idx) {
+    const propostas = relatorioCompleto?.relatorio?.propostas || [];
+    propostaEscolhida = propostas[idx];
+    document.querySelectorAll('.proposta-card').forEach((card, i) => {
+      card.classList.toggle('selecionada', i === idx);
+    });
+    document.getElementById('f_nicho').value = propostaEscolhida.subnicho || '';
   }
 
   function mostrarErroA(msg) {
@@ -1558,7 +2198,108 @@
     el.classList.add('visivel');
   }
 
-  async function salvarCanal() {
+  async function revisarCanal() {
+    if (!propostaEscolhida) {
+      document.getElementById('erroRevisao').textContent = '⚠️ Selecione uma das 3 propostas antes de revisar.';
+      document.getElementById('erroRevisao').classList.add('visivel');
+      return;
+    }
+    const avatarNome = document.getElementById('f_avatar_nome').value.trim();
+    if (!avatarNome) {
+      document.getElementById('erroRevisao').textContent = '⚠️ Preencha pelo menos o nome do avatar.';
+      document.getElementById('erroRevisao').classList.add('visivel');
+      return;
+    }
+
+    const btn = document.getElementById('btnRevisar');
+    const loading = document.getElementById('loadingRevisao');
+    btn.disabled = true;
+    loading.classList.add('ativo');
+    document.getElementById('erroRevisao').classList.remove('visivel');
+    document.getElementById('blocoRevisao').style.display = 'none';
+
+    const dadosRevisao = {
+      propostaEscolhida,
+      nicho: document.getElementById('f_nicho').value.trim(),
+      gapMercado: relatorioCompleto?.relatorio?.padroesDosCanais?.gapIdentificado || '',
+      gapEdicao: document.getElementById('gapEdicaoEditavel').value.trim(),
+      guiaImplementacao: relatorioCompleto?.relatorio?.guiaImplementacao || {},
+      avatar: {
+        nome: avatarNome,
+        idade: parseInt(document.getElementById('f_avatar_idade').value) || 0,
+        personalidade: document.getElementById('f_avatar_personalidade').value.trim(),
+        historia: {
+          profissao: document.getElementById('f_avatar_profissao').value.trim(),
+          familia: document.getElementById('f_avatar_familia').value.trim(),
+          estiloDeVida: document.getElementById('f_avatar_estilo').value.trim(),
+          biografia: document.getElementById('f_avatar_bio').value.trim()
+        }
+      },
+      tom: {
+        permitido: document.getElementById('f_tom_permitido').value.split(',').map(t => t.trim()).filter(Boolean),
+        proibido: document.getElementById('f_tom_proibido').value.split(',').map(t => t.trim()).filter(Boolean)
+      },
+      publicoAlvo: { faixaEtaria: document.getElementById('f_publico_idade').value.trim() }
+    };
+
+    try {
+      const res = await fetch('/api/revisar-canal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dadosRevisao)
+      });
+      const revisao = await res.json();
+      if (!res.ok) throw new Error(revisao.error || 'Erro na revisão');
+      renderRevisao(revisao);
+      document.getElementById('blocoRevisao').style.display = 'block';
+      document.getElementById('blocoRevisao').scrollIntoView({ behavior: 'smooth' });
+    } catch (err) {
+      document.getElementById('erroRevisao').textContent = '⚠️ ' + err.message;
+      document.getElementById('erroRevisao').classList.add('visivel');
+    } finally {
+      btn.disabled = false;
+      loading.classList.remove('ativo');
+    }
+  }
+
+  function renderRevisao(revisao) {
+    const ps = revisao.probabilidadeSucesso;
+    const classeCor = ps.classificacao?.replace(' ', '-') || 'media';
+    document.getElementById('probabilidadeBox').innerHTML = `
+      <div class="probabilidade-box ${classeCor}">
+        <div class="probabilidade-percentual">${ps.percentual}%</div>
+        <div class="probabilidade-classificacao">probabilidade de sucesso ${ps.classificacao}</div>
+        <div style="font-size:13px;color:var(--white);line-height:1.6;margin-top:8px">${ps.justificativa}</div>
+        <div class="veredicto-badge veredicto-${revisao.veredicto === 'aprovado' ? 'aprovado' : revisao.veredicto === 'aprovado_com_ressalvas' ? 'ressalvas' : 'ajustes'}">
+          ${revisao.veredicto === 'aprovado' ? '✓ Aprovado' : revisao.veredicto === 'aprovado_com_ressalvas' ? '⚠ Aprovado com ressalvas' : '✗ Requer ajustes'}
+        </div>
+      </div>`;
+
+    const categorias = revisao.avaliacaoGeral || {};
+    const icones = { ok: '✓', atencao: '⚠', critico: '✗' };
+    const classes = { ok: 'status-ok', atencao: 'status-atencao', critico: 'status-critico' };
+    document.getElementById('avaliacaoDetalhada').innerHTML = Object.entries(categorias).map(([chave, val]) => `
+      <div class="revisao-item">
+        <span class="${classes[val.status] || 'status-ok'}">${icones[val.status] || '✓'}</span>
+        <div>
+          <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px">${chave}</div>
+          <div style="color:var(--white)">${val.observacao}</div>
+        </div>
+      </div>`).join('');
+
+    if (revisao.conflitos?.length) {
+      document.getElementById('conflitosArea').style.display = 'block';
+      document.getElementById('conflitosLista').innerHTML = revisao.conflitos.map(c => `<div class="relatorio-item" style="color:#f08080">⚠ ${c}</div>`).join('');
+    } else {
+      document.getElementById('conflitosArea').style.display = 'none';
+    }
+
+    document.getElementById('pontosFortes').innerHTML = revisao.pontosFortesDoCanal?.map(p => `<div class="relatorio-item">✦ ${p}</div>`).join('') || '';
+    document.getElementById('recomendacoes').innerHTML = revisao.recomendacoesFinais?.map(r => `<div class="relatorio-item">→ ${r}</div>`).join('') || '';
+    document.getElementById('mensagemFinal').textContent = revisao.mensagemFinal || '';
+  }
+
+  async function confirmarESalvar() {
     const id = document.getElementById('f_id').value.trim().toLowerCase().replace(/\s+/g, '-');
     const canal = document.getElementById('f_canal').value.trim();
     const avatarNome = document.getElementById('f_avatar_nome').value.trim();
@@ -1567,8 +2308,10 @@
       document.getElementById('erroFormulario').classList.add('visivel');
       return;
     }
-    const tomPermitido = document.getElementById('f_tom_permitido').value.split(',').map(t => t.trim()).filter(Boolean);
-    const tomProibido = document.getElementById('f_tom_proibido').value.split(',').map(t => t.trim()).filter(Boolean);
+    const btn = document.getElementById('btnConfirmarSalvar');
+    btn.disabled = true;
+    btn.textContent = 'Salvando...';
+
     const payload = {
       id, canal,
       nicho: document.getElementById('f_nicho').value.trim(),
@@ -1586,18 +2329,37 @@
       },
       publicoAlvo: {
         faixaEtaria: document.getElementById('f_publico_idade').value.trim(),
-        perfil: propostaEscolhida?.publicoAlvo || relatorioAtual?.relatorio?.propostas?.[0]?.publicoAlvo || '',
+        perfil: propostaEscolhida?.publicoAlvo || '',
         dores: [], desejos: []
       },
-      tom: { permitido: tomPermitido, proibido: tomProibido },
+      tom: {
+        permitido: document.getElementById('f_tom_permitido').value.split(',').map(t => t.trim()).filter(Boolean),
+        proibido: document.getElementById('f_tom_proibido').value.split(',').map(t => t.trim()).filter(Boolean)
+      },
       formatoDeVideo: {
         duracaoIdeal: document.getElementById('f_duracao').value.trim(),
-        estrutura: [], estiloDeNarracao: relatorioAtual?.relatorio?.guiaImplementacao?.tomNarrativo || ''
+        estrutura: [],
+        estiloDeNarracao: relatorioCompleto?.relatorio?.guiaImplementacao?.tomNarrativo || ''
+      },
+      estrategia: {
+        propostaEscolhida,
+        todasPropostas: relatorioCompleto?.relatorio?.propostas || [],
+        gapMercado: relatorioCompleto?.relatorio?.padroesDosCanais?.gapIdentificado || '',
+        gapEdicao: document.getElementById('gapEdicaoEditavel').value.trim(),
+        guiaImplementacao: relatorioCompleto?.relatorio?.guiaImplementacao || {},
+        padroesDosCanaisAnalisados: {
+          oQueFunciona: relatorioCompleto?.relatorio?.padroesDosCanais?.oQueFunciona || [],
+          oQueNaoFunciona: relatorioCompleto?.relatorio?.padroesDosCanais?.oQueNaoFunciona || []
+        },
+        canaisAnalisados: relatorioCompleto?.dadosCanais?.map(c => ({
+          nome: c.nomeCanal,
+          inscritos: c.metricas?.totalInscritos,
+          videos: c.metricas?.totalVideos
+        })) || [],
+        dataAnalise: new Date().toISOString()
       }
     };
-    const btn = document.getElementById('btnSalvarCanal');
-    btn.disabled = true;
-    btn.textContent = 'Salvando...';
+
     try {
       const res = await fetch('/api/criar-canal', {
         method: 'POST',
@@ -1606,16 +2368,32 @@
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Erro ao salvar');
+
       document.getElementById('sucessoFormulario').textContent = `✓ Canal "${canal}" criado com sucesso! Acesse a Sessão B para começar a gerar vídeos.`;
       document.getElementById('sucessoFormulario').style.display = 'block';
       document.getElementById('erroFormulario').classList.remove('visivel');
+
+      setTimeout(() => {
+        canais = [];
+        propostaEscolhida = null;
+        relatorioCompleto = null;
+        renderCanaisTags();
+        document.getElementById('preIdeiaInput').value = '';
+        document.getElementById('relatorioArea').style.display = 'none';
+        document.getElementById('blocoEscolhas').style.display = 'none';
+        document.getElementById('blocoRevisao').style.display = 'none';
+        document.getElementById('sucessoFormulario').style.display = 'none';
+        document.querySelectorAll('#aba-a input, #aba-a textarea').forEach(el => el.value = '');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 3000);
+
       await carregarNichos();
     } catch (err) {
       document.getElementById('erroFormulario').textContent = '⚠️ ' + err.message;
       document.getElementById('erroFormulario').classList.add('visivel');
     } finally {
       btn.disabled = false;
-      btn.textContent = 'Salvar canal e criar banco de dados';
+      btn.textContent = 'Confirmar e salvar canal';
     }
   }
 
