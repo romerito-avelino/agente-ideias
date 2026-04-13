@@ -205,6 +205,27 @@ app.put('/api/nicho/:nichoId', (req, res) => {
   }
 });
 
+app.put('/api/nicho/:nichoId/estrategia', (req, res) => {
+  const { nichoId } = req.params;
+  const nichoPath = path.join(NICHOS_DIR, `${nichoId}.json`);
+  if (!fs.existsSync(nichoPath)) return res.status(404).json({ error: 'Nicho não encontrado.' });
+  try {
+    const nicho = JSON.parse(fs.readFileSync(nichoPath, 'utf-8'));
+    nicho.estrategia = req.body.estrategia;
+    nicho.canal = req.body.canal || nicho.canal;
+    nicho.nicho = req.body.nicho || nicho.nicho;
+    nicho.avatar = req.body.avatar || nicho.avatar;
+    nicho.publicoAlvo = req.body.publicoAlvo || nicho.publicoAlvo;
+    nicho.tom = req.body.tom || nicho.tom;
+    nicho.formatoDeVideo = req.body.formatoDeVideo || nicho.formatoDeVideo;
+    fs.writeFileSync(nichoPath, JSON.stringify(nicho, null, 2), 'utf-8');
+    console.log(`[server] Estratégia atualizada: ${nicho.canal}`);
+    res.json({ sucesso: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Falha ao atualizar estratégia.' });
+  }
+});
+
 app.delete('/api/nicho/:nichoId', (req, res) => {
   const { nichoId } = req.params;
   if (nichoId === 'seu-augusto') {

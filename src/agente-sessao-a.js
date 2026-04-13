@@ -121,6 +121,8 @@ async function revisarCanal(dadosRevisao) {
 
 Você analisa coerência, identifica conflitos, avalia potencial de sucesso e dá um veredicto claro.
 
+Seja conciso. Máximo 100 caracteres por campo de texto. JSON compacto e válido.
+
 Retorne APENAS um JSON válido sem texto extra com esta estrutura:
 {
   "probabilidadeSucesso": {
@@ -184,17 +186,29 @@ ${JSON.stringify(dadosRevisao.guiaImplementacao, null, 2)}`;
 
   const message = await client.messages.create({
     model: 'claude-opus-4-5',
-    max_tokens: 2000,
+    max_tokens: 1200,
     system: SYSTEM_PROMPT,
     messages: [{ role: 'user', content: mensagem }]
   });
 
-  const texto = message.content[0].text.trim();
-  const textoLimpo = texto.replace(/[\x00-\x1F\x7F]/g, ' ');
-  const inicio = textoLimpo.indexOf('{');
-  const fim = textoLimpo.lastIndexOf('}');
-  if (inicio === -1 || fim === -1) throw new Error('Resposta inválida do agente de revisão');
-  return JSON.parse(textoLimpo.slice(inicio, fim + 1));
+  const texto = message.content[0].text.trim()
+    .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
+    .replace(/\r|\n|\t/g, ' ');
+  const inicio = texto.indexOf('{');
+  const fim = texto.lastIndexOf('}');
+  if (inicio === -1 || fim === -1) throw new Error('JSON não encontrado na resposta da revisão');
+  const jsonStr = texto.slice(inicio, fim + 1);
+  let resultado;
+  try {
+    resultado = JSON.parse(jsonStr);
+  } catch {
+    const sanitizado = jsonStr
+      .replace(/,\s*}/g, '}')
+      .replace(/,\s*]/g, ']')
+      .replace(/[\u2018\u2019\u201C\u201D]/g, '"');
+    resultado = JSON.parse(sanitizado);
+  }
+  return resultado;
 }
 
 module.exports = { analisarCanal, revisarCanal };

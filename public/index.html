@@ -1429,13 +1429,15 @@
   <div class="nicho-bar">
     <div class="nicho-dot"></div>
     <span class="nicho-label">Nicho ativo:</span>
-    <select class="nicho-select" id="nichoSelect" onchange="nichoAtivo = this.value; carregarHistorico(this.value)">
+    <select class="nicho-select" id="nichoSelect" onchange="nichoAtivo = this.value; if (this.value) { carregarHistorico(this.value); } else { const h = document.getElementById('historicoArea'); if (h) h.style.display = 'none'; }">
       <option value="">Carregando...</option>
     </select>
   </div>
 
-  <div style="display:flex;gap:8px;margin-top:8px;margin-bottom:16px">
+  <div style="display:flex;gap:8px;margin-top:8px;margin-bottom:16px;flex-wrap:wrap">
     <button class="gerenciar-btn" onclick="abrirModalEditar()">✏️ Editar banco de dados</button>
+    <button class="gerenciar-btn" onclick="abrirModalEstrategia()">📊 Ver estratégia</button>
+    <button class="gerenciar-btn" onclick="revisarNichoAtual()" id="btnRevisarNicho">🔄 Revisar com IA</button>
     <button class="gerenciar-btn danger" onclick="confirmarDeletar()">🗑️ Deletar nicho</button>
   </div>
 
@@ -1516,9 +1518,72 @@
           <input type="text" id="e_gatilhos" />
         </div>
       </div>
-      <button class="btn-salvar" onclick="salvarEdicao()">Salvar alterações</button>
+      <div style="display:flex;gap:10px;margin-top:8px">
+        <button class="btn-salvar" onclick="salvarEdicao()" style="flex:1">Salvar alterações</button>
+        <button onclick="fecharModal()" style="flex:0 0 140px;padding:16px;background:rgba(226,75,74,0.1);border:1px solid rgba(226,75,74,0.3);border-radius:var(--radius);color:#E24B4A;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;transition:all 0.2s" onmouseover="this.style.background='rgba(226,75,74,0.2)'" onmouseout="this.style.background='rgba(226,75,74,0.1)'">Cancelar</button>
+      </div>
       <div class="erro" id="erroEdicao" style="margin-top:12px"></div>
       <div id="sucessoEdicao" style="display:none;margin-top:12px;background:rgba(29,158,117,0.1);border:1px solid rgba(29,158,117,0.3);border-radius:var(--radius);padding:14px 18px;color:#1D9E75;font-size:13px"></div>
+    </div>
+  </div>
+
+  <!-- Modal de estratégia -->
+  <div class="modal-overlay" id="modalEstrategia" style="position:fixed">
+    <div class="modal-box" style="max-width:800px">
+      <div class="modal-header">
+        <div class="modal-titulo">Estratégia do canal</div>
+        <button class="modal-fechar" onclick="fecharModalEstrategia()">×</button>
+      </div>
+
+      <!-- Probabilidade atual -->
+      <div id="estrategiaProbabilidade" style="margin-bottom:20px"></div>
+
+      <!-- Proposta escolhida -->
+      <div style="margin-bottom:20px">
+        <div class="relatorio-titulo" style="margin-bottom:10px">Proposta escolhida</div>
+        <div id="estrategiaProposta" class="relatorio-destaque"></div>
+      </div>
+
+      <!-- Gap de mercado e edição -->
+      <div class="resultado-grid" style="margin-bottom:20px">
+        <div>
+          <div class="relatorio-titulo" style="margin-bottom:8px">Gap de mercado</div>
+          <div id="estrategiaGapMercado" style="font-size:13px;color:var(--white);line-height:1.6"></div>
+        </div>
+        <div>
+          <div class="relatorio-titulo" style="margin-bottom:8px">Gap de edição</div>
+          <div id="estrategiaGapEdicao" style="font-size:13px;color:var(--white);line-height:1.6"></div>
+        </div>
+      </div>
+
+      <!-- Guia de implementação -->
+      <div style="margin-bottom:20px">
+        <div class="relatorio-titulo" style="margin-bottom:10px">Guia de implementação</div>
+        <div id="estrategiaGuia" style="font-size:13px;color:var(--white);line-height:1.8"></div>
+      </div>
+
+      <!-- Canais analisados -->
+      <div style="margin-bottom:20px">
+        <div class="relatorio-titulo" style="margin-bottom:10px">Canais analisados como base</div>
+        <div id="estrategiaCanais"></div>
+      </div>
+
+      <!-- Data da análise -->
+      <div style="font-size:11px;color:var(--muted);text-align:right" id="estrategiaData"></div>
+
+      <!-- Revisão atual -->
+      <div id="estrategiaRevisao" style="display:none;margin-top:20px"></div>
+
+      <!-- Botão revisar -->
+      <button class="btn-revisar" id="btnRevisarModal" onclick="revisarNichoAtual()" style="margin-top:16px">
+        🔄 Revisar probabilidade de sucesso com IA
+      </button>
+      <div class="loading" id="loadingRevisaoNicho" style="margin-top:12px">
+        <div class="spinner"></div>
+        <span>Analisando o banco de dados atual...</span>
+      </div>
+
+      <button onclick="fecharModalEstrategia()" style="width:100%;margin-top:12px;padding:12px;background:none;border:1px solid var(--border);border-radius:var(--radius);color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:14px;transition:all 0.2s" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">Fechar</button>
     </div>
   </div>
 
@@ -1654,16 +1719,14 @@
       const res = await fetch('/api/nichos');
       const nichos = await res.json();
       const select = document.getElementById('nichoSelect');
-      select.innerHTML = nichos.map(n =>
-        `<option value="${n.id}">${n.nome} · ${n.nicho}</option>`
-      ).join('');
-      if (nichos.length) {
-        nichoAtivo = nichos[0].id;
-        carregarHistorico(nichoAtivo);
-      }
-    } catch {
-      document.getElementById('nichoSelect').innerHTML =
-        '<option value="seu-augusto">Seu Augusto</option>';
+      if (!select) return;
+      select.innerHTML = '<option value="">— Selecione um canal —</option>' +
+        nichos.map(n => `<option value="${n.id}">${n.nome} · ${n.nicho}</option>`).join('');
+      nichoAtivo = '';
+      const nichoBarra = document.querySelector('.nicho-bar .nicho-value');
+      if (nichoBarra) nichoBarra.textContent = 'Nenhum canal selecionado';
+    } catch (err) {
+      console.error('Erro ao carregar nichos:', err.message);
     }
   }
 
@@ -1731,6 +1794,10 @@
   });
 
   async function gerarIdeias() {
+    if (!nichoAtivo) {
+      mostrarErro('Selecione um canal antes de gerar ideias.');
+      return;
+    }
     if (temas.length === 0 && videos.length === 0) {
       mostrarErro('Adicione pelo menos um tema ou vídeo de referência.');
       return;
@@ -2361,15 +2428,33 @@
     };
 
     try {
-      const res = await fetch('/api/criar-canal', {
-        method: 'POST',
+      // Verifica se canal já existe
+      const verificacao = await fetch(`/api/nicho/${id}`);
+      let endpoint, method;
+      if (verificacao.ok) {
+        // Canal existe — atualiza estratégia
+        endpoint = `/api/nicho/${id}/estrategia`;
+        method = 'PUT';
+        btn.textContent = 'Atualizando estratégia...';
+      } else {
+        // Canal novo — cria
+        endpoint = '/api/criar-canal';
+        method = 'POST';
+      }
+
+      const res = await fetch(endpoint, {
+        method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Erro ao salvar');
 
-      document.getElementById('sucessoFormulario').textContent = `✓ Canal "${canal}" criado com sucesso! Acesse a Sessão B para começar a gerar vídeos.`;
+      const mensagem = verificacao.ok
+        ? `✓ Estratégia do canal "${canal}" atualizada com sucesso!`
+        : `✓ Canal "${canal}" criado com sucesso! Acesse a aba Vídeos.`;
+
+      document.getElementById('sucessoFormulario').textContent = mensagem;
       document.getElementById('sucessoFormulario').style.display = 'block';
       document.getElementById('erroFormulario').classList.remove('visivel');
 
@@ -2383,7 +2468,7 @@
         document.getElementById('blocoEscolhas').style.display = 'none';
         document.getElementById('blocoRevisao').style.display = 'none';
         document.getElementById('sucessoFormulario').style.display = 'none';
-        document.querySelectorAll('#aba-a input, #aba-a textarea').forEach(el => el.value = '');
+        document.querySelectorAll('#aba-validacao input, #aba-validacao textarea').forEach(el => el.value = '');
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }, 3000);
 
@@ -2429,6 +2514,170 @@
 
   function fecharModal() {
     document.getElementById('modalEditar').classList.remove('aberto');
+  }
+
+  async function abrirModalEstrategia() {
+    try {
+      const res = await fetch(`/api/nicho/${nichoAtivo}`);
+      const nicho = await res.json();
+      const e = nicho.estrategia || {};
+
+      // Probabilidade
+      const prob = nicho.ultimaRevisao?.probabilidadeSucesso;
+      const revisaoData = nicho.ultimaRevisao?.data;
+      if (prob) {
+        const pct = prob.percentual;
+        const cor = pct >= 70 ? '#1D9E75' : pct >= 50 ? '#EF9F27' : '#E24B4A';
+        document.getElementById('estrategiaProbabilidade').innerHTML = `
+          <div style="background:var(--bg3);border:2px solid ${cor};border-radius:12px;padding:16px 20px;display:flex;align-items:center;gap:16px;margin-bottom:4px">
+            <div style="text-align:center;min-width:80px">
+              <div style="font-family:'Playfair Display',serif;font-size:42px;font-weight:700;color:${cor};line-height:1">${pct}%</div>
+              <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:2px">sucesso</div>
+            </div>
+            <div style="flex:1">
+              <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Probabilidade ${prob.classificacao}</div>
+              <div style="font-size:13px;color:var(--white);line-height:1.5">${prob.justificativa}</div>
+              ${revisaoData ? `<div style="font-size:11px;color:var(--muted);margin-top:6px">Última revisão: ${new Date(revisaoData).toLocaleDateString('pt-BR')}</div>` : ''}
+            </div>
+          </div>`;
+      } else {
+        document.getElementById('estrategiaProbabilidade').innerHTML = `
+          <div style="background:var(--bg3);border:1px dashed var(--border);border-radius:12px;padding:16px 20px;display:flex;align-items:center;gap:16px;margin-bottom:4px">
+            <div style="text-align:center;min-width:80px">
+              <div style="font-family:'Playfair Display',serif;font-size:42px;font-weight:700;color:var(--muted);line-height:1">?%</div>
+              <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:2px">sucesso</div>
+            </div>
+            <div style="flex:1">
+              <div style="font-size:13px;color:var(--muted)">Nenhuma revisão realizada ainda.</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:4px">Clique em "Revisar" abaixo para calcular a probabilidade de sucesso do canal.</div>
+            </div>
+          </div>`;
+      }
+
+      // Proposta
+      const p = e.propostaEscolhida;
+      document.getElementById('estrategiaProposta').innerHTML = p ? `
+        <strong style="color:var(--blue)">${p.titulo || 'Proposta selecionada'}</strong><br>
+        <span style="color:var(--muted)">Ângulo:</span> ${p.anguloUnico}<br>
+        <span style="color:var(--muted)">Subnicho:</span> ${p.subnicho}<br>
+        <span style="color:var(--muted)">Público:</span> ${p.publicoAlvo}<br>
+        <span style="color:var(--muted)">Diferencial:</span> ${p.diferencialCompetitivo}
+      ` : '<span style="color:var(--muted)">Nenhuma proposta registrada</span>';
+
+      // Gaps
+      document.getElementById('estrategiaGapMercado').textContent = e.gapMercado || 'Não registrado';
+      document.getElementById('estrategiaGapEdicao').textContent = e.gapEdicao || 'Não registrado';
+
+      // Guia
+      const g = e.guiaImplementacao || {};
+      document.getElementById('estrategiaGuia').innerHTML = g.formatoSugerido ? `
+        <div style="margin-bottom:6px"><span style="color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:1px">Formato: </span>${g.formatoSugerido}</div>
+        <div style="margin-bottom:6px"><span style="color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:1px">Tom: </span>${g.tomNarrativo}</div>
+        <div style="margin-bottom:6px"><span style="color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:1px">Frequência: </span>${g.frequenciaSugerida}</div>
+        ${g.primeirosPasso?.length ? '<div style="margin-top:8px">' + g.primeirosPasso.map((p,i) => `<div style="padding:4px 0;border-bottom:1px solid var(--border);font-size:12px">${i+1}. ${p}</div>`).join('') + '</div>' : ''}
+      ` : '<span style="color:var(--muted)">Não registrado</span>';
+
+      // Canais
+      const canaisBase = e.canaisAnalisados || [];
+      document.getElementById('estrategiaCanais').innerHTML = canaisBase.length ? canaisBase.map(c => `
+        <div style="display:flex;gap:10px;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px">
+          <span style="color:var(--blue)">▸</span>
+          <span style="color:var(--white)">${c.nome}</span>
+          <span style="color:var(--muted);margin-left:auto">${Number(c.inscritos||0).toLocaleString()} inscritos</span>
+        </div>
+      `).join('') : '<span style="color:var(--muted);font-size:13px">Nenhum canal registrado</span>';
+
+      // Data
+      document.getElementById('estrategiaData').textContent = e.dataAnalise ? `Análise realizada em: ${new Date(e.dataAnalise).toLocaleDateString('pt-BR')}` : '';
+
+      document.getElementById('loadingRevisaoNicho').classList.remove('ativo');
+      document.getElementById('modalEstrategia').classList.add('aberto');
+    } catch (err) {
+      alert('Erro ao carregar estratégia: ' + err.message);
+    }
+  }
+
+  function fecharModalEstrategia() {
+    document.getElementById('modalEstrategia').classList.remove('aberto');
+  }
+
+  async function revisarNichoAtual() {
+    const loading = document.getElementById('loadingRevisaoNicho');
+    const btnModal = document.getElementById('btnRevisarModal');
+    const btnExterno = document.getElementById('btnRevisarNicho');
+    if (btnModal) btnModal.disabled = true;
+    if (btnExterno) btnExterno.disabled = true;
+    if (loading) loading.classList.add('ativo');
+
+    try {
+      const res = await fetch(`/api/nicho/${nichoAtivo}`);
+      const nicho = await res.json();
+
+      const dadosRevisao = {
+        propostaEscolhida: nicho.estrategia?.propostaEscolhida || { anguloUnico: nicho.nicho },
+        nicho: nicho.nicho,
+        gapMercado: nicho.estrategia?.gapMercado || '',
+        gapEdicao: nicho.estrategia?.gapEdicao || '',
+        guiaImplementacao: nicho.estrategia?.guiaImplementacao || {},
+        avatar: nicho.avatar,
+        tom: nicho.tom,
+        publicoAlvo: nicho.publicoAlvo
+      };
+
+      const resRevisao = await fetch('/api/revisar-canal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dadosRevisao)
+      });
+      const revisao = await resRevisao.json();
+      if (!resRevisao.ok) throw new Error(revisao.error);
+
+      // Salva a revisão no nicho
+      await fetch(`/api/nicho/${nichoAtivo}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ultimaRevisao: { ...revisao, data: new Date().toISOString() } })
+      });
+
+      // Mostra resultado
+      const area = document.getElementById('estrategiaRevisao');
+      if (area) {
+        area.style.display = 'block';
+        area.innerHTML = '';
+        const divTemp = document.createElement('div');
+        document.body.appendChild(divTemp);
+        renderRevisao(revisao);
+        const blocoRevisao = document.getElementById('blocoRevisao');
+        if (blocoRevisao) area.innerHTML = blocoRevisao.innerHTML;
+        document.body.removeChild(divTemp);
+      }
+
+      // Atualiza probabilidade no topo
+      const prob = revisao.probabilidadeSucesso;
+      if (prob) {
+        const cls = prob.classificacao?.includes('alta') ? 'alta' : prob.classificacao === 'média' ? 'media' : 'baixa';
+        document.getElementById('estrategiaProbabilidade').innerHTML = `
+          <div class="probabilidade-box ${cls}" style="text-align:center;padding:16px;border-radius:10px;margin-bottom:4px">
+            <div class="probabilidade-percentual">${prob.percentual}%</div>
+            <div class="probabilidade-classificacao">probabilidade de sucesso ${prob.classificacao}</div>
+            <div style="font-size:12px;color:var(--white);margin-top:6px">${prob.justificativa}</div>
+          </div>`;
+      }
+
+      // Renderiza revisão completa
+      const areaRevisao = document.getElementById('estrategiaRevisao');
+      areaRevisao.style.display = 'block';
+      const divRevisao = document.createElement('div');
+      renderRevisao(revisao);
+      areaRevisao.innerHTML = document.getElementById('blocoRevisao')?.innerHTML || '';
+
+    } catch (err) {
+      alert('Erro na revisão: ' + err.message);
+    } finally {
+      if (btnModal) btnModal.disabled = false;
+      if (btnExterno) btnExterno.disabled = false;
+      if (loading) loading.classList.remove('ativo');
+    }
   }
 
   async function salvarEdicao() {

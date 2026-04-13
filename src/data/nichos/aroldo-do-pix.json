@@ -1,0 +1,111 @@
+{
+  "canal": "Aroldo do Pix",
+  "nicho": "Histórias de recomeço financeiro na terceira idade",
+  "avatar": {
+    "nome": "Seu Aroldo",
+    "idade": 0,
+    "personalidade": "",
+    "historia": {
+      "profissao": "",
+      "familia": "",
+      "estiloDeVida": "",
+      "biografia": ""
+    },
+    "jeitoDeFalar": []
+  },
+  "publicoAlvo": {
+    "faixaEtaria": "35-45",
+    "perfil": "Pessoas 50+ que sentem que começaram tarde demais e buscam esperança com praticidade",
+    "dores": [],
+    "desejos": []
+  },
+  "tom": {
+    "permitido": [],
+    "proibido": []
+  },
+  "formatoDeVideo": {
+    "duracaoIdeal": "8-15 min: Gancho emocional (30s) → Contexto da história (2min) → Desenvolvimento com conflito (4min) → Virada/lição (2min) → Aplicação prática (2min)",
+    "estrutura": [],
+    "estiloDeNarracao": "Voz calma e acolhedora, como avô contando história. Pausas dramáticas. Sem pressa. Frases curtas e diretas."
+  },
+  "temasFuncionaram": [],
+  "temasProibidos": [],
+  "videosPublicados": [],
+  "padroesDosComentarios": [],
+  "palavrasQueEngajam": [],
+  "gatilhosQueConvertem": [],
+  "estruturasDeTitulos": {
+    "instrucao": "Use essas estruturas como moldes.",
+    "confissaoVulnerabilidade": [],
+    "consequenciaVirada": [],
+    "endereçamentoDireto": [],
+    "revelacaoSegredo": [],
+    "tempoArrependimento": [],
+    "gatilhoDeIdentidade": []
+  },
+  "historicoGeracoes": [],
+  "estrategia": {
+    "propostaEscolhida": {
+      "titulo": "Seu Antônio Ensina",
+      "anguloUnico": "Avatar idoso conta histórias de erros e acertos financeiros da própria vida, terminando cada vídeo com a lição prática",
+      "subnicho": "Histórias de recomeço financeiro na terceira idade",
+      "publicoAlvo": "Pessoas 50+ que sentem que começaram tarde demais e buscam esperança com praticidade",
+      "diferencialCompetitivo": "Empatia de quem viveu os mesmos erros + lições aplicáveis sem jargão financeiro"
+    },
+    "todasPropostas": [
+      {
+        "titulo": "Seu Antônio Ensina",
+        "anguloUnico": "Avatar idoso conta histórias de erros e acertos financeiros da própria vida, terminando cada vídeo com a lição prática",
+        "subnicho": "Histórias de recomeço financeiro na terceira idade",
+        "publicoAlvo": "Pessoas 50+ que sentem que começaram tarde demais e buscam esperança com praticidade",
+        "diferencialCompetitivo": "Empatia de quem viveu os mesmos erros + lições aplicáveis sem jargão financeiro"
+      },
+      {
+        "titulo": "Histórias de Quem Aposentou",
+        "anguloUnico": "Cada vídeo é a história de um personagem diferente (fictício mas realista) que enfrentou um desafio financeiro na aposentadoria",
+        "subnicho": "Histórias de superação financeira de aposentados",
+        "publicoAlvo": "Aposentados e pré-aposentados com medo do futuro financeiro, buscando histórias que terminam bem",
+        "diferencialCompetitivo": "Formato antologia - cada vídeo é uma história nova, viciante como novela"
+      },
+      {
+        "titulo": "Lições do Meu Avô",
+        "anguloUnico": "Neto narra histórias que o avô contou sobre dinheiro, negócios e vida - resgatando sabedoria de gerações passadas",
+        "subnicho": "Histórias de sabedoria financeira entre gerações",
+        "publicoAlvo": "Jovens adultos 25-40 que valorizam sabedoria antiga e querem evitar erros dos pais",
+        "diferencialCompetitivo": "Atinge público jovem E idoso simultaneamente - avós compartilham com netos"
+      }
+    ],
+    "gapMercado": "Zero canais combinando histórias de vida reais com lições financeiras. O público 50+ quer se ver representado, não apenas ouvir dados.",
+    "gapEdicao": "Usar cenas do cotidiano de idosos (café da manhã, passeio no parque), inserir fotos antigas simuladas, mostrar avatar em situações reais como banco, mercado, família.",
+    "guiaImplementacao": {
+      "formatoSugerido": "8-12 min: Gancho emocional (30s) → Contexto da história (2min) → Desenvolvimento com conflito (4min) → Virada/lição (2min) → Aplicação prática (2min)",
+      "tomNarrativo": "Voz calma e acolhedora, como avô contando história. Pausas dramáticas. Sem pressa. Frases curtas e diretas.",
+      "frequenciaSugerida": "3x por semana. Público 50+ tem tempo e consome muito conteúdo. Consistência gera confiança.",
+      "primeirosPasso": [
+        "Criar persona do avatar com backstory completo",
+        "Produzir 10 histórias antes de lançar",
+        "Postar 3 vídeos no dia 1 para ter catálogo inicial"
+      ]
+    },
+    "padroesDosCanaisAnalisados": {
+      "oQueFunciona": [
+        "Títulos com números e dados específicos",
+        "Foco em medos reais: aposentadoria com pouco dinheiro",
+        "Conteúdo que desafia narrativas tradicionais"
+      ],
+      "oQueNaoFunciona": [
+        "Formato talking head sem emoção",
+        "Falta de conexão pessoal e storytelling",
+        "Vídeos longos demais sem gancho emocional"
+      ]
+    },
+    "canaisAnalisados": [
+      {
+        "nome": "Wes - The Catch-Up Investor",
+        "inscritos": "4700",
+        "videos": "67"
+      }
+    ],
+    "dataAnalise": "2026-04-13T21:02:55.739Z"
+  }
+}
