@@ -1129,6 +1129,315 @@
 }
 .btn-ir-validacao.visivel { display: inline-block; }
 .btn-ir-validacao:hover { background: #0F6E56; }
+.aprovacao-area {
+  display: none;
+  margin-top: 28px;
+}
+.aprovacao-area.visivel { display: block; }
+.selecao-titulo-item {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 10px;
+  padding: 14px 16px;
+  transition: all 0.2s;
+}
+.selecao-titulo-item:hover { border-color: var(--blue-dim); }
+.selecao-titulo-item.selecionado {
+  background: var(--blue-glow);
+  border-color: var(--blue);
+}
+.selecao-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  color: var(--blue-dim);
+  min-width: 24px;
+  line-height: 1.3;
+}
+.selecao-titulo-item.selecionado .selecao-num { color: var(--blue); }
+.selecao-texto {
+  font-size: 14px;
+  color: var(--white);
+  line-height: 1.5;
+  flex: 1;
+}
+.selecao-check {
+  display: none;
+  color: var(--blue);
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.selecao-titulo-item.selecionado .selecao-check { display: block; }
+.selecao-estrutura-item {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  padding: 14px 16px;
+  transition: all 0.2s;
+  font-size: 13px;
+  color: var(--white);
+  line-height: 1.7;
+  position: relative;
+}
+.selecao-estrutura-item:hover { border-color: var(--blue-dim); }
+.selecao-estrutura-item.selecionado {
+  background: var(--blue-glow);
+  border-color: var(--blue);
+}
+.selecao-estrutura-label {
+  font-size: 10px;
+  color: var(--blue);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+.selecao-estrutura-item.selecionado .selecao-estrutura-label { color: var(--blue); }
+.btn-preparar-pacote {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #1E40AF, #2563EB);
+  border: none;
+  border-radius: var(--radius);
+  color: #fff;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  margin-top: 20px;
+  transition: all 0.2s;
+  letter-spacing: 0.5px;
+}
+.btn-preparar-pacote:hover { opacity: 0.9; }
+.btn-preparar-pacote:disabled { opacity: 0.4; cursor: not-allowed; }
+.modal-voz-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+.modal-voz-field label {
+  font-size: 12px;
+  color: var(--blue);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.modal-voz-field textarea, .modal-voz-field input {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  outline: none;
+  padding: 12px 14px;
+  resize: vertical;
+  transition: border-color 0.2s;
+  width: 100%;
+}
+.modal-voz-field textarea:focus, .modal-voz-field input:focus { border-color: var(--blue); }
+.modal-voz-field .instrucao {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.btn-exportar {
+  width: 100%;
+  padding: 16px;
+  background: #1D9E75;
+  border: none;
+  border-radius: var(--radius);
+  color: #fff;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  margin-top: 8px;
+  transition: all 0.2s;
+}
+.btn-exportar:hover { background: #0F6E56; }
+.btn-exportar:disabled { opacity: 0.5; cursor: not-allowed; }
+.download-sucesso {
+  display: none;
+  background: rgba(29,158,117,0.1);
+  border: 1px solid rgba(29,158,117,0.3);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  margin-top: 12px;
+  text-align: center;
+}
+.download-sucesso.visivel { display: block; }
+.download-link {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 10px 24px;
+  background: #1D9E75;
+  border-radius: var(--radius);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.download-link:hover { background: #0F6E56; }
+.titulo-opcao {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.titulo-opcao:last-child { border-bottom: none; }
+.titulo-opcao-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  color: var(--blue-dim);
+  min-width: 24px;
+  line-height: 1.3;
+  flex-shrink: 0;
+}
+.titulo-opcao-texto {
+  font-size: 14px;
+  color: var(--white);
+  line-height: 1.5;
+  flex: 1;
+}
+.btn-usar {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  padding: 4px 10px;
+  transition: all 0.2s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.btn-usar:hover { border-color: var(--blue); color: var(--blue); }
+.btn-usar.ativo {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
+}
+.check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+}
+.check-item:last-child { border-bottom: none; }
+.check-box {
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  background: var(--bg3);
+}
+.check-item.marcado .check-box {
+  background: var(--blue);
+  border-color: var(--blue);
+}
+.check-item.marcado .check-box::after {
+  content: '✓';
+  color: #fff;
+  font-size: 11px;
+}
+.check-texto {
+  font-size: 13px;
+  color: var(--white);
+  line-height: 1.5;
+  flex: 1;
+}
+.roteiro-opcao {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 10px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.roteiro-opcao.selecionado { border-color: var(--blue); }
+.roteiro-opcao-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg2);
+}
+.roteiro-opcao-label {
+  font-size: 10px;
+  color: var(--blue);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 500;
+}
+.roteiro-opcao-texto {
+  padding: 12px 14px;
+  font-size: 13px;
+  color: var(--white);
+  line-height: 1.7;
+}
+.loading-elemento {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--muted);
+  padding: 8px 0;
+}
+.loading-elemento.ativo { display: flex; }
+.revisao-preview-bloco {
+  background: var(--bg3);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 12px;
+}
+.revisao-preview-label {
+  font-size: 10px;
+  color: var(--blue);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+.revisao-preview-texto {
+  font-size: 13px;
+  color: var(--white);
+  line-height: 1.6;
+}
+.gap-editavel {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  outline: none;
+  padding: 12px 14px;
+  resize: vertical;
+  transition: border-color 0.2s;
+  width: 100%;
+  line-height: 1.6;
+}
+.gap-editavel:focus { border-color: var(--blue); }
 </style>
 </head>
 <body>
@@ -1640,71 +1949,131 @@
   </div>
 
   <!-- Resultados -->
-  <div id="resultado">
+  <div id="resultado" style="display:none;margin-top:32px">
 
     <div class="resultado-divider">Novo Tema</div>
 
-    <div class="resultado-grid">
-      <!-- Títulos -->
-      <div class="resultado-card">
-        <div class="card-header">
-          <div class="card-title"><span>🎯</span> Títulos</div>
-          <button class="btn-copy" onclick="copiar('titulos')">Copiar</button>
-        </div>
-        <div id="titulos"></div>
+    <!-- TÍTULOS -->
+    <div class="resultado-card">
+      <div class="card-header">
+        <div class="card-title"><span>🎯</span> Títulos</div>
+        <button class="btn-copy" onclick="regerarElemento('titulos')">↺ Gerar novamente</button>
       </div>
+      <div id="titulos"></div>
+    </div>
 
-      <!-- Sinopse -->
-      <div class="resultado-card">
-        <div class="card-header">
-          <div class="card-title"><span>📋</span> Sinopse</div>
-          <button class="btn-copy" onclick="copiar('sinopse')">Copiar</button>
-        </div>
-        <div id="sinopse" class="sinopse-text"></div>
+    <!-- SINOPSE -->
+    <div class="resultado-card">
+      <div class="card-header">
+        <div class="card-title"><span>📋</span> Sinopse</div>
+        <button class="btn-copy" onclick="regerarElemento('sinopse')">↺ Gerar novamente</button>
       </div>
+      <textarea id="sinopse" class="gap-editavel" rows="6"></textarea>
+    </div>
 
-      <!-- Rascunho Thumbnail -->
-      <div class="resultado-card full">
-        <div class="card-header">
-          <div class="card-title"><span>🖼️</span> Rascunho de Thumbnail</div>
-          <button class="btn-copy" onclick="copiar('thumbnail')">Copiar</button>
-        </div>
-        <div id="thumbnail" class="capa-text"></div>
+    <!-- THUMBNAIL -->
+    <div class="resultado-card full">
+      <div class="card-header">
+        <div class="card-title"><span>🖼️</span> Rascunho de Thumbnail</div>
+        <button class="btn-copy" onclick="regerarElemento('thumbnail')">↺ Gerar novamente</button>
       </div>
+      <textarea id="thumbnail" class="gap-editavel" rows="3"></textarea>
     </div>
 
     <div class="resultado-divider">Nova Abordagem</div>
 
-    <div class="resultado-grid">
-      <!-- Gatilhos -->
-      <div class="resultado-card">
-        <div class="card-header">
-          <div class="card-title"><span>⚡</span> Gatilhos Emocionais</div>
-          <button class="btn-copy" onclick="copiar('gatilhos')">Copiar</button>
-        </div>
-        <div id="gatilhos"></div>
+    <!-- GATILHOS -->
+    <div class="resultado-card">
+      <div class="card-header">
+        <div class="card-title"><span>⚡</span> Gatilhos Emocionais</div>
+        <button class="btn-copy" onclick="regerarElemento('gatilhos')">↺ Gerar novamente</button>
       </div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:10px">Selecione os que deseja incluir no pacote</div>
+      <div id="gatilhos"></div>
+    </div>
 
-      <!-- Ganchos -->
-      <div class="resultado-card">
-        <div class="card-header">
-          <div class="card-title"><span>🪝</span> Ganchos</div>
-          <button class="btn-copy" onclick="copiar('ganchos')">Copiar</button>
-        </div>
-        <div id="ganchos"></div>
+    <!-- GANCHOS -->
+    <div class="resultado-card">
+      <div class="card-header">
+        <div class="card-title"><span>🪝</span> Ganchos</div>
+        <button class="btn-copy" onclick="regerarElemento('ganchos')">↺ Gerar novamente</button>
       </div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:10px">Selecione os que deseja incluir no pacote</div>
+      <div id="ganchos"></div>
+    </div>
 
-      <!-- Estrutura Roteiro -->
-      <div class="resultado-card full">
-        <div class="card-header">
-          <div class="card-title"><span>📝</span> Estrutura do Roteiro</div>
-          <button class="btn-copy" onclick="copiar('roteiro')">Copiar</button>
-        </div>
-        <div id="roteiro"></div>
+    <!-- ESTRUTURA ROTEIRO -->
+    <div class="resultado-card full">
+      <div class="card-header">
+        <div class="card-title"><span>📝</span> Estrutura do Roteiro</div>
+        <button class="btn-copy" onclick="regerarElemento('roteiro')">↺ Gerar novamente</button>
       </div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:10px">Escolha uma estrutura para o roteiro</div>
+      <div id="roteiro"></div>
+    </div>
+
+    <!-- BOTÃO PREPARAR PACOTE -->
+    <div id="barraPacote" style="display:none;margin-top:24px">
+      <button class="btn-preparar-pacote" onclick="abrirModalVoz()">
+        Preparar pacote para o Roteirista →
+      </button>
     </div>
 
   </div>
+
+  <!-- Modal de voz do criador -->
+  <div class="modal-overlay" id="modalVoz" style="position:fixed">
+    <div class="modal-box" style="max-width:700px">
+      <div class="modal-header">
+        <div class="modal-titulo">Sua voz — elementos manuais</div>
+        <button class="modal-fechar" onclick="fecharModalVoz()">×</button>
+      </div>
+
+      <div style="font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.6">
+        Esses elementos serão inseridos no roteiro exatamente como você escrever. O Agente-Roteirista não vai reescrever — apenas posicionar nos momentos certos.
+      </div>
+
+      <div class="modal-voz-field">
+        <label>Hook pessoal</label>
+        <div class="instrucao">Será inserido na abertura — primeiros 30 segundos. Escreva como você falaria naturalmente.</div>
+        <textarea id="hookPessoal" rows="3" placeholder="Ex: Eu nunca contei isso pra ninguém. Mas hoje, com 70 anos, sinto que está na hora..."></textarea>
+      </div>
+
+      <div class="modal-voz-field">
+        <label>Ensinamento próprio</label>
+        <div class="instrucao">A lição de vida que VOCÊ tira desse tema — da sua experiência real. Será inserida antes do encerramento.</div>
+        <textarea id="ensinamentoProprio" rows="3" placeholder="Ex: O que aprendi é que a gente não perde o dinheiro — perde o tempo que gastou ganhando ele..."></textarea>
+      </div>
+
+      <div class="modal-voz-field">
+        <label>CTA específico</label>
+        <div class="instrucao">Chamada para ação do encerramento. Pode ser para comentar, compartilhar, se inscrever — com as suas palavras.</div>
+        <textarea id="ctaEspecifico" rows="2" placeholder="Ex: Se você também já passou por isso, me conta aqui nos comentários. Quero ler cada história..."></textarea>
+      </div>
+
+      <div class="modal-voz-field">
+        <label>Observações para o Roteirista (opcional)</label>
+        <div class="instrucao">Qualquer instrução especial que o Agente-Roteirista precisa saber sobre este vídeo específico.</div>
+        <textarea id="obsRoteirista" rows="3" placeholder="Ex: Esse vídeo é mais leve, sem drama excessivo. Quero que o tom seja esperançoso do início ao fim..."></textarea>
+      </div>
+
+      <!-- Revisão final -->
+      <div class="resultado-divider" style="margin:20px 0 16px">Revisão final do pacote</div>
+      <div id="revisaoFinal"></div>
+
+      <button class="btn-exportar" id="btnExportar" onclick="exportarPacote()">
+        Gerar pacote .docx para o Roteirista
+      </button>
+      <div class="erro" id="erroExportacao" style="margin-top:12px"></div>
+      <div class="download-sucesso" id="downloadSucesso">
+        <div style="color:#1D9E75;font-size:14px;font-weight:500">✓ Pacote gerado com sucesso!</div>
+        <div style="color:var(--muted);font-size:13px;margin-top:4px">Clique abaixo para baixar o arquivo Word</div>
+        <a id="downloadLink" href="#" class="download-link">⬇ Baixar pacote .docx</a>
+      </div>
+      <button onclick="fecharModalVoz()" style="width:100%;margin-top:10px;padding:12px;background:none;border:1px solid var(--border);border-radius:var(--radius);color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:14px;transition:all 0.2s">Fechar</button>
+    </div>
+  </div>
+
 </div>
 </main>
 
@@ -1713,6 +2082,222 @@
   let videos = [];
   let dadosGerados = {};
   let nichoAtivo = 'seu-augusto';
+  let tituloEscolhido = null;
+  let estruturaEscolhida = null;
+
+  function renderTitulos(titulos) {
+    document.getElementById('titulos').innerHTML = titulos.map((t, i) => `
+      <div class="titulo-opcao" id="tit-${i}">
+        <div class="titulo-opcao-num">${i + 1}</div>
+        <div class="titulo-opcao-texto">${t}</div>
+        <button class="btn-usar" id="btntit-${i}" onclick="usarTitulo(${i})">Usar este</button>
+      </div>
+    `).join('');
+  }
+
+  function renderGatilhos(gatilhos) {
+    const emojis = ['❤️','😢','😤','😱','🥺','✨','💔'];
+    document.getElementById('gatilhos').innerHTML = gatilhos.map((g, i) => `
+      <div class="check-item marcado" id="gat-${i}" onclick="toggleCheck('gat-${i}')">
+        <div class="check-box"></div>
+        <div class="check-texto">${emojis[i % emojis.length]} ${g}</div>
+      </div>
+    `).join('');
+  }
+
+  function renderGanchos(ganchos) {
+    document.getElementById('ganchos').innerHTML = ganchos.map((g, i) => `
+      <div class="check-item marcado" id="gan-${i}" onclick="toggleCheck('gan-${i}')">
+        <div class="check-box"></div>
+        <div class="check-texto">${g}</div>
+      </div>
+    `).join('');
+  }
+
+  function renderEstruturas(estruturas) {
+    document.getElementById('roteiro').innerHTML = estruturas.map((e, i) => `
+      <div class="roteiro-opcao" id="rot-${i}">
+        <div class="roteiro-opcao-header">
+          <span class="roteiro-opcao-label">Opção ${i + 1}</span>
+          <button class="btn-usar" id="btnrot-${i}" onclick="usarEstrutura(${i})">Usar esta</button>
+        </div>
+        <div class="roteiro-opcao-texto">${e}</div>
+      </div>
+    `).join('');
+  }
+
+  function usarTitulo(idx) {
+    document.querySelectorAll('[id^="btntit-"]').forEach(b => b.classList.remove('ativo'));
+    document.getElementById(`btntit-${idx}`).classList.add('ativo');
+    tituloEscolhido = dadosGerados.titulos?.[idx];
+    verificarPacote();
+  }
+
+  function usarEstrutura(idx) {
+    document.querySelectorAll('.roteiro-opcao').forEach(r => r.classList.remove('selecionado'));
+    document.querySelectorAll('[id^="btnrot-"]').forEach(b => b.classList.remove('ativo'));
+    document.getElementById(`rot-${idx}`).classList.add('selecionado');
+    document.getElementById(`btnrot-${idx}`).classList.add('ativo');
+    estruturaEscolhida = dadosGerados.estruturaRoteiro?.[idx];
+    verificarPacote();
+  }
+
+  function toggleCheck(id) {
+    document.getElementById(id).classList.toggle('marcado');
+  }
+
+  function verificarPacote() {
+    const pronto = tituloEscolhido && estruturaEscolhida;
+    document.getElementById('barraPacote').style.display = pronto ? 'block' : 'none';
+    if (pronto) {
+      document.getElementById('barraPacote').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }
+
+  function abrirModalVoz() {
+    const gatilhosSelecionados = [...document.querySelectorAll('[id^="gat-"].marcado')]
+      .map(el => el.querySelector('.check-texto')?.textContent?.trim());
+    const ganchosSelecionados = [...document.querySelectorAll('[id^="gan-"].marcado')]
+      .map(el => el.querySelector('.check-texto')?.textContent?.trim());
+
+    document.getElementById('revisaoFinal').innerHTML = `
+      <div class="revisao-preview-bloco">
+        <div class="revisao-preview-label">Título escolhido</div>
+        <div class="revisao-preview-texto">${tituloEscolhido}</div>
+      </div>
+      <div class="revisao-preview-bloco">
+        <div class="revisao-preview-label">Sinopse</div>
+        <div class="revisao-preview-texto">${document.getElementById('sinopse').value}</div>
+      </div>
+      <div class="revisao-preview-bloco">
+        <div class="revisao-preview-label">Thumbnail</div>
+        <div class="revisao-preview-texto">${document.getElementById('thumbnail').value}</div>
+      </div>
+      <div class="revisao-preview-bloco">
+        <div class="revisao-preview-label">Gatilhos selecionados (${gatilhosSelecionados.length})</div>
+        ${gatilhosSelecionados.map(g => `<div class="revisao-preview-texto">• ${g}</div>`).join('')}
+      </div>
+      <div class="revisao-preview-bloco">
+        <div class="revisao-preview-label">Ganchos selecionados (${ganchosSelecionados.length})</div>
+        ${ganchosSelecionados.map(g => `<div class="revisao-preview-texto">• ${g}</div>`).join('')}
+      </div>
+      <div class="revisao-preview-bloco">
+        <div class="revisao-preview-label">Estrutura do roteiro</div>
+        <div class="revisao-preview-texto">${estruturaEscolhida}</div>
+      </div>
+    `;
+
+    document.getElementById('downloadSucesso').classList.remove('visivel');
+    document.getElementById('erroExportacao').classList.remove('visivel');
+    document.getElementById('modalVoz').classList.add('aberto');
+  }
+
+  function fecharModalVoz() {
+    document.getElementById('modalVoz').classList.remove('aberto');
+  }
+
+  async function exportarPacote() {
+    const btn = document.getElementById('btnExportar');
+    btn.disabled = true;
+    btn.textContent = 'Gerando arquivo...';
+    document.getElementById('erroExportacao').classList.remove('visivel');
+    document.getElementById('downloadSucesso').classList.remove('visivel');
+
+    const gatilhosSelecionados = [...document.querySelectorAll('[id^="gat-"].marcado')]
+      .map(el => el.querySelector('.check-texto')?.textContent?.trim()).filter(Boolean);
+    const ganchosSelecionados = [...document.querySelectorAll('[id^="gan-"].marcado')]
+      .map(el => el.querySelector('.check-texto')?.textContent?.trim()).filter(Boolean);
+
+    try {
+      const nichoRes = await fetch(`/api/nicho/${nichoAtivo}`);
+      const nicho = await nichoRes.json();
+
+      const pacote = {
+        nicho,
+        avatar: nicho.avatar,
+        estrategia: nicho.estrategia || {},
+        tituloEscolhido,
+        estruturaEscolhida,
+        sinopse: document.getElementById('sinopse').value,
+        ideiaDeCapa: document.getElementById('thumbnail').value,
+        gatilhos: gatilhosSelecionados,
+        ganchos: ganchosSelecionados,
+        hookPessoal: document.getElementById('hookPessoal').value.trim(),
+        ensinamentoProprio: document.getElementById('ensinamentoProprio').value.trim(),
+        ctaEspecifico: document.getElementById('ctaEspecifico').value.trim(),
+        observacoesAdicionais: document.getElementById('obsRoteirista').value.trim()
+      };
+
+      const res = await fetch('/api/gerar-pacote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(pacote)
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Erro ao gerar pacote');
+
+      document.getElementById('downloadLink').href = data.downloadUrl;
+      document.getElementById('downloadLink').download = data.nomeArquivo;
+      document.getElementById('downloadSucesso').classList.add('visivel');
+    } catch (err) {
+      document.getElementById('erroExportacao').textContent = '⚠️ ' + err.message;
+      document.getElementById('erroExportacao').classList.add('visivel');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Gerar pacote .docx para o Roteirista';
+    }
+  }
+
+  async function regerarElemento(elemento) {
+    if (temas.length === 0 && videos.length === 0) {
+      mostrarErro('Adicione um tema ou vídeo para regenerar.');
+      return;
+    }
+    const input = { temas, videos, anguloProibido: document.getElementById('anguloProibidoInput')?.value || '' };
+
+    const labelMap = {
+      titulos: 'Gerando novos títulos...',
+      sinopse: 'Gerando nova sinopse...',
+      thumbnail: 'Gerando nova ideia de thumbnail...',
+      gatilhos: 'Gerando novos gatilhos...',
+      ganchos: 'Gerando novos ganchos...',
+      roteiro: 'Gerando novas estruturas de roteiro...'
+    };
+
+    const el = document.getElementById(elemento);
+    const textoOriginal = el.innerHTML || el.value;
+    if (el.tagName === 'TEXTAREA') {
+      el.value = labelMap[elemento];
+      el.disabled = true;
+    } else {
+      el.style.opacity = '0.4';
+    }
+
+    try {
+      const res = await fetch('/api/gerar-ideias', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ input: JSON.stringify(input), nichoId: nichoAtivo })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+
+      if (elemento === 'titulos') renderTitulos(data.titulos || []);
+      else if (elemento === 'sinopse') { el.value = data.sinopse || ''; el.disabled = false; }
+      else if (elemento === 'thumbnail') { el.value = data.ideiaDeCapa || ''; el.disabled = false; }
+      else if (elemento === 'gatilhos') renderGatilhos(data.gatilhos || []);
+      else if (elemento === 'ganchos') renderGanchos(data.ganchos || []);
+      else if (elemento === 'roteiro') renderEstruturas(data.estruturaRoteiro || []);
+
+      dadosGerados = { ...dadosGerados, ...data };
+    } catch (err) {
+      if (el.tagName === 'TEXTAREA') { el.value = textoOriginal; el.disabled = false; }
+      else { el.innerHTML = textoOriginal; el.style.opacity = '1'; }
+      alert('Erro ao regenerar: ' + err.message);
+    } finally {
+      if (el.tagName !== 'TEXTAREA') el.style.opacity = '1';
+    }
+  }
 
   async function carregarNichos() {
     try {
@@ -1798,6 +2383,8 @@
       mostrarErro('Selecione um canal antes de gerar ideias.');
       return;
     }
+    tituloEscolhido = null;
+    estruturaEscolhida = null;
     if (temas.length === 0 && videos.length === 0) {
       mostrarErro('Adicione pelo menos um tema ou vídeo de referência.');
       return;
@@ -1810,7 +2397,7 @@
 
     btn.disabled = true;
     loading.classList.add('ativo');
-    resultado.classList.remove('visivel');
+    resultado.style.display = 'none';
     erro.classList.remove('visivel');
 
     const anguloProibido = document.getElementById('anguloProibidoInput').value.trim();
@@ -1831,9 +2418,7 @@
 
       if (!res.ok) throw new Error(data.error || 'Erro ao gerar ideias');
 
-      dadosGerados = data;
       renderizarResultado(data);
-      resultado.classList.add('visivel');
       carregarHistorico(nichoAtivo);
 
     } catch (err) {
@@ -1845,53 +2430,19 @@
   }
 
   function renderizarResultado(data) {
-    // Títulos
-    const titulosEl = document.getElementById('titulos');
-    if (data.titulos && data.titulos.length) {
-      titulosEl.innerHTML = data.titulos.map((t, i) => `
-        <div class="titulo-item">
-          <div class="titulo-num">${i + 1}</div>
-          <div class="titulo-text">${t}</div>
-        </div>
-      `).join('');
-    }
+    dadosGerados = data;
 
-    // Sinopse
-    document.getElementById('sinopse').textContent = data.sinopse || '';
+    renderTitulos(data.titulos || []);
+    document.getElementById('sinopse').value = data.sinopse || '';
+    document.getElementById('thumbnail').value = data.ideiaDeCapa || '';
+    renderGatilhos(data.gatilhos || []);
+    renderGanchos(data.ganchos || []);
+    renderEstruturas(data.estruturaRoteiro || []);
 
-    // Thumbnail
-    document.getElementById('thumbnail').textContent = data.ideiaDeCapa || '';
-
-    // Gatilhos
-    const gatilhosEl = document.getElementById('gatilhos');
-    const emojis = ['❤️','😢','😤','😱','🥺','✨','💔'];
-    if (data.gatilhos && data.gatilhos.length) {
-      gatilhosEl.innerHTML = data.gatilhos.map((g, i) => `
-        <div class="gatilho-item">
-          <span class="gatilho-emoji">${emojis[i % emojis.length]}</span>
-          <span>${g}</span>
-        </div>
-      `).join('');
-    }
-
-    // Ganchos
-    const ganchosEl = document.getElementById('ganchos');
-    if (data.ganchos && data.ganchos.length) {
-      ganchosEl.innerHTML = data.ganchos.map(g => `
-        <div class="abordagem-item">${g}</div>
-      `).join('');
-    }
-
-    // Estrutura Roteiro
-    const roteiroEl = document.getElementById('roteiro');
-    if (data.estruturaRoteiro && data.estruturaRoteiro.length) {
-      roteiroEl.innerHTML = data.estruturaRoteiro.map((bloco, i) => `
-        <div class="roteiro-bloco">
-          <strong>Opção ${i + 1}</strong>
-          ${bloco}
-        </div>
-      `).join('');
-    }
+    tituloEscolhido = null;
+    estruturaEscolhida = null;
+    document.getElementById('barraPacote').style.display = 'none';
+    document.getElementById('resultado').style.display = 'block';
   }
 
   function mostrarErro(msg) {

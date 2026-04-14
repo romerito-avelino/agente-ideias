@@ -49,5 +49,60 @@
     "tempoArrependimento": [],
     "gatilhoDeIdentidade": []
   },
-  "historicoGeracoes": []
+  "historicoGeracoes": [],
+  "ultimaRevisao": {
+    "probabilidadeSucesso": {
+      "percentual": 62,
+      "classificacao": "média",
+      "justificativa": "Avatar forte e autêntico, mas falta estratégia de implementação e gaps definidos"
+    },
+    "avaliacaoGeral": {
+      "avatar": {
+        "status": "ok",
+        "observacao": "História rica e vulnerável. Gera identificação real com erros e arrependimentos"
+      },
+      "proposta": {
+        "status": "atencao",
+        "observacao": "Proposta válida, mas genérica. Falta diferencial claro frente a outros canais"
+      },
+      "publico": {
+        "status": "ok",
+        "observacao": "35-45 anos busca reflexão. Público coerente com histórias de maturidade"
+      },
+      "tom": {
+        "status": "ok",
+        "observacao": "Tom calmo e emocional combina perfeitamente com avatar e público-alvo"
+      },
+      "nicho": {
+        "status": "atencao",
+        "observacao": "Subnicho existe, mas é pequeno. Precisa estratégia de crescimento clara"
+      }
+    },
+    "conflitos": [
+      "Avatar 70 anos contando histórias, mas público 35-45 pode querer se ver na narrativa",
+      "Sem gap de mercado definido, difícil se diferenciar de canais similares",
+      "Guia de implementação vazio compromete execução prática do canal"
+    ],
+    "camposVaziosCriticos": [
+      "GAP DE MERCADO - essencial para posicionamento único",
+      "GAP DE EDIÇÃO - define identidade visual do canal",
+      "GUIA DE IMPLEMENTAÇÃO - sem ele, não há plano de ação"
+    ],
+    "pontosFortesDoCanal": [
+      "Biografia do avatar é genuína, profunda e universalmente relacionável",
+      "Tema de arrependimento e redenção conecta com audiência madura",
+      "Tom emocional alinhado com tendência de conteúdo reflexivo no YouTube",
+      "Cenário da chácara oferece autenticidade visual única"
+    ],
+    "recomendacoesFinais": [
+      "Definir gap: histórias com lição prática? Formato curto? Voz real?",
+      "Criar ponte narrativa: Juvenal fala, mas público se reconhece nas histórias",
+      "Testar formato: crônicas de 5-8 min com gancho emocional nos 30s iniciais",
+      "Preencher guia de implementação antes de gravar primeiro vídeo"
+    ],
+    "veredicto": "aprovado_com_ressalvas",
+    "mensagemFinal": "Seu Juvenal tem história de verdade. Isso é raro e valioso. Defina os gaps e execute.",
+    "data": "2026-04-13T21:22:46.901Z"
+  },
+  "estrategia": {}
 }

@@ -7,6 +7,7 @@ const { coletarDadosVideo } = require('./coletor-youtube');
 const { analisarCanal, revisarCanal } = require('./agente-sessao-a');
 const { coletarDadosCanal } = require('./coletor-youtube');
 const { minerarCanais } = require('./agente-minerador');
+const { gerarPacoteRoteirista } = require('./gerador-pacote');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -268,6 +269,22 @@ app.post('/api/mineracao', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+app.post('/api/gerar-pacote', async (req, res) => {
+  const pacote = req.body;
+  if (!pacote.tituloEscolhido || !pacote.estruturaEscolhida) {
+    return res.status(400).json({ error: 'Título e estrutura são obrigatórios para gerar o pacote.' });
+  }
+  try {
+    const { nomeArquivo } = await gerarPacoteRoteirista(pacote);
+    res.json({ sucesso: true, nomeArquivo, downloadUrl: `/pacotes/${nomeArquivo}` });
+  } catch (err) {
+    console.error('[pacote] Erro:', err.message);
+    res.status(500).json({ error: 'Falha ao gerar o pacote. Tente novamente.' });
+  }
+});
+
+app.use('/pacotes', express.static(path.join(__dirname, '..', 'pacotes')));
 
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);

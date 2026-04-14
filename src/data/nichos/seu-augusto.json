@@ -180,6 +180,85 @@
         "Ela marcou a visita no asilo sem me avisar — o que fiz depois calou toda a família"
       ],
       "anguloProibido": null
+    },
+    {
+      "data": "2026-04-14T20:03:55.210Z",
+      "temas": [
+        "Esse é o segredo de uma boa velhice"
+      ],
+      "titulosGerados": [
+        "Com 74 anos descobri o que realmente mantém um homem de pé — e não é o que os médicos falam",
+        "Passei 50 anos correndo atrás de dinheiro e quase perdi o que me mantinha vivo",
+        "Se você quer envelhecer sem virar um peso, precisa ouvir isso antes que seja tarde"
+      ],
+      "anguloProibido": null
+    },
+    {
+      "data": "2026-04-14T20:25:22.161Z",
+      "temas": [
+        "Esse é o segredo para uma boa velhice"
+      ],
+      "titulosGerados": [
+        "Com 73 anos descobri que estava me matando devagar no café da manhã — e ninguém me avisou",
+        "O médico olhou nos meus olhos e disse: suas pernas estão derretendo por dentro — foi aí que entendi tudo",
+        "Passei 50 anos comendo o que achava certo e quase perdi a capacidade de andar — preciso te contar isso"
+      ],
+      "anguloProibido": null
     }
-  ]
+  ],
+  "ultimaRevisao": {
+    "probabilidadeSucesso": {
+      "percentual": 72,
+      "classificacao": "média",
+      "justificativa": "Avatar rico e autêntico, mas faltam detalhes cruciais de execução (gap, edição, implementação)"
+    },
+    "avaliacaoGeral": {
+      "avatar": {
+        "status": "ok",
+        "observacao": "Seu Augusto é real, complexo e gera identificação. História com camadas emocionais genuínas."
+      },
+      "proposta": {
+        "status": "atencao",
+        "observacao": "Proposta genérica. 'Storytelling emocional 50+' não é diferencial, é descrição de formato."
+      },
+      "publico": {
+        "status": "ok",
+        "observacao": "Público 50+ cresce no YouTube e busca conexão emocional. Demanda real existe."
+      },
+      "tom": {
+        "status": "ok",
+        "observacao": "Tom coerente com avatar e público. Acolhedor sem ser piegas. Equilibrado."
+      },
+      "nicho": {
+        "status": "atencao",
+        "observacao": "Subnicho indefinido. 'Histórias de quê?' Vida militar? Família? Arrependimento? Falta foco."
+      }
+    },
+    "conflitos": [
+      "Avatar tem história rica mas proposta não aproveita isso - poderia ser 'histórias de recomeço após erros'",
+      "Gap de mercado vazio compromete posicionamento estratégico do canal",
+      "Guia de implementação vazio indica falta de planejamento de execução"
+    ],
+    "camposVaziosCriticos": [
+      "GAP DE MERCADO - essencial para diferenciação",
+      "GAP DE EDIÇÃO - define identidade visual",
+      "GUIA DE IMPLEMENTAÇÃO - sem ele, execução será improvisada"
+    ],
+    "pontosFortesDoCanal": [
+      "Avatar com história real, imperfeita e humana - gera conexão profunda",
+      "Temas ricos já mapeados (traição, perdão, recomeço) - conteúdo infinito",
+      "Tom bem definido e coerente com persona e público",
+      "Público-alvo com alta retenção e lealdade quando conectado"
+    ],
+    "recomendacoesFinais": [
+      "Defina o subnicho: 'Histórias de homens que erraram e reconstruíram' é mais forte",
+      "Preencha o gap de mercado: o que Seu Augusto oferece que outros narradores não oferecem?",
+      "Crie guia de edição: ritmo lento, pausas, música nostálgica, visual acolhedor",
+      "Teste primeiros vídeos com temas do próprio avatar antes de expandir"
+    ],
+    "veredicto": "aprovado_com_ressalvas",
+    "mensagemFinal": "Seu Augusto tem alma. O canal tem potencial real. Mas precisa de estratégia clara antes de gravar.",
+    "data": "2026-04-13T21:24:20.931Z"
+  },
+  "estrategia": {}
 }
