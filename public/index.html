@@ -1623,7 +1623,7 @@
       </div>
       <div class="form-field">
         <label>ID do canal (sem espaços) *</label>
-        <input type="text" id="f_id" placeholder="Ex: historias-do-sargento" />
+        <input type="text" id="f_id" placeholder="Ex: historias-do-sargento" oninput="verificarCanalExistente()" />
       </div>
       <div class="form-field full">
         <label>Descrição do nicho</label>
@@ -1656,6 +1656,10 @@
       <div class="form-field full">
         <label>Biografia completa</label>
         <textarea id="f_avatar_bio" rows="5" placeholder="Escreva livremente a história completa do avatar..."></textarea>
+      </div>
+      <div class="form-field full">
+        <label>Estilo de escrita e fala do avatar</label>
+        <textarea id="f_avatar_escrita" rows="5" placeholder="Escreva aqui um exemplo real de como o avatar fala. Inclua jargões, bordões, gírias, português informal, palavras abreviadas, expressões regionais. Ex: 'Uai meu fio, eu tô te falando uma coisa que a maioria dos home num quer acreditar não...'"></textarea>
       </div>
       <div class="form-field full">
         <label>Tom permitido (separado por vírgulas)</label>
@@ -1746,8 +1750,7 @@
   <div style="display:flex;gap:8px;margin-top:8px;margin-bottom:16px;flex-wrap:wrap">
     <button class="gerenciar-btn" onclick="abrirModalEditar()">✏️ Editar banco de dados</button>
     <button class="gerenciar-btn" onclick="abrirModalEstrategia()">📊 Ver estratégia</button>
-    <button class="gerenciar-btn" onclick="revisarNichoAtual()" id="btnRevisarNicho">🔄 Revisar com IA</button>
-    <button class="gerenciar-btn danger" onclick="confirmarDeletar()">🗑️ Deletar nicho</button>
+<button class="gerenciar-btn danger" onclick="confirmarDeletar()">🗑️ Deletar nicho</button>
   </div>
 
   <!-- Modal de edição -->
@@ -1795,6 +1798,10 @@
           <textarea id="e_avatar_bio" rows="5"></textarea>
         </div>
         <div class="form-field full">
+          <label>Estilo de escrita e fala do avatar</label>
+          <textarea id="e_avatar_escrita" rows="5" placeholder="Escreva aqui um exemplo real de como o avatar fala. Inclua jargões, bordões, gírias, português informal, palavras abreviadas, expressões regionais. Ex: 'Uai meu fio, eu tô te falando uma coisa que a maioria dos home num quer acreditar não...'"></textarea>
+        </div>
+        <div class="form-field full">
           <label>Tom permitido (separado por vírgulas)</label>
           <input type="text" id="e_tom_permitido" />
         </div>
@@ -1825,6 +1832,10 @@
         <div class="form-field full">
           <label>Gatilhos que convertem (separados por vírgulas)</label>
           <input type="text" id="e_gatilhos" />
+        </div>
+        <div class="form-field full">
+          <label>Títulos que funcionaram bem (um por linha)</label>
+          <textarea id="e_titulos_funcionais" rows="4" placeholder="Cole aqui títulos de vídeos seus que tiveram boa performance. O agente vai aprender com esses padrões.&#10;Ex: Com 70 anos descobri que estava me matando devagar — e ninguém me avisou"></textarea>
         </div>
       </div>
       <div style="display:flex;gap:10px;margin-top:8px">
@@ -2225,7 +2236,8 @@
         hookPessoal: document.getElementById('hookPessoal').value.trim(),
         ensinamentoProprio: document.getElementById('ensinamentoProprio').value.trim(),
         ctaEspecifico: document.getElementById('ctaEspecifico').value.trim(),
-        observacoesAdicionais: document.getElementById('obsRoteirista').value.trim()
+        observacoesAdicionais: document.getElementById('obsRoteirista').value.trim(),
+        urlsVideosReferencia: videos
       };
 
       const res = await fetch('/api/gerar-pacote', {
@@ -2642,7 +2654,8 @@
           ${canal.emAlta?.slice(0, 3).map(v => `
             <div class="mineracao-video-item">
               <span>📈</span>
-              <a href="${v.url}" target="_blank" style="color:var(--white);text-decoration:none;flex:1">${v.titulo}</a>
+              ${v.url ? `<img src="https://img.youtube.com/vi/${v.url.split('v=')[1]?.split('&')[0]}/mqdefault.jpg" style="width:80px;height:45px;object-fit:cover;border-radius:4px;flex-shrink:0" onerror="this.style.display='none'">` : ''}
+              <a href="${v.url}" target="_blank" style="color:var(--white);text-decoration:none;flex:1;font-size:11px">${v.titulo}</a>
               <span class="mineracao-video-views">${Number(v.views).toLocaleString()} views</span>
             </div>
           `).join('')}
@@ -2917,78 +2930,163 @@
     document.getElementById('mensagemFinal').textContent = revisao.mensagemFinal || '';
   }
 
+  let canalCarregadoId = null;
+
+  async function verificarCanalExistente() {
+    const id = document.getElementById('f_id').value.trim().toLowerCase().replace(/\s+/g, '-');
+    if (id.length < 3) {
+      document.getElementById('avisoCanal')?.remove();
+      canalCarregadoId = null;
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/nicho/${id}`);
+      if (!res.ok) {
+        document.getElementById('avisoCanal')?.remove();
+        canalCarregadoId = null;
+        return;
+      }
+
+      const nicho = await res.json();
+      canalCarregadoId = id;
+
+      // Preenche todos os campos com os dados existentes
+      document.getElementById('f_canal').value = nicho.canal || '';
+      document.getElementById('f_nicho').value = nicho.nicho || '';
+      document.getElementById('f_avatar_nome').value = nicho.avatar?.nome || '';
+      document.getElementById('f_avatar_idade').value = nicho.avatar?.idade || '';
+      document.getElementById('f_avatar_profissao').value = nicho.avatar?.historia?.profissao || '';
+      document.getElementById('f_avatar_familia').value = nicho.avatar?.historia?.familia || '';
+      document.getElementById('f_avatar_estilo').value = nicho.avatar?.historia?.estiloDeVida || '';
+      document.getElementById('f_avatar_personalidade').value = nicho.avatar?.personalidade || '';
+      document.getElementById('f_avatar_bio').value = nicho.avatar?.historia?.biografia || '';
+      document.getElementById('f_avatar_escrita').value = nicho.avatar?.estiloDeEscrita || '';
+      document.getElementById('f_tom_permitido').value = (nicho.tom?.permitido || []).join(', ');
+      document.getElementById('f_tom_proibido').value = (nicho.tom?.proibido || []).join(', ');
+      document.getElementById('f_duracao').value = nicho.formatoDeVideo?.duracaoIdeal || '';
+      document.getElementById('f_publico_idade').value = nicho.publicoAlvo?.faixaEtaria || '';
+
+      // Mostra aviso de canal encontrado
+      document.getElementById('avisoCanal')?.remove();
+      const aviso = document.createElement('div');
+      aviso.id = 'avisoCanal';
+      aviso.style.cssText = 'background:rgba(29,158,117,0.1);border:1px solid rgba(29,158,117,0.3);border-radius:8px;padding:10px 14px;font-size:12px;color:#1D9E75;margin-top:8px;display:flex;align-items:center;gap:8px';
+      aviso.innerHTML = `✓ Canal "<strong>${nicho.canal}</strong>" encontrado — dados carregados. Atualize apenas o que precisar e salve.`;
+      document.getElementById('f_id').closest('.form-field').after(aviso);
+
+    } catch {
+      document.getElementById('avisoCanal')?.remove();
+      canalCarregadoId = null;
+    }
+  }
+
   async function confirmarESalvar() {
     const id = document.getElementById('f_id').value.trim().toLowerCase().replace(/\s+/g, '-');
     const canal = document.getElementById('f_canal').value.trim();
     const avatarNome = document.getElementById('f_avatar_nome').value.trim();
+
     if (!id || !canal || !avatarNome) {
       document.getElementById('erroFormulario').textContent = '⚠️ Nome do canal, ID e nome do avatar são obrigatórios.';
       document.getElementById('erroFormulario').classList.add('visivel');
       return;
     }
+
     const btn = document.getElementById('btnConfirmarSalvar');
     btn.disabled = true;
     btn.textContent = 'Salvando...';
 
+    // Se canal já existe, carrega dados atuais para fazer merge seguro
+    let nichoBase = {};
+    if (canalCarregadoId === id) {
+      try {
+        const resBase = await fetch(`/api/nicho/${id}`);
+        if (resBase.ok) nichoBase = await resBase.json();
+      } catch {}
+    }
+
     const payload = {
       id, canal,
-      nicho: document.getElementById('f_nicho').value.trim(),
+      nicho: document.getElementById('f_nicho').value.trim() || nichoBase.nicho,
       avatar: {
         nome: avatarNome,
-        idade: parseInt(document.getElementById('f_avatar_idade').value) || 0,
-        personalidade: document.getElementById('f_avatar_personalidade').value.trim(),
+        idade: parseInt(document.getElementById('f_avatar_idade').value) || nichoBase.avatar?.idade || 0,
+        personalidade: document.getElementById('f_avatar_personalidade').value.trim() || nichoBase.avatar?.personalidade || '',
+        estiloDeEscrita: document.getElementById('f_avatar_escrita').value.trim() || nichoBase.avatar?.estiloDeEscrita || '',
         historia: {
-          profissao: document.getElementById('f_avatar_profissao').value.trim(),
-          familia: document.getElementById('f_avatar_familia').value.trim(),
-          estiloDeVida: document.getElementById('f_avatar_estilo').value.trim(),
-          biografia: document.getElementById('f_avatar_bio').value.trim()
+          profissao: document.getElementById('f_avatar_profissao').value.trim() || nichoBase.avatar?.historia?.profissao || '',
+          familia: document.getElementById('f_avatar_familia').value.trim() || nichoBase.avatar?.historia?.familia || '',
+          estiloDeVida: document.getElementById('f_avatar_estilo').value.trim() || nichoBase.avatar?.historia?.estiloDeVida || '',
+          biografia: document.getElementById('f_avatar_bio').value.trim() || nichoBase.avatar?.historia?.biografia || ''
         },
-        jeitoDeFalar: []
+        jeitoDeFalar: nichoBase.avatar?.jeitoDeFalar || []
       },
       publicoAlvo: {
-        faixaEtaria: document.getElementById('f_publico_idade').value.trim(),
-        perfil: propostaEscolhida?.publicoAlvo || '',
-        dores: [], desejos: []
+        faixaEtaria: document.getElementById('f_publico_idade').value.trim() || nichoBase.publicoAlvo?.faixaEtaria || '',
+        perfil: propostaEscolhida?.publicoAlvo || nichoBase.publicoAlvo?.perfil || '',
+        dores: nichoBase.publicoAlvo?.dores || [],
+        desejos: nichoBase.publicoAlvo?.desejos || []
       },
       tom: {
-        permitido: document.getElementById('f_tom_permitido').value.split(',').map(t => t.trim()).filter(Boolean),
-        proibido: document.getElementById('f_tom_proibido').value.split(',').map(t => t.trim()).filter(Boolean)
+        permitido: document.getElementById('f_tom_permitido').value.split(',').map(t => t.trim()).filter(Boolean).length > 0
+          ? document.getElementById('f_tom_permitido').value.split(',').map(t => t.trim()).filter(Boolean)
+          : nichoBase.tom?.permitido || [],
+        proibido: document.getElementById('f_tom_proibido').value.split(',').map(t => t.trim()).filter(Boolean).length > 0
+          ? document.getElementById('f_tom_proibido').value.split(',').map(t => t.trim()).filter(Boolean)
+          : nichoBase.tom?.proibido || []
       },
       formatoDeVideo: {
-        duracaoIdeal: document.getElementById('f_duracao').value.trim(),
-        estrutura: [],
-        estiloDeNarracao: relatorioCompleto?.relatorio?.guiaImplementacao?.tomNarrativo || ''
+        duracaoIdeal: document.getElementById('f_duracao').value.trim() || nichoBase.formatoDeVideo?.duracaoIdeal || '',
+        estrutura: nichoBase.formatoDeVideo?.estrutura || [],
+        estiloDeNarracao: relatorioCompleto?.relatorio?.guiaImplementacao?.tomNarrativo || nichoBase.formatoDeVideo?.estiloDeNarracao || ''
       },
-      estrategia: {
-        propostaEscolhida,
-        todasPropostas: relatorioCompleto?.relatorio?.propostas || [],
-        gapMercado: relatorioCompleto?.relatorio?.padroesDosCanais?.gapIdentificado || '',
-        gapEdicao: document.getElementById('gapEdicaoEditavel').value.trim(),
-        guiaImplementacao: relatorioCompleto?.relatorio?.guiaImplementacao || {},
-        padroesDosCanaisAnalisados: {
-          oQueFunciona: relatorioCompleto?.relatorio?.padroesDosCanais?.oQueFunciona || [],
-          oQueNaoFunciona: relatorioCompleto?.relatorio?.padroesDosCanais?.oQueNaoFunciona || []
-        },
-        canaisAnalisados: relatorioCompleto?.dadosCanais?.map(c => ({
-          nome: c.nomeCanal,
-          inscritos: c.metricas?.totalInscritos,
-          videos: c.metricas?.totalVideos
-        })) || [],
-        dataAnalise: new Date().toISOString()
-      }
+      // Preserva todos os campos que não estão no formulário
+      temasFuncionaram: nichoBase.temasFuncionaram || [],
+      temasProibidos: nichoBase.temasProibidos || [],
+      videosPublicados: nichoBase.videosPublicados || [],
+      padroesDosComentarios: nichoBase.padroesDosComentarios || [],
+      palavrasQueEngajam: nichoBase.palavrasQueEngajam || [],
+      gatilhosQueConvertem: nichoBase.gatilhosQueConvertem || [],
+      estruturasDeTitulos: nichoBase.estruturasDeTitulos || {},
+      historicoGeracoes: nichoBase.historicoGeracoes || [],
+      estrategia: (() => {
+        const estrategiaExistente = nichoBase.estrategia || {};
+        // Só atualiza se veio uma análise nova completa
+        if (relatorioCompleto?.relatorio && propostaEscolhida) {
+          return {
+            // Preserva campos existentes que não foram atualizados
+            ...estrategiaExistente,
+            // Atualiza com os novos dados da análise
+            propostaEscolhida,
+            todasPropostas: relatorioCompleto.relatorio.propostas || estrategiaExistente.todasPropostas || [],
+            gapMercado: relatorioCompleto.relatorio.padroesDosCanais?.gapIdentificado || estrategiaExistente.gapMercado || '',
+            gapEdicao: document.getElementById('gapEdicaoEditavel').value.trim() || estrategiaExistente.gapEdicao || '',
+            guiaImplementacao: relatorioCompleto.relatorio.guiaImplementacao || estrategiaExistente.guiaImplementacao || {},
+            padroesDosCanaisAnalisados: {
+              oQueFunciona: relatorioCompleto.relatorio.padroesDosCanais?.oQueFunciona || estrategiaExistente.padroesDosCanaisAnalisados?.oQueFunciona || [],
+              oQueNaoFunciona: relatorioCompleto.relatorio.padroesDosCanais?.oQueNaoFunciona || estrategiaExistente.padroesDosCanaisAnalisados?.oQueNaoFunciona || []
+            },
+            canaisAnalisados: relatorioCompleto.dadosCanais?.map(c => ({
+              nome: c.nomeCanal,
+              inscritos: c.metricas?.totalInscritos,
+              videos: c.metricas?.totalVideos
+            })) || estrategiaExistente.canaisAnalisados || [],
+            dataAnalise: new Date().toISOString()
+          };
+        }
+        // Se não veio análise nova, preserva a estratégia existente intacta
+        return estrategiaExistente;
+      })()
     };
 
     try {
-      // Verifica se canal já existe
       const verificacao = await fetch(`/api/nicho/${id}`);
       let endpoint, method;
       if (verificacao.ok) {
-        // Canal existe — atualiza estratégia
         endpoint = `/api/nicho/${id}/estrategia`;
         method = 'PUT';
-        btn.textContent = 'Atualizando estratégia...';
+        btn.textContent = 'Atualizando canal...';
       } else {
-        // Canal novo — cria
         endpoint = '/api/criar-canal';
         method = 'POST';
       }
@@ -3001,11 +3099,9 @@
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Erro ao salvar');
 
-      const mensagem = verificacao.ok
-        ? `✓ Estratégia do canal "${canal}" atualizada com sucesso!`
-        : `✓ Canal "${canal}" criado com sucesso! Acesse a aba Vídeos.`;
-
-      document.getElementById('sucessoFormulario').textContent = mensagem;
+      document.getElementById('sucessoFormulario').textContent = verificacao.ok
+        ? `✓ Canal "${canal}" atualizado com sucesso! Todos os dados anteriores foram preservados.`
+        : `✓ Canal "${canal}" criado com sucesso!`;
       document.getElementById('sucessoFormulario').style.display = 'block';
       document.getElementById('erroFormulario').classList.remove('visivel');
 
@@ -3013,12 +3109,14 @@
         canais = [];
         propostaEscolhida = null;
         relatorioCompleto = null;
+        canalCarregadoId = null;
         renderCanaisTags();
         document.getElementById('preIdeiaInput').value = '';
         document.getElementById('relatorioArea').style.display = 'none';
         document.getElementById('blocoEscolhas').style.display = 'none';
         document.getElementById('blocoRevisao').style.display = 'none';
         document.getElementById('sucessoFormulario').style.display = 'none';
+        document.getElementById('avisoCanal')?.remove();
         document.querySelectorAll('#aba-validacao input, #aba-validacao textarea').forEach(el => el.value = '');
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }, 3000);
@@ -3047,6 +3145,7 @@
       document.getElementById('e_avatar_familia').value = nicho.avatar?.historia?.familia || '';
       document.getElementById('e_avatar_estilo').value = nicho.avatar?.historia?.estiloDeVida || '';
       document.getElementById('e_avatar_bio').value = nicho.avatar?.historia?.biografia || '';
+      document.getElementById('e_avatar_escrita').value = nicho.avatar?.estiloDeEscrita || '';
       document.getElementById('e_tom_permitido').value = (nicho.tom?.permitido || []).join(', ');
       document.getElementById('e_tom_proibido').value = (nicho.tom?.proibido || []).join(', ');
       document.getElementById('e_duracao').value = nicho.formatoDeVideo?.duracaoIdeal || '';
@@ -3055,6 +3154,7 @@
       document.getElementById('e_temas_proibidos').value = (nicho.temasProibidos || []).join('\n');
       document.getElementById('e_palavras_engajam').value = (nicho.palavrasQueEngajam || []).join(', ');
       document.getElementById('e_gatilhos').value = (nicho.gatilhosQueConvertem || []).join(', ');
+      document.getElementById('e_titulos_funcionais').value = (nicho.estruturasDeTitulos?.funcionais || []).join('\n');
       document.getElementById('erroEdicao').classList.remove('visivel');
       document.getElementById('sucessoEdicao').style.display = 'none';
       document.getElementById('modalEditar').classList.add('aberto');
@@ -3233,6 +3333,8 @@
 
   async function salvarEdicao() {
     const nichoId = nichoAtivo;
+    const nichoAtualRes = await fetch(`/api/nicho/${nichoId}`);
+    const nichoAtual = await nichoAtualRes.json();
     const payload = {
       canal: document.getElementById('e_canal').value.trim(),
       nicho: document.getElementById('e_nicho').value.trim(),
@@ -3246,7 +3348,8 @@
           estiloDeVida: document.getElementById('e_avatar_estilo').value.trim(),
           biografia: document.getElementById('e_avatar_bio').value.trim()
         },
-        jeitoDeFalar: []
+        jeitoDeFalar: [],
+        estiloDeEscrita: document.getElementById('e_avatar_escrita').value.trim()
       },
       tom: {
         permitido: document.getElementById('e_tom_permitido').value.split(',').map(t => t.trim()).filter(Boolean),
@@ -3263,7 +3366,11 @@
       temasFuncionaram: document.getElementById('e_temas_funcionaram').value.split('\n').map(t => t.trim()).filter(Boolean),
       temasProibidos: document.getElementById('e_temas_proibidos').value.split('\n').map(t => t.trim()).filter(Boolean),
       palavrasQueEngajam: document.getElementById('e_palavras_engajam').value.split(',').map(t => t.trim()).filter(Boolean),
-      gatilhosQueConvertem: document.getElementById('e_gatilhos').value.split(',').map(t => t.trim()).filter(Boolean)
+      gatilhosQueConvertem: document.getElementById('e_gatilhos').value.split(',').map(t => t.trim()).filter(Boolean),
+      estruturasDeTitulos: {
+        ...(nichoAtual.estruturasDeTitulos || {}),
+        funcionais: document.getElementById('e_titulos_funcionais').value.split('\n').map(t => t.trim()).filter(Boolean)
+      }
     };
     try {
       const res = await fetch(`/api/nicho/${nichoId}`, {

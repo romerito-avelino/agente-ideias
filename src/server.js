@@ -209,21 +209,87 @@ app.put('/api/nicho/:nichoId', (req, res) => {
 app.put('/api/nicho/:nichoId/estrategia', (req, res) => {
   const { nichoId } = req.params;
   const nichoPath = path.join(NICHOS_DIR, `${nichoId}.json`);
-  if (!fs.existsSync(nichoPath)) return res.status(404).json({ error: 'Nicho não encontrado.' });
+  if (!fs.existsSync(nichoPath)) {
+    return res.status(404).json({ error: 'Nicho não encontrado.' });
+  }
   try {
-    const nicho = JSON.parse(fs.readFileSync(nichoPath, 'utf-8'));
-    nicho.estrategia = req.body.estrategia;
-    nicho.canal = req.body.canal || nicho.canal;
-    nicho.nicho = req.body.nicho || nicho.nicho;
-    nicho.avatar = req.body.avatar || nicho.avatar;
-    nicho.publicoAlvo = req.body.publicoAlvo || nicho.publicoAlvo;
-    nicho.tom = req.body.tom || nicho.tom;
-    nicho.formatoDeVideo = req.body.formatoDeVideo || nicho.formatoDeVideo;
-    fs.writeFileSync(nichoPath, JSON.stringify(nicho, null, 2), 'utf-8');
-    console.log(`[server] Estratégia atualizada: ${nicho.canal}`);
+    const nichoAtual = JSON.parse(fs.readFileSync(nichoPath, 'utf-8'));
+    const novos = req.body;
+
+    // Merge profundo — preserva tudo que existe, atualiza só o que veio preenchido
+    const atualizado = {
+      ...nichoAtual,
+
+      // Campos básicos — só atualiza se veio preenchido
+      canal: novos.canal || nichoAtual.canal,
+      nicho: novos.nicho || nichoAtual.nicho,
+
+      // Avatar — merge campo por campo
+      avatar: {
+        ...nichoAtual.avatar,
+        nome: novos.avatar?.nome || nichoAtual.avatar?.nome,
+        idade: novos.avatar?.idade || nichoAtual.avatar?.idade,
+        personalidade: novos.avatar?.personalidade || nichoAtual.avatar?.personalidade,
+        estiloDeEscrita: novos.avatar?.estiloDeEscrita || nichoAtual.avatar?.estiloDeEscrita,
+        jeitoDeFalar: nichoAtual.avatar?.jeitoDeFalar || [],
+        historia: {
+          ...nichoAtual.avatar?.historia,
+          profissao: novos.avatar?.historia?.profissao || nichoAtual.avatar?.historia?.profissao,
+          familia: novos.avatar?.historia?.familia || nichoAtual.avatar?.historia?.familia,
+          estiloDeVida: novos.avatar?.historia?.estiloDeVida || nichoAtual.avatar?.historia?.estiloDeVida,
+          biografia: novos.avatar?.historia?.biografia || nichoAtual.avatar?.historia?.biografia
+        }
+      },
+
+      // Público — merge campo por campo
+      publicoAlvo: {
+        ...nichoAtual.publicoAlvo,
+        faixaEtaria: novos.publicoAlvo?.faixaEtaria || nichoAtual.publicoAlvo?.faixaEtaria,
+        perfil: novos.publicoAlvo?.perfil || nichoAtual.publicoAlvo?.perfil,
+        dores: nichoAtual.publicoAlvo?.dores || [],
+        desejos: nichoAtual.publicoAlvo?.desejos || []
+      },
+
+      // Tom — só atualiza se veio com itens
+      tom: {
+        permitido: novos.tom?.permitido?.length > 0
+          ? novos.tom.permitido
+          : nichoAtual.tom?.permitido || [],
+        proibido: novos.tom?.proibido?.length > 0
+          ? novos.tom.proibido
+          : nichoAtual.tom?.proibido || []
+      },
+
+      // Formato — merge campo por campo
+      formatoDeVideo: {
+        ...nichoAtual.formatoDeVideo,
+        duracaoIdeal: novos.formatoDeVideo?.duracaoIdeal || nichoAtual.formatoDeVideo?.duracaoIdeal,
+        estiloDeNarracao: novos.formatoDeVideo?.estiloDeNarracao || nichoAtual.formatoDeVideo?.estiloDeNarracao,
+        estrutura: nichoAtual.formatoDeVideo?.estrutura || []
+      },
+
+      // Campos de aprendizado — NUNCA sobrescreve, sempre preserva
+      temasFuncionaram: nichoAtual.temasFuncionaram || [],
+      temasProibidos: nichoAtual.temasProibidos || [],
+      videosPublicados: nichoAtual.videosPublicados || [],
+      padroesDosComentarios: nichoAtual.padroesDosComentarios || [],
+      palavrasQueEngajam: nichoAtual.palavrasQueEngajam || [],
+      gatilhosQueConvertem: nichoAtual.gatilhosQueConvertem || [],
+      estruturasDeTitulos: nichoAtual.estruturasDeTitulos || {},
+      historicoGeracoes: nichoAtual.historicoGeracoes || [],
+      ultimaRevisao: nichoAtual.ultimaRevisao || null,
+
+      // Estratégia — só atualiza se veio uma nova análise
+      estrategia: novos.estrategia?.dataAnalise
+        ? novos.estrategia
+        : nichoAtual.estrategia || {}
+    };
+
+    fs.writeFileSync(nichoPath, JSON.stringify(atualizado, null, 2), 'utf-8');
+    console.log(`[server] Canal atualizado com merge seguro: ${atualizado.canal}`);
     res.json({ sucesso: true });
   } catch (err) {
-    res.status(500).json({ error: 'Falha ao atualizar estratégia.' });
+    res.status(500).json({ error: 'Falha ao atualizar canal.' });
   }
 });
 
@@ -276,6 +342,21 @@ app.post('/api/gerar-pacote', async (req, res) => {
     return res.status(400).json({ error: 'Título e estrutura são obrigatórios para gerar o pacote.' });
   }
   try {
+    // Busca dados dos vídeos de referência para incluir no .docx
+    const urlsVideos = pacote.urlsVideosReferencia || [];
+    const videosReferencia = [];
+    for (const url of urlsVideos) {
+      try {
+        const dados = await coletarDadosVideo(url);
+        // Pega a thumbnail de maior qualidade disponível
+        const thumbUrl = dados.thumbnail || null;
+        videosReferencia.push({ ...dados, thumbnail: thumbUrl });
+        console.log(`[pacote] Vídeo coletado para .docx: ${dados.titulo}`);
+      } catch (err) {
+        console.warn(`[pacote] Falha ao coletar vídeo ${url}: ${err.message}`);
+      }
+    }
+    pacote.videosReferencia = videosReferencia;
     const { nomeArquivo } = await gerarPacoteRoteirista(pacote);
     res.json({ sucesso: true, nomeArquivo, downloadUrl: `/pacotes/${nomeArquivo}` });
   } catch (err) {

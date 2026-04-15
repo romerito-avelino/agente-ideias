@@ -1,38 +1,33 @@
 {
   "canal": "Prosas do Seu Juvenal",
-  "nicho": "Histórias cotidianas de sabedoria - crônicas da terceira idade",
+  "nicho": "Terror religioso rural - santos, promessas e fé que pune",
   "avatar": {
     "nome": "Seu Juvenal",
-    "idade": 70,
-    "personalidade": "É um senhor, alegre, sábio, mais pensativo",
+    "idade": 0,
+    "personalidade": "",
     "historia": {
-      "profissao": "Ex Agente da SUCAM / aposentado",
-      "familia": "Divorciado, com a primeira esposa, e casado com a atual/2 filhos do primeiro casamento e 2 filhos da união atual",
-      "estiloDeVida": "Mora numa chácara no interior de Rio Verde GO, vive de sua aposentadoria, mais cria tilápias em tanques elevados para consumo.",
-      "biografia": "Seu Juvenal, em sua mocidade, prestou serviços para a Superintendência de Campanhas de Saúde Pública (Sucam), criada em 1970. Tratava-se de um órgão federal brasileiro responsável pelo combate a endemias como malária, varíola, doença de Chagas e febre amarela, sendo bastante conhecido por seus agentes, os chamados “sucaneiros”, que pulverizavam casas com DDT.\n\nSeu Juvenal começou a trabalhar na Sucam em 1982, sendo, na época, lotado na cidade de Carolina, no Maranhão. Em suas andanças prestando serviço para o órgão, ele se apaixonou por Cleonice. Não demorou muito para que se casassem, formando uma família que, com o tempo, cresceu com a chegada de dois filhos: Kaline e Vinícios.\n\nPor motivos de baixo efetivo, Seu Juvenal frequentemente precisava prestar serviços fora de sua cidade de lotação. Em um desses deslocamentos, acabou se envolvendo em relacionamentos extraconjugais com garotas mais novas. E isso passou a se repetir sempre que ele se ausentava de casa.\n\nNaquela época, Seu Juvenal não dimensionava o peso de suas escolhas. Para ele, eram apenas deslizes passageiros, erros que acreditava poder esconder atrás da distância e do silêncio. Mas, como quase sempre acontece, a verdade encontrou caminhos para se revelar.\n\nCleonice, mulher firme e dedicada, acabou descobrindo as traições. O que antes era um lar estruturado, cheio de sonhos e planos, começou a ruir. A confiança foi quebrada e, com ela, o respeito que sustentava o casamento. Mesmo diante das tentativas de justificar seus atos, Seu Juvenal não conseguiu reconstruir o que havia destruído. O casamento chegou ao fim, deixando marcas profundas, principalmente nos filhos, Kaline e Vinícios, que cresceram testemunhando a dor da mãe.\n\nCom o passar dos anos, Seu Juvenal tentou recomeçar. Formou uma nova família, acreditando que poderia, de alguma forma, corrigir o rumo da própria história. Casou-se novamente e teve outros filhos. No entanto, a vida já não lhe oferecia a mesma paz e tranquilidade de antes. Havia sempre um vazio difícil de explicar, uma sensação constante de que algo essencial havia se perdido no caminho.\n\nSua nova esposa, embora presente, não tinha o mesmo cuidado e cumplicidade que Cleonice demonstrava nos tempos antigos. O lar que construiu não possuía o mesmo calor, e as relações pareciam mais frágeis, menos profundas. Seus filhos da nova família, por sua vez, não despertavam nele o mesmo orgulho que sentia pelos primeiros — talvez não por falta de amor, mas pelo peso das comparações e das lembranças.\n\nE o mais doloroso veio com o tempo: o distanciamento de Kaline e Vinícios. Marcados pelas escolhas do pai e pela dor causada à mãe, eles passaram a vê-lo com outros olhos. O respeito deu lugar à mágoa, e a presença dele em suas vidas tornou-se cada vez mais rara e protocolar. Não havia mais a admiração de antes, apenas uma relação fria, construída sobre feridas que nunca cicatrizaram completamente.\n\nAssim, Seu Juvenal seguiu vivendo — não sem conquistas, nem sem momentos de alegria —, mas carregando consigo o peso silencioso de suas decisões. Aprendeu, talvez tarde demais, que certas escolhas não apenas mudam o presente, mas ecoam por toda uma vida, alterando destinos e deixando marcas que o tempo, sozinho, não consegue apagar."
+      "profissao": "",
+      "familia": "",
+      "estiloDeVida": "",
+      "biografia": ""
     },
-    "jeitoDeFalar": []
+    "jeitoDeFalar": [],
+    "estiloDeEscrita": ""
   },
   "publicoAlvo": {
     "faixaEtaria": "35-45",
-    "perfil": "Adultos 35-65 anos (especialmente mulheres) que sentem falta de figuras paternas/maternas sábias, buscam conforto em histórias genuínas, e valorizam a sabedoria dos mais velhos. Também idosos que se identificam e se sentem representados.",
+    "perfil": "",
     "dores": [],
     "desejos": []
   },
   "tom": {
-    "permitido": [
-      "calmo",
-      "emocional"
-    ],
-    "proibido": [
-      "fantasia",
-      "promessas falsa"
-    ]
+    "permitido": [],
+    "proibido": []
   },
   "formatoDeVideo": {
-    "duracaoIdeal": "Vídeos de 8-15 minutos estruturados assim: (1) Gancho cotidiano intrigante, (2) História que se desenrola com detalhes sensoriais e emocionais, (3) Conexão com uma memória ou experiência passada, (4) Reflexão/lição que emerge naturalmente da história, (5) Fechamento contemplativo. Imagens: fotos antigas, paisagens calmas, mãos envelhecidas, objetos com história.",
+    "duracaoIdeal": "Vídeos de 8-15 min. Abertura com o idoso em cadeira de balanço, transição para narração com imagens de capelas, santos e roça.",
     "estrutura": [],
-    "estiloDeNarracao": "Voz calma, pausada, com a cadência de quem não tem pressa. Tom de quem está contando para um neto querido, não palestrando. Deve soar como alguém refletindo em voz alta, com pausas naturais e pequenos suspiros. Evitar tom professoral ou de autoajuda."
+    "estiloDeNarracao": ""
   },
   "temasFuncionaram": [],
   "temasProibidos": [],
@@ -49,60 +44,81 @@
     "tempoArrependimento": [],
     "gatilhoDeIdentidade": []
   },
-  "historicoGeracoes": [],
+  "historicoGeracoes": [
+    {
+      "data": "2026-04-15T22:42:02.840Z",
+      "temas": [
+        "Aparição de santo em fazenda"
+      ],
+      "titulosGerados": [
+        "O Santo Apareceu na Fazenda — Mas Não Veio Abençoar",
+        "Meu Avô Viu um Santo no Pasto e Nunca Mais Foi o Mesmo",
+        "Na Roça, Quando Santo Aparece de Noite, Não É Milagre"
+      ],
+      "anguloProibido": null
+    }
+  ],
   "ultimaRevisao": {
     "probabilidadeSucesso": {
-      "percentual": 62,
-      "classificacao": "média",
-      "justificativa": "Avatar forte e autêntico, mas falta estratégia de implementação e gaps definidos"
+      "percentual": 78,
+      "classificacao": "alta",
+      "justificativa": "Subnicho original com avatar rico, mas tom proibido conflita com proposta de terror"
     },
     "avaliacaoGeral": {
       "avatar": {
         "status": "ok",
-        "observacao": "História rica e vulnerável. Gera identificação real com erros e arrependimentos"
+        "observacao": "Biografia profunda gera autenticidade. História pessoal cria conexão emocional real"
       },
       "proposta": {
         "status": "atencao",
-        "observacao": "Proposta válida, mas genérica. Falta diferencial claro frente a outros canais"
+        "observacao": "Terror religioso é forte, mas conflita com tom 'esperançoso/acolhedor' definido"
       },
       "publico": {
         "status": "ok",
-        "observacao": "35-45 anos busca reflexão. Público coerente com histórias de maturidade"
+        "observacao": "Público 35-60 do interior tem nostalgia real dessas histórias. Demanda existe"
       },
       "tom": {
-        "status": "ok",
-        "observacao": "Tom calmo e emocional combina perfeitamente com avatar e público-alvo"
+        "status": "critico",
+        "observacao": "Tom proibido veta 'exagerado/sensacionalista' mas proposta fala em 'fé que pune'"
       },
       "nicho": {
-        "status": "atencao",
-        "observacao": "Subnicho existe, mas é pequeno. Precisa estratégia de crescimento clara"
+        "status": "ok",
+        "observacao": "Gap real identificado. Terror religioso rural está inexplorado no YouTube BR"
       }
     },
     "conflitos": [
-      "Avatar 70 anos contando histórias, mas público 35-45 pode querer se ver na narrativa",
-      "Sem gap de mercado definido, difícil se diferenciar de canais similares",
-      "Guia de implementação vazio compromete execução prática do canal"
+      "Tom 'acolhedor/esperançoso' contradiz 'santos que aparecem para cobrar, não abençoar'",
+      "Público definido como 35-45, mas proposta fala em 35-60. Qual é o real?",
+      "Avatar divorciado por traição pode gerar desconexão com público religioso conservador"
     ],
-    "camposVaziosCriticos": [
-      "GAP DE MERCADO - essencial para posicionamento único",
-      "GAP DE EDIÇÃO - define identidade visual do canal",
-      "GUIA DE IMPLEMENTAÇÃO - sem ele, não há plano de ação"
-    ],
+    "camposVaziosCriticos": [],
     "pontosFortesDoCanal": [
-      "Biografia do avatar é genuína, profunda e universalmente relacionável",
-      "Tema de arrependimento e redenção conecta com audiência madura",
-      "Tom emocional alinhado com tendência de conteúdo reflexivo no YouTube",
-      "Cenário da chácara oferece autenticidade visual única"
+      "Subnicho único e inexplorado no YouTube brasileiro",
+      "Avatar com história autêntica e profundidade emocional rara",
+      "Gap de edição bem definido com elementos visuais específicos",
+      "Estratégia de lançamento em datas religiosas é inteligente"
     ],
     "recomendacoesFinais": [
-      "Definir gap: histórias com lição prática? Formato curto? Voz real?",
-      "Criar ponte narrativa: Juvenal fala, mas público se reconhece nas histórias",
-      "Testar formato: crônicas de 5-8 min com gancho emocional nos 30s iniciais",
-      "Preencher guia de implementação antes de gravar primeiro vídeo"
+      "Resolver conflito de tom: ou abraça o terror ou suaviza para 'causos misteriosos'",
+      "Decidir se avatar revela passado de traição ou mantém só faceta sábia",
+      "Unificar faixa etária do público em todos os documentos",
+      "Testar recepção do público religioso antes de ir pesado no 'terror'"
     ],
     "veredicto": "aprovado_com_ressalvas",
-    "mensagemFinal": "Seu Juvenal tem história de verdade. Isso é raro e valioso. Defina os gaps e execute.",
-    "data": "2026-04-13T21:22:46.901Z"
+    "mensagemFinal": "Projeto forte com DNA original. Resolva o conflito de tom e você tem ouro nas mãos",
+    "data": "2026-04-15T22:39:03.894Z"
   },
-  "estrategia": {}
+  "estrategia": {
+    "propostaEscolhida": null,
+    "todasPropostas": [],
+    "gapMercado": "",
+    "gapEdicao": "Incluir cenas de altares improvisados, velas acesas, imagens de santos antigas, crucifixos em casas de roça. Avatar do idoso em cenários reais de capelas rurais abandonadas.",
+    "guiaImplementacao": {},
+    "padroesDosCanaisAnalisados": {
+      "oQueFunciona": [],
+      "oQueNaoFunciona": []
+    },
+    "canaisAnalisados": [],
+    "dataAnalise": "2026-04-15T22:39:20.883Z"
+  }
 }

@@ -1,8 +1,21 @@
-const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType,
-  BorderStyle, ShadingType, Table, TableRow, TableCell, WidthType,
-  LevelFormat, PageNumber, Header, Footer } = require('docx');
+const { Document, Packer, Paragraph, TextRun, ImageRun, HeadingLevel, AlignmentType,
+  BorderStyle, LevelFormat } = require('docx');
 const fs = require('fs');
 const path = require('path');
+const https = require('https');
+const http = require('http');
+
+async function downloadImagem(url) {
+  return new Promise((resolve) => {
+    const protocolo = url.startsWith('https') ? https : http;
+    protocolo.get(url, (res) => {
+      const chunks = [];
+      res.on('data', chunk => chunks.push(chunk));
+      res.on('end', () => resolve(Buffer.concat(chunks)));
+      res.on('error', () => resolve(null));
+    }).on('error', () => resolve(null));
+  });
+}
 
 function criarSeparador() {
   return new Paragraph({
@@ -48,10 +61,83 @@ async function gerarPacoteRoteirista(pacote) {
     nicho, avatar, tituloEscolhido, sinopse, ideiaDeCapa,
     gatilhos, ganchos, estruturaEscolhida,
     hookPessoal, ensinamentoProprio, ctaEspecifico,
-    observacoesAdicionais, estrategia
+    observacoesAdicionais
   } = pacote;
 
   const children = [
+    // REFERÊNCIAS VISUAIS E COMENTÁRIOS — seção 0
+    ...(pacote.videosReferencia && pacote.videosReferencia.length > 0 ? [
+      new Paragraph({
+        text: 'REFERÊNCIAS VISUAIS E PADRÕES DO PÚBLICO',
+        heading: HeadingLevel.HEADING_1,
+        spacing: { before: 200, after: 200 }
+      }),
+      criarComentario('Esta seção contém os vídeos usados como referência na geração das ideias. Use as thumbnails para entender o padrão visual da concorrência e os comentários para entender o que o público realmente quer.'),
+      ...await Promise.all((pacote.videosReferencia || []).map(async (video, i) => {
+        const blocos = [
+          new Paragraph({
+            children: [new TextRun({ text: `Vídeo ${i+1}: ${video.titulo || 'Sem título'}`, bold: true, size: 24, font: 'Arial', color: '1E40AF' })],
+            spacing: { before: 160, after: 60 }
+          }),
+          criarTexto(`Canal: ${video.canal || '—'} | Views: ${Number(video.metricas?.views || 0).toLocaleString()} | Likes: ${Number(video.metricas?.likes || 0).toLocaleString()}`),
+        ];
+
+        // Tenta baixar a thumbnail
+        if (video.thumbnail) {
+          try {
+            const imgBuffer = await downloadImagem(video.thumbnail);
+            if (imgBuffer) {
+              blocos.push(new Paragraph({
+                children: [new ImageRun({
+                  data: imgBuffer,
+                  transformation: { width: 320, height: 180 },
+                  type: 'jpg'
+                })],
+                spacing: { before: 60, after: 120 }
+              }));
+            }
+          } catch (e) {
+            blocos.push(criarTexto(`[Thumbnail não disponível: ${video.thumbnail}]`));
+          }
+        }
+
+        // Comentários ricos do vídeo
+        if (video.comentarios && video.comentarios.length > 0) {
+          const comentariosRicos = video.comentarios
+            .filter(c => c && c.length > 60)
+            .slice(0, 15);
+          const comentariosCurtos = video.comentarios
+            .filter(c => c && c.length >= 20 && c.length <= 60)
+            .slice(0, 5);
+          const selecionados = [...comentariosRicos, ...comentariosCurtos];
+
+          if (selecionados.length > 0) {
+            blocos.push(criarLabel(`Comentários do público (${selecionados.length} selecionados de ${video.comentarios.length} coletados)`));
+            blocos.push(criarComentario('Leia estes comentários antes de escrever o roteiro. Eles revelam as dores reais, os desejos e a linguagem do público que assiste conteúdo similar.'));
+            selecionados.forEach((c, j) => {
+              blocos.push(new Paragraph({
+                children: [
+                  new TextRun({ text: `[${j+1}] `, bold: true, size: 20, font: 'Arial', color: '2563EB' }),
+                  new TextRun({ text: c, size: 20, font: 'Arial', color: '374151' })
+                ],
+                spacing: { before: 40, after: 40 },
+                border: { left: { style: BorderStyle.SINGLE, size: 6, color: 'D1D5DB', space: 8 } },
+                indent: { left: 240 }
+              }));
+            });
+          }
+        }
+
+        blocos.push(new Paragraph({
+          border: { bottom: { style: BorderStyle.SINGLE, size: 2, color: 'E5E7EB', space: 1 } },
+          spacing: { before: 120, after: 120 }
+        }));
+
+        return blocos;
+      })).then(arr => arr.flat()),
+      criarSeparador(),
+    ] : []),
+
     // CAPA
     new Paragraph({
       children: [new TextRun({ text: 'PACOTE DE PRODUÇÃO', bold: true, size: 48, font: 'Arial', color: '1E40AF' })],
@@ -94,6 +180,20 @@ async function gerarPacoteRoteirista(pacote) {
     criarTexto(avatar?.historia?.biografia || avatar?.historia),
     criarLabel('Jeito de falar'),
     criarTexto(nicho?.tom?.permitido?.join(', ')),
+    criarLabel('Estilo de escrita e fala do avatar'),
+    criarComentario('ATENÇÃO: Este é o estilo de escrita real do avatar. Use como referência para cada frase do roteiro. O roteiro deve soar exatamente assim — não mais formal, não mais polido.'),
+    new Paragraph({
+      children: [new TextRun({
+        text: avatar?.estiloDeEscrita || 'Não definido — preencher no banco de dados do canal.',
+        italics: true,
+        size: 22,
+        font: 'Arial',
+        color: avatar?.estiloDeEscrita ? '111827' : '9CA3AF'
+      })],
+      spacing: { before: 60, after: 120 },
+      border: { left: { style: BorderStyle.SINGLE, size: 16, color: '2563EB', space: 8 } },
+      indent: { left: 360 }
+    }),
     criarLabel('Tom proibido'),
     criarTexto(nicho?.tom?.proibido?.join(', ')),
     criarLabel('Duração ideal do vídeo'),
@@ -179,20 +279,94 @@ async function gerarPacoteRoteirista(pacote) {
 
     criarSeparador(),
 
-    // SEÇÃO 6 — ESTRATÉGIA DO CANAL
+    criarSeparador(),
+
+    // SEÇÃO 6 — CONTEXTO ESTRATÉGICO E BANCO DE DADOS
     new Paragraph({
-      text: '6. CONTEXTO ESTRATÉGICO DO CANAL', heading: HeadingLevel.HEADING_1,
+      text: '6. CONTEXTO ESTRATÉGICO E BANCO DE DADOS DO CANAL',
+      heading: HeadingLevel.HEADING_1,
       spacing: { before: 300, after: 200 }
     }),
-    criarComentario('Use este contexto para garantir que o roteiro reforce o posicionamento único do canal e não soe genérico.'),
-    criarLabel('Gap de mercado'),
-    criarTexto(estrategia?.gapMercado),
-    criarLabel('Gap de edição'),
-    criarTexto(estrategia?.gapEdicao),
-    criarLabel('Diferencial do canal'),
-    criarTexto(estrategia?.propostaEscolhida?.diferencialCompetitivo),
+    criarComentario('LEIA ESTA SEÇÃO INTEIRA ANTES DE COMEÇAR O ROTEIRO. Aqui estão todas as informações que definem a identidade do canal. O roteiro deve reforçar cada um desses elementos, nunca contradizê-los.'),
+
+    criarLabel('Nicho do canal'),
+    criarTexto(nicho?.nicho),
+
     criarLabel('Público-alvo'),
-    criarTexto(estrategia?.propostaEscolhida?.publicoAlvo),
+    criarTexto(`${nicho?.publicoAlvo?.faixaEtaria || ''} — ${nicho?.publicoAlvo?.perfil || ''}`),
+
+    criarLabel('Dores do público'),
+    ...(nicho?.publicoAlvo?.dores?.length
+      ? nicho.publicoAlvo.dores.map(d => criarItem(d))
+      : [criarTexto('Não definido — preencher no banco de dados')]),
+
+    criarLabel('Desejos do público'),
+    ...(nicho?.publicoAlvo?.desejos?.length
+      ? nicho.publicoAlvo.desejos.map(d => criarItem(d))
+      : [criarTexto('Não definido — preencher no banco de dados')]),
+
+    criarLabel('Palavras que engajam'),
+    criarTexto(nicho?.palavrasQueEngajam?.join(', ') || 'Não definido — preencher no banco de dados'),
+
+    criarLabel('Gatilhos que convertem'),
+    criarTexto(nicho?.gatilhosQueConvertem?.join(', ') || 'Não definido — preencher no banco de dados'),
+
+    criarLabel('Temas que já funcionaram'),
+    ...(nicho?.temasFuncionaram?.length
+      ? nicho.temasFuncionaram.map(t => criarItem(t))
+      : [criarTexto('Nenhum registrado ainda')]),
+
+    criarLabel('Temas proibidos'),
+    ...(nicho?.temasProibidos?.length
+      ? nicho.temasProibidos.map(t => criarItem(t))
+      : [criarTexto('Nenhum registrado ainda')]),
+
+    criarLabel('Estilo de narração'),
+    criarTexto(nicho?.formatoDeVideo?.estiloDeNarracao || 'Não definido'),
+
+    criarLabel('Estrutura padrão dos vídeos'),
+    ...(nicho?.formatoDeVideo?.estrutura?.length
+      ? nicho.formatoDeVideo.estrutura.map(e => criarItem(e))
+      : [criarTexto('Não definido')]),
+
+    criarSeparador(),
+
+    // SEÇÃO 7 — ESTRATÉGIA VALIDADA
+    ...(nicho?.estrategia?.propostaEscolhida ? [
+      new Paragraph({
+        text: '7. ESTRATÉGIA VALIDADA DO CANAL',
+        heading: HeadingLevel.HEADING_1,
+        spacing: { before: 300, after: 200 }
+      }),
+      criarComentario('Esta é a estratégia validada pelo criador. Use para garantir que o roteiro reforce o posicionamento único e não soe genérico ou igual à concorrência.'),
+      criarLabel('Ângulo único do canal'),
+      criarTexto(nicho.estrategia.propostaEscolhida.anguloUnico),
+      criarLabel('Subnicho'),
+      criarTexto(nicho.estrategia.propostaEscolhida.subnicho),
+      criarLabel('Diferencial competitivo'),
+      criarTexto(nicho.estrategia.propostaEscolhida.diferencialCompetitivo),
+      criarLabel('Público-alvo validado'),
+      criarTexto(nicho.estrategia.propostaEscolhida.publicoAlvo),
+      criarLabel('Gap de mercado'),
+      criarTexto(nicho.estrategia.gapMercado || 'Não registrado'),
+      criarLabel('Gap de edição'),
+      criarTexto(nicho.estrategia.gapEdicao || 'Não registrado'),
+      criarLabel('Canais analisados como base'),
+      ...(nicho.estrategia.canaisAnalisados?.length
+        ? nicho.estrategia.canaisAnalisados.map(c =>
+            criarItem(`${c.nome} — ${Number(c.inscritos || 0).toLocaleString()} inscritos`))
+        : [criarTexto('Nenhum registrado')]),
+      criarSeparador(),
+    ] : [
+      new Paragraph({
+        text: '7. ESTRATÉGIA VALIDADA DO CANAL',
+        heading: HeadingLevel.HEADING_1,
+        spacing: { before: 300, after: 200 }
+      }),
+      criarComentario('Estratégia ainda não registrada. O criador deve passar pela Sessão de Validação no Agente-Ideias para gerar e salvar a estratégia do canal.'),
+      criarTexto('Sem estratégia registrada — realize a Validação no Agente-Ideias para completar esta seção.'),
+      criarSeparador(),
+    ]),
   ];
 
   const doc = new Document({

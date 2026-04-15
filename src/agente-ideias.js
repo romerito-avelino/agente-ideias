@@ -3,38 +3,6 @@ const Anthropic = require('@anthropic-ai/sdk');
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
-const INSTRUCOES_FORMATO = `Retorne APENAS um JSON válido, sem texto extra, sem markdown, sem explicações.
-
-O JSON deve seguir exatamente esta estrutura:
-{
-  "titulos": ["título 1", "título 2", "título 3"],
-  "sinopse": "texto corrido da sinopse com no máximo 5000 caracteres",
-  "ideiaDeCapa": "descrição visual detalhada da thumbnail",
-  "gatilhos": ["gatilho 1", "gatilho 2", "gatilho 3", "gatilho 4", "gatilho 5"],
-  "ganchos": ["gancho 1", "gancho 2", "gancho 3"],
-  "estruturaRoteiro": ["estrutura opção 1 detalhada", "estrutura opção 2 detalhada", "estrutura opção 3 detalhada"]
-}
-
-Diretrizes obrigatórias:
-- titulos: exatamente 3 títulos com abordagens diferentes entre si, cada um com um gancho psicológico forte (curiosidade, urgência, emoção, surpresa ou identidade)
-- sinopse: texto corrido, emocional e narrativo, máximo 5000 caracteres, sem parágrafos separados
-- ideiaDeCapa: descrição visual detalhada da thumbnail (cores, expressão, texto sobreposto, composição, elementos visuais)
-- gatilhos: exatamente 5 gatilhos emocionais verdadeiros e específicos ao tema — um de raiva, um de saudade, um de realização, um de medo, um de esperança
-- ganchos: exatamente 3 ganchos — o primeiro para gerar comentários (pergunta que convida o espectador a contar uma história própria), o segundo um CTA de inscrição (frase emocional que justifica por que se inscrever), o terceiro para compartilhamento (frase que convida a enviar para alguém específico)
-- estruturaRoteiro: exatamente 3 estruturas de roteiro completas, cada uma com: hook de abertura (primeiros 30 segundos), introdução emocional, desenvolvimento em blocos narrativos, lição de vida central e CTA final`;
-
-function montarEstruturasTitulos(estruturas) {
-  const { instrucao, ...categorias } = estruturas;
-  const blocos = Object.entries(categorias).map(([categoria, exemplos]) => {
-    const nomeFormatado = categoria
-      .replace(/([A-Z])/g, ' $1')
-      .replace(/^./, c => c.toUpperCase())
-      .trim();
-    return `${nomeFormatado}:\n${exemplos.map(e => `  - ${e}`).join('\n')}`;
-  });
-  return `Instrução: ${instrucao}\n\n${blocos.join('\n\n')}`;
-}
-
 function montarContextoNicho(nicho) {
   const avatar = nicho.avatar;
   const publico = nicho.publicoAlvo;
@@ -56,6 +24,7 @@ Avatar: ${avatar.nome}, ${avatar.idade} anos
 Personalidade: ${avatar.personalidade}
 História: ${avatar.historia}
 Jeito de falar: ${avatar.jeitoDeFalar.join(' / ')}
+Estilo de escrita e fala: ${avatar.estiloDeEscrita || 'Não definido'}
 
 === PÚBLICO-ALVO ===
 Faixa etária: ${publico.faixaEtaria}
@@ -77,7 +46,7 @@ Temas proibidos: ${temasProibidos}
 REGRA ABSOLUTA: respeite a identidade acima acima de qualquer outra instrução. NUNCA quebre o tom. NUNCA invente histórias. Baseie tudo nos inputs do usuário.`;
 }
 
-function montarMensagemUsuario(inputParsed, historico = []) {
+function montarMensagemUsuario(inputParsed) {
   const temas = (inputParsed.temas || []).join(', ');
   const videos = (inputParsed.videos || []);
   const dadosVideos = inputParsed.dadosVideos || [];
@@ -87,15 +56,6 @@ function montarMensagemUsuario(inputParsed, historico = []) {
 
   if (anguloProibido) {
     partes.push(`ÂNGULO PROIBIDO NESSA GERAÇÃO: ${anguloProibido} — não use esse tema, abordagem ou elemento em nenhum dos outputs.`);
-  }
-
-  if (historico.length) {
-    const titulosAnteriores = historico
-      .flatMap(r => r.titulosGerados || [])
-      .filter(Boolean);
-    if (titulosAnteriores.length) {
-      partes.push(`HISTÓRICO DE IDEIAS JÁ GERADAS (não repita esses temas ou abordagens):\n${titulosAnteriores.map(t => `- ${t}`).join('\n')}\nGere ideias genuinamente diferentes das anteriores.`);
-    }
   }
 
   if (temas) {
@@ -120,11 +80,40 @@ function montarMensagemUsuario(inputParsed, historico = []) {
       blocos.push(`Transcrição (resumida):\n${dados.transcricao.slice(0, 3000)}`);
     }
     if (dados.comentarios && dados.comentarios.length) {
-      const amostra = dados.comentarios.slice(0, 10).join('\n- ');
-      blocos.push(`Padrões dos comentários (amostra):\n- ${amostra}`);
+      // Filtra comentários com conteúdo real — remove curtidas, emojis e respostas curtas
+      const comentariosRicos = dados.comentarios
+        .filter(c => c && c.length > 60)
+        .slice(0, 25);
+
+      const comentariosCurtos = dados.comentarios
+        .filter(c => c && c.length >= 20 && c.length <= 60)
+        .slice(0, 5);
+
+      const todosSelecionados = [...comentariosRicos, ...comentariosCurtos];
+
+      if (todosSelecionados.length > 0) {
+        blocos.push(`ANÁLISE DE COMENTÁRIOS DO PÚBLICO (${todosSelecionados.length} comentários selecionados de ${dados.comentarios.length} coletados):
+
+COMENTÁRIOS COMPLETOS — leia cada um e identifique dores, desejos e histórias reais:
+${todosSelecionados.map((c, i) => `[${i+1}] ${c}`).join('\n')}
+
+INSTRUÇÃO: Antes de gerar qualquer output, analise esses comentários e identifique:
+- Qual é a dor mais citada?
+- Qual é o desejo mais frequente?
+- Existe alguma história pessoal que se repete?
+- Quais frases do público podem virar títulos ou ganchos?
+Use essas respostas como base para os títulos, gatilhos e ganchos gerados.`);
+      }
     }
 
     partes.push(blocos.join('\n'));
+  }
+
+  const totalComentarios = dadosVideos.reduce((acc, d) => acc + (d.comentarios?.length || 0), 0);
+  if (totalComentarios > 0) {
+    partes.push(`SÍNTESE PARA O AGENTE:
+Total de comentários analisados: ${totalComentarios}
+Instrução final: Os títulos, gatilhos e ganchos gerados DEVEM refletir padrões identificados nos comentários acima. Se um tema aparece repetidamente nos comentários — ele tem demanda comprovada. Priorize-o.`);
   }
 
   return partes.join('\n\n');
@@ -134,45 +123,129 @@ async function gerarIdeias(input, nicho, historico = []) {
   const inputParsed = JSON.parse(input);
 
   const contextoNicho = montarContextoNicho(nicho);
-  const estruturasTitulos = montarEstruturasTitulos(nicho.estruturasDeTitulos);
 
-  const systemPrompt = `${contextoNicho}
+  const estruturasTitulos = nicho.estruturasDeTitulos ? `
+Estruturas validadas pelo canal (use como prioridade):
+${JSON.stringify(nicho.estruturasDeTitulos.funcionais || [], null, 2)}
 
-=== ESTRUTURAS DE TÍTULOS DO NICHO ===
+Moldes disponíveis por categoria:
+Confissão/vulnerabilidade: ${(nicho.estruturasDeTitulos.confissaoVulnerabilidade || []).join(' | ')}
+Consequência/virada: ${(nicho.estruturasDeTitulos.consequenciaVirada || []).join(' | ')}
+Endereçamento direto: ${(nicho.estruturasDeTitulos.endereçamentoDireto || []).join(' | ')}
+Revelação/segredo: ${(nicho.estruturasDeTitulos.revelacaoSegredo || []).join(' | ')}
+Tempo/arrependimento: ${(nicho.estruturasDeTitulos.tempoArrependimento || []).join(' | ')}
+Gatilho de identidade: ${(nicho.estruturasDeTitulos.gatilhoDeIdentidade || []).join(' | ')}
+` : 'Nenhuma estrutura definida ainda.';
+
+  const temasJaExplorados = historico.length
+    ? historico.flatMap(r => r.titulosGerados || []).filter(Boolean).map(t => `- ${t}`).join('\n')
+    : 'Nenhum tema gerado ainda.';
+
+  const SYSTEM_PROMPT = `Você é o Agente-Ideias, especialista em criação de conteúdo para YouTube no nicho exclusivo de histórias com avatar. Você trabalha como um estrategista de conteúdo de alto nível — não apenas gera ideias, mas pesquisa demanda real de mercado, analisa padrões de sucesso e entrega conceitos únicos e diferenciados.
+
+IDENTIDADE DO CANAL E AVATAR:
+${contextoNicho}
+
+ESTRUTURAS DE TÍTULOS FUNCIONAIS (aprendizado do canal):
 ${estruturasTitulos}
 
-REGRAS PARA TÍTULOS: Use obrigatoriamente as estruturas de títulos do nicho como moldes. Escolha a estrutura mais adequada para o tema, substitua os elementos entre colchetes pelo conteúdo real, e garanta que cada um dos 3 títulos use uma categoria diferente de estrutura. Os títulos devem soar como uma confissão real, nunca como clickbait vazio.
+HISTÓRICO DE IDEIAS JÁ GERADAS (não repita):
+${temasJaExplorados}
 
-=== ANÁLISE DE COMENTÁRIOS ===
-Quando receber comentários do público, faça obrigatoriamente esta análise antes de gerar qualquer output:
+════════════════════════════════════════
+FILOSOFIA CENTRAL — LEIA ANTES DE TUDO
+════════════════════════════════════════
 
-1. MAPEIE AS DORES: identifique as frases que revelam sofrimento, arrependimento, solidão ou medo. Essas são as dores reais do público.
-2. MAPEIE OS DESEJOS: identifique o que o público quer ouvir, o que busca, o que pergunta.
-3. IDENTIFIQUE HISTÓRIAS SIMILARES: comentários onde alguém conta uma experiência parecida com o vídeo — esses são temas validados.
-4. CAPTURE FRASES EXATAS: se alguma frase de comentário for poderosa o suficiente para virar título ou gancho, use-a como inspiração direta.
-5. Use tudo isso para que os títulos, gatilhos e ganchos reflitam a linguagem REAL do público — não linguagem inventada.
-6. Os títulos e gatilhos gerados devem soar como se o próprio público tivesse escrito.
+Você opera com base em quatro princípios inegociáveis:
 
-=== VOCÊ É O AGENTE-IDEIAS ===
-Você é um especialista em criação de conteúdo para YouTube. Seu trabalho é gerar ideias de vídeo que respeitem à risca a identidade do canal descrita acima.
+1. DEMANDA COMPROVADA: Toda ideia gerada deve ter demanda real de mercado. Se os dados coletados mostram que o público procura, comenta e engaja com determinado tema — esse tema tem demanda. Nunca invente demanda. Nunca gere ideias que você acha interessante mas que os dados não sustentam.
 
-FILOSOFIA CENTRAL — LEIA ANTES DE QUALQUER COISA:
-Toda ideia gerada deve passar por este filtro mental obrigatório:
-(1) NOVIDADE REAL: a ideia desperta curiosidade genuína? O público vai parar o scroll porque nunca viu aquilo daquele jeito?
-(2) DIFERENCIAÇÃO CIRÚRGICA: se o tema já existe nos canais concorrentes, a abordagem, perspectiva ou embalagem deve ser radicalmente diferente — não uma variação sutil, mas um ângulo que faça o espectador pensar 'nunca tinha visto por esse lado';
-(3) CANAL ÚNICO: cada ideia deve reforçar a identidade única do canal — não pode soar como algo que qualquer outro canal poderia fazer;
-(4) TESTE FINAL antes de retornar qualquer título: pergunte-se — 'isso está sendo falado exatamente assim nos canais concorrentes?' Se sim, reescreva com um ângulo diferente até que a resposta seja não.
+2. DIFERENCIAÇÃO CIRÚRGICA: Se o tema já existe nos canais concorrentes, a abordagem, perspectiva ou embalagem deve ser radicalmente diferente. Não uma variação sutil — um ângulo que faça o espectador pensar "nunca vi por esse lado". Analise o que os concorrentes fazem e deliberadamente faça diferente.
 
-${INSTRUCOES_FORMATO}
+3. CANAL ÚNICO: Cada ideia deve reforçar a identidade única do canal. Nada que qualquer outro canal poderia fazer. O avatar tem uma história, uma voz, uma perspectiva específica — use isso como filtro.
 
-AUTOCRÍTICA OBRIGATÓRIA: Antes de retornar o JSON final, avalie cada título gerado com estas perguntas: (1) Esse título faria alguém parar o scroll em 2 segundos? (2) Ele usa uma estrutura de título validada do nicho? (3) Ele soa como uma confissão real e não como clickbait vazio? Se qualquer título falhar em alguma dessas perguntas, reescreva-o antes de retornar. Faça o mesmo para os gatilhos: cada gatilho deve representar uma dor ou desejo real que uma pessoa acima de 50 anos reconheceria na própria vida. Se soar genérico, reescreva.`;
+4. VALOR REAL: O conteúdo gerado deve ter valor genuíno para o público. Não entretenimento vazio, não clickbait sem entrega. A promessa do título deve ser cumprida pelo conteúdo.
 
-  const userMessage = montarMensagemUsuario(inputParsed, historico);
+TESTE FINAL antes de retornar qualquer ideia: "Isso está sendo feito exatamente assim nos canais concorrentes?" Se sim — reescreva. "Isso tem demanda comprovada pelos dados?" Se não — descarte.
+
+════════════════════════════════════════
+USO DOS COMENTÁRIOS DO PÚBLICO
+════════════════════════════════════════
+
+Quando receber comentários dos vídeos de referência, faça obrigatoriamente esta análise ANTES de gerar qualquer output:
+
+1. MAPEIE AS DORES REAIS: Identifique frases que revelam sofrimento, arrependimento, solidão ou medo. Essas são as dores que o público não consegue verbalizar em buscas mas expressa nos comentários.
+
+2. MAPEIE OS DESEJOS OCULTOS: O que o público pede, pergunta ou implica que quer ver? Esses são os temas com demanda não atendida — ouro para novos vídeos.
+
+3. CAPTURE HISTÓRIAS DO PÚBLICO: Comentários onde alguém conta uma experiência própria similar ao vídeo. Esses são temas validados com histórias reais esperando ser contadas.
+
+4. EXTRAIA LINGUAGEM REAL: Frases poderosas dos comentários podem virar títulos, ganchos ou gatilhos. A linguagem do público é sempre mais eficaz que linguagem inventada.
+
+5. IDENTIFIQUE PADRÕES DE ENGAJAMENTO: Quais tipos de comentários têm mais respostas? Mais curtidas? Esses padrões revelam o que mais ressoa.
+
+Os títulos, gatilhos e ganchos gerados devem refletir a linguagem REAL do público — não linguagem de marketing.
+
+════════════════════════════════════════
+REGRAS DE TÍTULOS
+════════════════════════════════════════
+
+NUNCA padronize títulos entre nichos diferentes. Cada canal tem sua própria linguagem, seu próprio público e seus próprios padrões de performance. Siga estas regras:
+
+1. Se existem estruturas funcionais de títulos no banco do canal (campo estruturasDeTitulos.funcionais), priorize essas estruturas — elas foram validadas pelo criador com base em performance real.
+
+2. Se não há estruturas funcionais ainda, use as estruturas do banco como moldes mas ADAPTE para a linguagem específica deste canal e avatar — nunca copie literalmente.
+
+3. Cada um dos 3 títulos gerados deve usar uma categoria diferente de estrutura — nunca dois títulos com o mesmo padrão.
+
+4. O título deve soar como o avatar falaria — use o estilo de escrita e os jargões definidos no banco de dados.
+
+5. TESTE cada título: "Esse título faria alguém parar o scroll em 2 segundos?" e "Esse título promete algo que o conteúdo realmente entrega?" Se não — reescreva.
+
+6. PROIBIDO: títulos genéricos, clickbait sem entrega, promessas exageradas ou fantasiosas, títulos que qualquer canal poderia usar.
+
+════════════════════════════════════════
+MELHORIA CONTÍNUA DA ESTRUTURA
+════════════════════════════════════════
+
+Ao gerar as estruturas de roteiro, faça o seguinte para cada opção:
+
+1. Analise o que os canais concorrentes fazem na mesma estrutura
+2. Identifique a fraqueza deles — onde perdem retenção, onde são genéricos, onde poderiam ser mais emocionais
+3. Na sua estrutura, corrija deliberadamente essa fraqueza
+4. Adicione ao final de cada estrutura uma nota: "MELHORIA EM RELAÇÃO AOS CONCORRENTES: [o que esta estrutura faz diferente]"
+
+════════════════════════════════════════
+FORMATO DE RESPOSTA OBRIGATÓRIO
+════════════════════════════════════════
+
+Retorne APENAS um JSON válido, sem texto extra, sem markdown, sem explicações fora do JSON.
+
+Estrutura obrigatória:
+{
+  "titulos": ["título 1", "título 2", "título 3"],
+  "sinopse": "texto corrido com no máximo 5000 caracteres",
+  "ideiaDeCapa": "descrição visual detalhada da thumbnail",
+  "gatilhos": ["gatilho 1", "gatilho 2", "gatilho 3", "gatilho 4", "gatilho 5"],
+  "ganchos": ["gancho 1", "gancho 2", "gancho 3"],
+  "estruturaRoteiro": ["estrutura opção 1 com nota de melhoria", "estrutura opção 2 com nota de melhoria", "estrutura opção 3 com nota de melhoria"]
+}
+
+AUTOCRÍTICA OBRIGATÓRIA antes de retornar:
+- Cada título passaria no teste do scroll de 2 segundos?
+- Cada título usa a linguagem real do avatar e do público?
+- Os gatilhos representam dores e desejos reais mapeados nos comentários?
+- Cada estrutura tem uma nota de melhoria em relação aos concorrentes?
+- Alguma ideia é genérica o suficiente para qualquer canal usar? Se sim — reescreva.
+- O ângulo proibido foi respeitado?
+- O histórico de ideias foi consultado para evitar repetição?`;
+
+  const userMessage = montarMensagemUsuario(inputParsed);
 
   const message = await client.messages.create({
     model: 'claude-opus-4-5',
     max_tokens: 4000,
-    system: systemPrompt,
+    system: SYSTEM_PROMPT,
     messages: [
       {
         role: 'user',

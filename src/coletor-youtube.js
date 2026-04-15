@@ -145,6 +145,7 @@ async function coletarDadosVideo(url) {
       likes: metadados?.likes || 0,
       totalComentarios: metadados?.totalComentarios || 0
     },
+    thumbnail: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`,
     transcricao,
     comentarios
   };
