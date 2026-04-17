@@ -1438,6 +1438,53 @@
   line-height: 1.6;
 }
 .gap-editavel:focus { border-color: var(--blue); }
+
+.campo-obrigatorio label::after {
+  content: ' *';
+  color: #E24B4A;
+  font-size: 11px;
+}
+.campo-recomendado label::after {
+  content: ' ✦';
+  color: #EF9F27;
+  font-size: 10px;
+}
+.completude-bar {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  margin-bottom: 16px;
+}
+.completude-titulo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 12px;
+}
+.completude-label { color: var(--muted); }
+.completude-percentual {
+  font-weight: 500;
+  font-size: 14px;
+}
+.completude-track {
+  height: 6px;
+  background: var(--bg2);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.completude-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+.completude-campos {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.6;
+}
 </style>
 </head>
 <body>
@@ -1617,63 +1664,63 @@
   <div class="relatorio-card">
     <div class="relatorio-titulo">Dados do canal e avatar</div>
     <div class="form-grid">
-      <div class="form-field">
-        <label>Nome do canal *</label>
+      <div class="form-field campo-obrigatorio">
+        <label>Nome do canal</label>
         <input type="text" id="f_canal" placeholder="Ex: Histórias do Sargento" />
       </div>
-      <div class="form-field">
-        <label>ID do canal (sem espaços) *</label>
+      <div class="form-field campo-obrigatorio">
+        <label>ID do canal (sem espaços)</label>
         <input type="text" id="f_id" placeholder="Ex: historias-do-sargento" oninput="verificarCanalExistente()" />
       </div>
-      <div class="form-field full">
+      <div class="form-field full campo-recomendado">
         <label>Descrição do nicho</label>
         <input type="text" id="f_nicho" placeholder="Ex: Storytelling emocional de militares para público 40+" />
       </div>
-      <div class="form-field">
-        <label>Nome do avatar *</label>
+      <div class="form-field campo-obrigatorio">
+        <label>Nome do avatar</label>
         <input type="text" id="f_avatar_nome" placeholder="Ex: Sargento Menezes" />
       </div>
-      <div class="form-field">
+      <div class="form-field campo-obrigatorio">
         <label>Idade do avatar</label>
         <input type="number" id="f_avatar_idade" placeholder="Ex: 65" />
       </div>
-      <div class="form-field">
+      <div class="form-field campo-obrigatorio">
         <label>Profissão / histórico</label>
         <input type="text" id="f_avatar_profissao" placeholder="Ex: Ex-militar, aposentado" />
       </div>
-      <div class="form-field">
+      <div class="form-field campo-obrigatorio">
         <label>Estado civil / família</label>
         <input type="text" id="f_avatar_familia" placeholder="Ex: Viúvo, 3 filhos" />
       </div>
-      <div class="form-field full">
+      <div class="form-field full campo-obrigatorio">
         <label>Estilo de vida atual</label>
         <input type="text" id="f_avatar_estilo" placeholder="Ex: Mora no interior, vive da aposentadoria, cultiva horta" />
       </div>
-      <div class="form-field full">
+      <div class="form-field full campo-obrigatorio">
         <label>Personalidade</label>
         <input type="text" id="f_avatar_personalidade" placeholder="Ex: Sábio, direto, carrega peso do passado mas encontrou paz" />
       </div>
-      <div class="form-field full">
+      <div class="form-field full campo-obrigatorio">
         <label>Biografia completa</label>
         <textarea id="f_avatar_bio" rows="5" placeholder="Escreva livremente a história completa do avatar..."></textarea>
       </div>
-      <div class="form-field full">
+      <div class="form-field full campo-obrigatorio">
         <label>Estilo de escrita e fala do avatar</label>
         <textarea id="f_avatar_escrita" rows="5" placeholder="Escreva aqui um exemplo real de como o avatar fala. Inclua jargões, bordões, gírias, português informal, palavras abreviadas, expressões regionais. Ex: 'Uai meu fio, eu tô te falando uma coisa que a maioria dos home num quer acreditar não...'"></textarea>
       </div>
-      <div class="form-field full">
+      <div class="form-field full campo-obrigatorio">
         <label>Tom permitido (separado por vírgulas)</label>
         <input type="text" id="f_tom_permitido" placeholder="Ex: emocional, verdadeiro, reflexivo, esperançoso" />
       </div>
-      <div class="form-field full">
+      <div class="form-field full campo-obrigatorio">
         <label>Tom proibido (separado por vírgulas)</label>
         <input type="text" id="f_tom_proibido" placeholder="Ex: fantasioso, sensacionalista, promessas falsas" />
       </div>
-      <div class="form-field">
+      <div class="form-field campo-obrigatorio">
         <label>Duração ideal dos vídeos</label>
         <input type="text" id="f_duracao" placeholder="Ex: 15 a 25 minutos" />
       </div>
-      <div class="form-field">
+      <div class="form-field campo-obrigatorio">
         <label>Faixa etária do público</label>
         <input type="text" id="f_publico_idade" placeholder="Ex: 45 anos ou mais" />
       </div>
@@ -1760,8 +1807,9 @@
         <div class="modal-titulo">Editar banco de dados do nicho</div>
         <button class="modal-fechar" onclick="fecharModal()">×</button>
       </div>
+      <div id="completude-modal"></div>
       <div class="form-grid">
-        <div class="form-field">
+        <div class="form-field campo-obrigatorio">
           <label>Nome do canal</label>
           <input type="text" id="e_canal" />
         </div>
@@ -1769,53 +1817,69 @@
           <label>Descrição do nicho</label>
           <input type="text" id="e_nicho" />
         </div>
-        <div class="form-field">
+        <div class="form-field campo-obrigatorio">
           <label>Nome do avatar</label>
           <input type="text" id="e_avatar_nome" />
         </div>
-        <div class="form-field">
+        <div class="form-field campo-obrigatorio">
           <label>Idade do avatar</label>
           <input type="number" id="e_avatar_idade" />
         </div>
-        <div class="form-field">
+        <div class="form-field campo-obrigatorio">
           <label>Personalidade</label>
           <input type="text" id="e_avatar_personalidade" />
         </div>
-        <div class="form-field">
+        <div class="form-field campo-obrigatorio">
           <label>Profissão / histórico</label>
           <input type="text" id="e_avatar_profissao" />
         </div>
-        <div class="form-field">
+        <div class="form-field campo-obrigatorio">
           <label>Estado civil / família</label>
           <input type="text" id="e_avatar_familia" />
         </div>
-        <div class="form-field">
+        <div class="form-field campo-obrigatorio">
           <label>Estilo de vida</label>
           <input type="text" id="e_avatar_estilo" />
         </div>
-        <div class="form-field full">
+        <div class="form-field full campo-obrigatorio">
           <label>Biografia completa</label>
           <textarea id="e_avatar_bio" rows="5"></textarea>
         </div>
-        <div class="form-field full">
+        <div class="form-field full campo-obrigatorio">
           <label>Estilo de escrita e fala do avatar</label>
           <textarea id="e_avatar_escrita" rows="5" placeholder="Escreva aqui um exemplo real de como o avatar fala. Inclua jargões, bordões, gírias, português informal, palavras abreviadas, expressões regionais. Ex: 'Uai meu fio, eu tô te falando uma coisa que a maioria dos home num quer acreditar não...'"></textarea>
         </div>
-        <div class="form-field full">
+        <div class="form-field full campo-obrigatorio">
           <label>Tom permitido (separado por vírgulas)</label>
           <input type="text" id="e_tom_permitido" />
         </div>
-        <div class="form-field full">
+        <div class="form-field full campo-obrigatorio">
           <label>Tom proibido (separado por vírgulas)</label>
           <input type="text" id="e_tom_proibido" />
         </div>
-        <div class="form-field">
+        <div class="form-field campo-obrigatorio">
           <label>Duração ideal dos vídeos</label>
           <input type="text" id="e_duracao" />
         </div>
-        <div class="form-field">
+        <div class="form-field campo-obrigatorio">
           <label>Faixa etária do público</label>
           <input type="text" id="e_publico_idade" />
+        </div>
+        <div class="form-field full campo-obrigatorio">
+          <label>Dores do público (uma por linha)</label>
+          <textarea id="e_publico_dores" rows="4" placeholder="Ex: solidão&#10;medo de ser um peso para a família&#10;arrependimentos do passado"></textarea>
+        </div>
+        <div class="form-field full campo-obrigatorio">
+          <label>Desejos do público (uma por linha)</label>
+          <textarea id="e_publico_desejos" rows="4" placeholder="Ex: ser compreendido&#10;sentir que não está sozinho&#10;aprender com experiências alheias"></textarea>
+        </div>
+        <div class="form-field full campo-obrigatorio">
+          <label>Palavras que engajam (separadas por vírgulas)</label>
+          <input type="text" id="e_palavras_engajam" placeholder="Ex: saudade, arrependimento, segunda chance, recomeço" />
+        </div>
+        <div class="form-field full campo-obrigatorio">
+          <label>Gatilhos que convertem (separados por vírgulas)</label>
+          <input type="text" id="e_gatilhos_convertem" placeholder="Ex: tempo perdido, amor verdadeiro, família, recomeço" />
         </div>
         <div class="form-field full">
           <label>Temas que funcionaram (um por linha)</label>
@@ -1824,14 +1888,6 @@
         <div class="form-field full">
           <label>Temas proibidos (um por linha)</label>
           <textarea id="e_temas_proibidos" rows="3"></textarea>
-        </div>
-        <div class="form-field full">
-          <label>Palavras que engajam (separadas por vírgulas)</label>
-          <input type="text" id="e_palavras_engajam" />
-        </div>
-        <div class="form-field full">
-          <label>Gatilhos que convertem (separados por vírgulas)</label>
-          <input type="text" id="e_gatilhos" />
         </div>
         <div class="form-field full">
           <label>Títulos que funcionaram bem (um por linha)</label>
@@ -2092,7 +2148,7 @@
   let temas = [];
   let videos = [];
   let dadosGerados = {};
-  let nichoAtivo = 'seu-augusto';
+  let nichoAtivo = '';
   let tituloEscolhido = null;
   let estruturaEscolhida = null;
 
@@ -2982,17 +3038,39 @@
   }
 
   async function confirmarESalvar() {
+    const camposObrigatorios = [
+      { id: 'f_canal', nome: 'Nome do canal' },
+      { id: 'f_id', nome: 'ID do canal' },
+      { id: 'f_avatar_nome', nome: 'Nome do avatar' },
+      { id: 'f_avatar_idade', nome: 'Idade do avatar' },
+      { id: 'f_avatar_profissao', nome: 'Profissão do avatar' },
+      { id: 'f_avatar_familia', nome: 'Estado civil e família' },
+      { id: 'f_avatar_estilo', nome: 'Estilo de vida' },
+      { id: 'f_avatar_personalidade', nome: 'Personalidade' },
+      { id: 'f_avatar_bio', nome: 'Biografia completa' },
+      { id: 'f_avatar_escrita', nome: 'Estilo de escrita e fala' },
+      { id: 'f_tom_permitido', nome: 'Tom permitido' },
+      { id: 'f_tom_proibido', nome: 'Tom proibido' },
+      { id: 'f_duracao', nome: 'Duração ideal dos vídeos' },
+      { id: 'f_publico_idade', nome: 'Faixa etária do público' }
+    ];
+    const camposVazios = camposObrigatorios.filter(c => {
+      const el = document.getElementById(c.id);
+      return !el || !el.value.trim();
+    });
+    const btn = document.getElementById('btnConfirmarSalvar');
+    if (camposVazios.length > 0) {
+      document.getElementById('erroFormulario').textContent = `⚠️ Preencha os campos obrigatórios antes de salvar: ${camposVazios.map(c => c.nome).join(', ')}`;
+      document.getElementById('erroFormulario').classList.add('visivel');
+      btn.disabled = false;
+      btn.textContent = 'Confirmar e salvar canal';
+      return;
+    }
+
     const id = document.getElementById('f_id').value.trim().toLowerCase().replace(/\s+/g, '-');
     const canal = document.getElementById('f_canal').value.trim();
     const avatarNome = document.getElementById('f_avatar_nome').value.trim();
 
-    if (!id || !canal || !avatarNome) {
-      document.getElementById('erroFormulario').textContent = '⚠️ Nome do canal, ID e nome do avatar são obrigatórios.';
-      document.getElementById('erroFormulario').classList.add('visivel');
-      return;
-    }
-
-    const btn = document.getElementById('btnConfirmarSalvar');
     btn.disabled = true;
     btn.textContent = 'Salvando...';
 
@@ -3150,13 +3228,16 @@
       document.getElementById('e_tom_proibido').value = (nicho.tom?.proibido || []).join(', ');
       document.getElementById('e_duracao').value = nicho.formatoDeVideo?.duracaoIdeal || '';
       document.getElementById('e_publico_idade').value = nicho.publicoAlvo?.faixaEtaria || '';
+      document.getElementById('e_publico_dores').value = (nicho.publicoAlvo?.dores || []).join('\n');
+      document.getElementById('e_publico_desejos').value = (nicho.publicoAlvo?.desejos || []).join('\n');
+      document.getElementById('e_palavras_engajam').value = (nicho.palavrasQueEngajam || []).join(', ');
+      document.getElementById('e_gatilhos_convertem').value = (nicho.gatilhosQueConvertem || []).join(', ');
       document.getElementById('e_temas_funcionaram').value = (nicho.temasFuncionaram || []).join('\n');
       document.getElementById('e_temas_proibidos').value = (nicho.temasProibidos || []).join('\n');
-      document.getElementById('e_palavras_engajam').value = (nicho.palavrasQueEngajam || []).join(', ');
-      document.getElementById('e_gatilhos').value = (nicho.gatilhosQueConvertem || []).join(', ');
       document.getElementById('e_titulos_funcionais').value = (nicho.estruturasDeTitulos?.funcionais || []).join('\n');
       document.getElementById('erroEdicao').classList.remove('visivel');
       document.getElementById('sucessoEdicao').style.display = 'none';
+      renderCompletude('completude-modal', nicho);
       document.getElementById('modalEditar').classList.add('aberto');
     } catch (err) {
       alert('Erro ao carregar dados do nicho: ' + err.message);
@@ -3332,6 +3413,34 @@
   }
 
   async function salvarEdicao() {
+    const camposObrigatoriosModal = [
+      { id: 'e_canal', nome: 'Nome do canal' },
+      { id: 'e_avatar_nome', nome: 'Nome do avatar' },
+      { id: 'e_avatar_idade', nome: 'Idade do avatar' },
+      { id: 'e_avatar_profissao', nome: 'Profissão' },
+      { id: 'e_avatar_familia', nome: 'Estado civil e família' },
+      { id: 'e_avatar_estilo', nome: 'Estilo de vida' },
+      { id: 'e_avatar_personalidade', nome: 'Personalidade' },
+      { id: 'e_avatar_bio', nome: 'Biografia completa' },
+      { id: 'e_avatar_escrita', nome: 'Estilo de escrita e fala' },
+      { id: 'e_tom_permitido', nome: 'Tom permitido' },
+      { id: 'e_tom_proibido', nome: 'Tom proibido' },
+      { id: 'e_duracao', nome: 'Duração dos vídeos' },
+      { id: 'e_publico_idade', nome: 'Faixa etária do público' },
+      { id: 'e_publico_dores', nome: 'Dores do público' },
+      { id: 'e_publico_desejos', nome: 'Desejos do público' },
+      { id: 'e_palavras_engajam', nome: 'Palavras que engajam' },
+      { id: 'e_gatilhos_convertem', nome: 'Gatilhos que convertem' }
+    ];
+    const vaziosModal = camposObrigatoriosModal.filter(c => {
+      const el = document.getElementById(c.id);
+      return !el || !el.value.trim();
+    });
+    if (vaziosModal.length > 0) {
+      document.getElementById('erroEdicao').textContent = `⚠️ Preencha os campos obrigatórios: ${vaziosModal.map(c => c.nome).join(', ')}`;
+      document.getElementById('erroEdicao').classList.add('visivel');
+      return;
+    }
     const nichoId = nichoAtivo;
     const nichoAtualRes = await fetch(`/api/nicho/${nichoId}`);
     const nichoAtual = await nichoAtualRes.json();
@@ -3361,12 +3470,14 @@
       },
       publicoAlvo: {
         faixaEtaria: document.getElementById('e_publico_idade').value.trim(),
-        perfil: '', dores: [], desejos: []
+        perfil: nichoAtual?.publicoAlvo?.perfil || '',
+        dores: document.getElementById('e_publico_dores').value.split('\n').map(t => t.trim()).filter(Boolean),
+        desejos: document.getElementById('e_publico_desejos').value.split('\n').map(t => t.trim()).filter(Boolean)
       },
       temasFuncionaram: document.getElementById('e_temas_funcionaram').value.split('\n').map(t => t.trim()).filter(Boolean),
       temasProibidos: document.getElementById('e_temas_proibidos').value.split('\n').map(t => t.trim()).filter(Boolean),
       palavrasQueEngajam: document.getElementById('e_palavras_engajam').value.split(',').map(t => t.trim()).filter(Boolean),
-      gatilhosQueConvertem: document.getElementById('e_gatilhos').value.split(',').map(t => t.trim()).filter(Boolean),
+      gatilhosQueConvertem: document.getElementById('e_gatilhos_convertem').value.split(',').map(t => t.trim()).filter(Boolean),
       estruturasDeTitulos: {
         ...(nichoAtual.estruturasDeTitulos || {}),
         funcionais: document.getElementById('e_titulos_funcionais').value.split('\n').map(t => t.trim()).filter(Boolean)
@@ -3390,11 +3501,60 @@
     }
   }
 
+  function calcularCompletude(dados) {
+    const campos = [
+      { nome: 'Nome do canal', val: dados.canal },
+      { nome: 'Nome do avatar', val: dados.avatar?.nome },
+      { nome: 'Idade do avatar', val: dados.avatar?.idade },
+      { nome: 'Profissão', val: dados.avatar?.historia?.profissao },
+      { nome: 'Família', val: dados.avatar?.historia?.familia },
+      { nome: 'Estilo de vida', val: dados.avatar?.historia?.estiloDeVida },
+      { nome: 'Personalidade', val: dados.avatar?.personalidade },
+      { nome: 'Biografia', val: dados.avatar?.historia?.biografia },
+      { nome: 'Estilo de escrita', val: dados.avatar?.estiloDeEscrita },
+      { nome: 'Tom permitido', val: dados.tom?.permitido?.length },
+      { nome: 'Tom proibido', val: dados.tom?.proibido?.length },
+      { nome: 'Duração dos vídeos', val: dados.formatoDeVideo?.duracaoIdeal },
+      { nome: 'Faixa etária', val: dados.publicoAlvo?.faixaEtaria },
+      { nome: 'Dores do público', val: dados.publicoAlvo?.dores?.length },
+      { nome: 'Desejos do público', val: dados.publicoAlvo?.desejos?.length },
+      { nome: 'Palavras que engajam', val: dados.palavrasQueEngajam?.length },
+      { nome: 'Gatilhos que convertem', val: dados.gatilhosQueConvertem?.length },
+      { nome: 'Nicho descrito', val: dados.nicho }
+    ];
+    const preenchidos = campos.filter(c => c.val && c.val !== 0);
+    const vazios = campos.filter(c => !c.val || c.val === 0);
+    const percentual = Math.round((preenchidos.length / campos.length) * 100);
+    return { percentual, vazios: vazios.map(c => c.nome), total: campos.length, preenchidos: preenchidos.length };
+  }
+
+  function renderCompletude(containerId, dados) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    const { percentual, vazios } = calcularCompletude(dados);
+    const cor = percentual >= 80 ? '#1D9E75' : percentual >= 50 ? '#EF9F27' : '#E24B4A';
+    const msg = percentual === 100
+      ? 'Banco de dados completo — o agente vai trabalhar com máxima precisão!'
+      : percentual >= 80
+      ? 'Banco quase completo — bom contexto para o agente.'
+      : percentual >= 50
+      ? 'Banco incompleto — preencha mais campos para ideias mais precisas.'
+      : 'Banco muito incompleto — o agente vai trabalhar com contexto limitado.';
+    container.innerHTML = `
+      <div class="completude-bar">
+        <div class="completude-titulo">
+          <span class="completude-label">${msg}</span>
+          <span class="completude-percentual" style="color:${cor}">${percentual}%</span>
+        </div>
+        <div class="completude-track">
+          <div class="completude-fill" style="width:${percentual}%;background:${cor}"></div>
+        </div>
+        ${vazios.length > 0 ? `<div class="completude-campos">Campos vazios: ${vazios.join(' · ')}</div>` : ''}
+      </div>
+    `;
+  }
+
   async function confirmarDeletar() {
-    if (nichoAtivo === 'seu-augusto') {
-      alert('O nicho padrão não pode ser deletado.');
-      return;
-    }
     const confirma = confirm(`Tem certeza que deseja deletar o nicho "${nichoAtivo}"? Essa ação não pode ser desfeita.`);
     if (!confirma) return;
     try {

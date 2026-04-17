@@ -110,7 +110,11 @@ app.post('/api/criar-canal', (req, res) => {
 });
 
 app.post('/api/gerar-ideias', async (req, res) => {
-  const { input, nichoId = 'seu-augusto' } = req.body;
+  const { input, nichoId } = req.body;
+
+  if (!nichoId || nichoId.trim() === '') {
+    return res.status(400).json({ error: 'Selecione um canal antes de gerar ideias.' });
+  }
 
   if (!input || typeof input !== 'string' || input.trim() === '') {
     return res.status(400).json({ error: 'O campo "input" é obrigatório.' });
@@ -295,9 +299,6 @@ app.put('/api/nicho/:nichoId/estrategia', (req, res) => {
 
 app.delete('/api/nicho/:nichoId', (req, res) => {
   const { nichoId } = req.params;
-  if (nichoId === 'seu-augusto') {
-    return res.status(400).json({ error: 'O nicho padrão não pode ser deletado.' });
-  }
   const nichoPath = path.join(NICHOS_DIR, `${nichoId}.json`);
   if (!fs.existsSync(nichoPath)) return res.status(404).json({ error: 'Nicho não encontrado.' });
   try {
