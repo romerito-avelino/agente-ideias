@@ -20,3 +20,5 @@ Editar banco de dados:
 - Palavras que geraram mais clique → campo "palavras que engajam"
       ↓
 Próxima geração já usa esse aprendizado
+
+[] - https://www.youtube.com/channel/UCFPfloFwa6X2UddqRH83rAA

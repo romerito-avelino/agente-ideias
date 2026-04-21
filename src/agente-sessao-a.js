@@ -3,61 +3,62 @@ const Anthropic = require('@anthropic-ai/sdk');
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
-async function analisarCanal(dadosCanais, preIdeia) {
-  const SYSTEM_PROMPT = `Você é um estrategista especialista em canais de YouTube focado EXCLUSIVAMENTE no nicho de histórias. Seu trabalho é analisar canais concorrentes e validar ideias de novos canais dentro do universo de histórias.
+async function analisarCanal(dadosCanais, preIdeia, nicho = null) {
+  const contextoCanal = nicho ? `
+CONTEXTO DO PROJETO:
+Canal: ${nicho.canal || 'novo canal'}
+Nicho: ${nicho.nicho || 'a definir'}
+Público-alvo: ${nicho.publicoAlvo?.faixaEtaria || 'público mais velho'}
+Tom: ${nicho.tom?.permitido?.join(', ') || 'não definido'}
+Proposta atual: ${nicho.estrategia?.propostaEscolhida?.anguloUnico || 'não definida ainda'}` : 'Nenhum canal ativo — analise com base na pré-ideia do usuário.';
 
-REGRA ABSOLUTA: Todo canal analisado e toda ideia validada DEVE estar dentro do nicho de histórias. Se a ideia do usuário não for de histórias, encontre o ângulo de histórias dentro dela. Sempre.
+  const SYSTEM_PROMPT = `Você é um estrategista especialista em canais do YouTube voltados para o público mais velho (40+ anos), usando o formato de histórias como veículo de engajamento.
 
-Subnichos possíveis dentro de histórias: histórias emocionais, histórias de família, histórias de superação, histórias de traição e perdão, histórias de militares, histórias de imigrantes, histórias de recomeço financeiro, histórias de amor tardio, histórias rurais, histórias de guerra, entre infinitos outros.
+${contextoCanal}
 
-Você retorna APENAS um JSON válido sem texto extra com esta estrutura:
+Sua função é analisar os canais apresentados e validar a pré-ideia do criador com base em dados reais.
+
+REGRAS:
+- Não force nenhum nicho específico — analise o que os dados mostram
+- Valide a pré-ideia com base nos canais apresentados e no contexto do projeto
+- Identifique gaps reais — o que esses canais não estão fazendo que o projeto poderia fazer
+- Seja honesto: se a ideia não tiver potencial, diga claramente por quê
+- Sempre puxe para o formato de histórias voltadas ao público mais velho — esse é o veículo, não o limite
+
+Retorne APENAS um JSON válido sem texto extra com esta estrutura:
 {
   "validacao": {
     "existeEspaco": true/false,
-    "justificativa": "explicação clara de por que existe ou não espaço",
+    "justificativa": "explicação clara",
     "nivelConcorrencia": "baixo/médio/alto",
     "tempoMedioParaCrescer": "estimativa baseada nos dados"
   },
   "padroesDosCanais": {
     "oQueFunciona": ["padrão 1", "padrão 2", "padrão 3"],
     "oQueNaoFunciona": ["ponto fraco 1", "ponto fraco 2"],
-    "gapIdentificado": "o que nenhum canal está fazendo ainda",
-    "gapEdicao": "descrição de como melhorar o estilo de edição baseado no que os canais analisados fazem — sugerir recursos visuais, inserções de cenas do cotidiano, uso do avatar em situações reais, etc."
+    "gapIdentificado": "o que ninguém está fazendo ainda",
+    "gapEdicao": "como melhorar o estilo de edição baseado nos canais analisados"
   },
   "propostas": [
     {
-      "titulo": "nome curto da proposta",
-      "anguloUnico": "como esse novo canal se diferencia de tudo que existe",
-      "subnicho": "subnicho específico dentro de histórias",
-      "publicoAlvo": "quem vai assistir e por quê",
-      "diferencialCompetitivo": "o pulo do gato desse canal"
+      "titulo": "nome curto",
+      "anguloUnico": "",
+      "subnicho": "",
+      "publicoAlvo": "",
+      "diferencialCompetitivo": ""
     },
-    {
-      "titulo": "nome curto da proposta",
-      "anguloUnico": "como esse novo canal se diferencia de tudo que existe",
-      "subnicho": "subnicho específico dentro de histórias — DIFERENTE das outras propostas",
-      "publicoAlvo": "quem vai assistir e por quê",
-      "diferencialCompetitivo": "o pulo do gato desse canal"
-    },
-    {
-      "titulo": "nome curto da proposta",
-      "anguloUnico": "como esse novo canal se diferencia de tudo que existe",
-      "subnicho": "subnicho específico dentro de histórias — DIFERENTE das outras propostas",
-      "publicoAlvo": "quem vai assistir e por quê",
-      "diferencialCompetitivo": "o pulo do gato desse canal"
-    }
+    { "titulo": "", "anguloUnico": "", "subnicho": "", "publicoAlvo": "", "diferencialCompetitivo": "" },
+    { "titulo": "", "anguloUnico": "", "subnicho": "", "publicoAlvo": "", "diferencialCompetitivo": "" }
   ],
   "guiaImplementacao": {
-    "formatoSugerido": "como os vídeos devem ser estruturados",
-    "tomNarrativo": "como deve soar a narração",
-    "frequenciaSugerida": "quantos vídeos por semana e por quê",
+    "formatoSugerido": "",
+    "tomNarrativo": "",
+    "frequenciaSugerida": "",
     "primeirosPasso": ["passo 1", "passo 2", "passo 3"]
   }
 }
 
-REGRA OBRIGATÓRIA PARA propostas: As 3 propostas DEVEM ser genuinamente diferentes entre si em subnicho e ângulo. Cada uma deve explorar um subnicho distinto dentro do universo de histórias. Não repita subnichos entre as propostas.
-
-IMPORTANTE: Mantenha cada campo de texto com no máximo 200 caracteres. Seja direto e objetivo. JSON inválido ou muito longo será rejeitado.`;
+IMPORTANTE: As 3 propostas devem ser genuinamente diferentes entre si. Cada uma deve explorar um subnicho ou ângulo distinto dentro do contexto do projeto. Máximo 200 caracteres por campo de texto.`;
 
   const contextoCanais = dadosCanais.map((c, i) => `
 CANAL ${i + 1}: ${c.nomeCanal}
@@ -76,7 +77,7 @@ PRÉ-IDEIA DO USUÁRIO: ${preIdeia}
 CANAIS ANALISADOS:
 ${contextoCanais}
 
-Analise os canais, valide a pré-ideia dentro do nicho de histórias e gere o relatório completo.`;
+Analise os canais, valide a pré-ideia com base nos dados coletados e no contexto do projeto, e gere o relatório completo.`;
 
   const message = await client.messages.create({
     model: 'claude-opus-4-5',
@@ -116,49 +117,36 @@ Analise os canais, valide a pré-ideia dentro do nicho de histórias e gere o re
   return resultado;
 }
 
-async function revisarCanal(dadosRevisao) {
-  const SYSTEM_PROMPT = `Você é um consultor especialista em canais de YouTube no nicho de histórias. Sua função é fazer uma revisão crítica e honesta de um projeto de canal antes do lançamento.
+async function revisarCanal(dadosRevisao, nicho = null) {
+  const contexto = nicho
+    ? `Canal: ${nicho.canal}. Nicho: ${nicho.nicho}. Público: ${nicho.publicoAlvo?.faixaEtaria}.`
+    : 'Novo canal sem contexto definido.';
 
-Você analisa coerência, identifica conflitos, avalia potencial de sucesso e dá um veredicto claro.
+  const SYSTEM_PROMPT = `Você é um consultor especialista em canais do YouTube voltados para o público mais velho, usando histórias como formato de conteúdo.
 
-Seja conciso. Máximo 100 caracteres por campo de texto. JSON compacto e válido.
+Contexto: ${contexto}
 
-Retorne APENAS um JSON válido sem texto extra com esta estrutura:
+Revise criticamente o projeto de canal apresentado. Avalie coerência, identifique conflitos e dê um veredicto honesto sobre o potencial de sucesso.
+
+Retorne APENAS JSON válido:
 {
-  "probabilidadeSucesso": {
-    "percentual": 0,
-    "classificacao": "baixa/média/alta/muito alta",
-    "justificativa": "explicação direta e honesta"
-  },
+  "probabilidadeSucesso": { "percentual": 0, "classificacao": "baixa/média/alta/muito alta", "justificativa": "" },
   "avaliacaoGeral": {
-    "avatar": {
-      "status": "ok/atencao/critico",
-      "observacao": "o avatar vai gerar conexão emocional com o público?"
-    },
-    "proposta": {
-      "status": "ok/atencao/critico",
-      "observacao": "a proposta é diferenciada e viável?"
-    },
-    "publico": {
-      "status": "ok/atencao/critico",
-      "observacao": "o público tem interesse real nesse conteúdo?"
-    },
-    "tom": {
-      "status": "ok/atencao/critico",
-      "observacao": "o tom está alinhado com o avatar e o público?"
-    },
-    "nicho": {
-      "status": "ok/atencao/critico",
-      "observacao": "o subnicho escolhido tem espaço real no mercado?"
-    }
+    "avatar": { "status": "ok/atencao/critico", "observacao": "" },
+    "proposta": { "status": "ok/atencao/critico", "observacao": "" },
+    "publico": { "status": "ok/atencao/critico", "observacao": "" },
+    "tom": { "status": "ok/atencao/critico", "observacao": "" },
+    "nicho": { "status": "ok/atencao/critico", "observacao": "" }
   },
   "conflitos": [],
   "camposVaziosCriticos": [],
   "pontosFortesDoCanal": [],
   "recomendacoesFinais": [],
   "veredicto": "aprovado/aprovado_com_ressalvas/requer_ajustes",
-  "mensagemFinal": "mensagem direta e motivadora para o criador"
-}`;
+  "mensagemFinal": ""
+}
+
+Seja conciso. Máximo 100 caracteres por campo de texto. JSON compacto e válido.`;
 
   const mensagem = `Revise este projeto de canal completo e dê seu veredicto:
 

@@ -169,7 +169,7 @@ Gatilho de identidade: ${(nicho.estruturasDeTitulos.gatilhoDeIdentidade || []).j
     ? historico.flatMap(r => r.titulosGerados || []).filter(Boolean).map(t => `- ${t}`).join('\n')
     : 'Nenhum tema gerado ainda.';
 
-  const SYSTEM_PROMPT = `Você é o Agente-Ideias — estrategista de conteúdo especializado em canais de histórias com avatar no YouTube. Sua função não é apenas gerar ideias: é identificar demanda real, analisar o que funciona na concorrência e entregar conceitos únicos que um canal novo pode testar com inteligência.
+  const SYSTEM_PROMPT = `Você é o Agente-Ideias — estrategista de conteúdo especializado em criação de canais no YouTube voltados para o público mais velho, usando o formato de histórias como veículo de conexão e engajamento. Você trabalha com qualquer nicho ou tema — desde que o conteúdo seja adaptado para o formato de histórias e direcionado a um público acima de 40 anos. Sua função não é apenas gerar ideias: é identificar demanda real, analisar o que funciona na concorrência e entregar conceitos únicos que um canal novo pode testar com inteligência.
 
 CONTEXTO DO CANAL ATIVO:
 ${contextoNicho}

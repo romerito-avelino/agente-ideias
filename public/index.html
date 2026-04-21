@@ -676,6 +676,8 @@
 }
 .btn-salvar:hover { background: #0F6E56; }
 .btn-salvar:disabled { opacity: 0.5; cursor: not-allowed; }
+#btnConfirmarSalvar:disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+#btnConfirmarSalvar:not(:disabled) { opacity: 1; cursor: pointer; }
 .canal-card {
   background: var(--bg3);
   border: 1px solid var(--border);
@@ -1501,20 +1503,34 @@
 </div>
 
 <div class="aba-conteudo" id="aba-mineracao">
-
   <div class="greeting">
     <h1>Minerar <span>canais</span></h1>
-    <p>Digite um tema, título ou cole uma URL. O agente varre o YouTube e encontra canais com potencial de modelagem para histórias.</p>
+    <p>Adicione temas e URLs que você já analisou. O agente varre o YouTube em busca de canais com potencial de modelagem.</p>
+  </div>
+
+  <!-- Base de pesquisa fixada -->
+  <div id="basePesquisaArea" style="display:none;margin-bottom:20px">
+    <div class="relatorio-card">
+      <div class="card-header">
+        <div class="card-title" style="font-size:11px">📌 Base de pesquisa</div>
+        <button class="btn-copy" onclick="limparBasePesquisa()">Limpar tudo</button>
+      </div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Esses inputs foram usados como base. Você pode enviá-los para a Validação.</div>
+      <div id="basePesquisaTags" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px"></div>
+      <button class="btn-ir-validacao visivel" onclick="enviarBaseParaValidacao()" style="display:inline-block">
+        Enviar base para Validação →
+      </button>
+    </div>
   </div>
 
   <div class="input-section">
     <div class="section-label">O que você quer explorar?</div>
     <div class="input-wrap" style="margin-bottom:8px">
-      <input type="text" id="mineracaoInput" placeholder="Ex: idoso sábio cotidiano, superação financeira, histórias de família..." />
+      <input type="text" id="mineracaoInput" placeholder="Cole uma URL do YouTube ou descreva um tema..." />
       <button class="btn-add" onclick="adicionarInputMineracao()">+ Adicionar</button>
     </div>
-    <div class="tags-area" id="tagsMineracao" style="margin-top:8px"></div>
-    <div style="font-size:12px;color:var(--muted)">O agente não se limita a canais de histórias — analisa qualquer canal com potencial de modelagem</div>
+    <div class="tags-area" id="tagsMineracao" style="margin-bottom:8px"></div>
+    <div style="font-size:12px;color:var(--muted)">O agente encontra canais com potencial de modelagem para o seu projeto.</div>
     <button class="btn-gerar" id="btnMinerar" onclick="iniciarMineracao()" style="margin-top:16px">
       Iniciar Mineração com IA
     </button>
@@ -1531,6 +1547,7 @@
         <span class="mineracao-resumo-num" id="totalQualificados">0</span>
         <span> canais qualificados encontrados</span>
         <span style="margin-left:12px;font-size:12px" id="termosUsados"></span>
+        <span id="distribuicaoIdiomas" style="font-size:11px;color:var(--muted);margin-left:12px"></span>
       </div>
       <button class="btn-ir-validacao" id="btnIrValidacao" onclick="irParaValidacao()">
         Validar selecionados →
@@ -1546,6 +1563,14 @@
   <div class="greeting">
     <h1>Validar <span>canal</span> e ideia</h1>
     <p>Minerou canais? Cole as URLs abaixo e descreva sua pré-ideia. O agente analisa e valida.</p>
+  </div>
+
+  <div class="nicho-bar" style="margin-bottom:20px" id="nichoBarValidacao">
+    <div class="nicho-dot"></div>
+    <span class="nicho-label">Canal de contexto (opcional):</span>
+    <select id="nichoSelectValidacao" style="background:none;border:none;color:var(--blue);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;outline:none;cursor:pointer;flex:1" onchange="nichoAtivoValidacao = this.value">
+      <option value="">— Nenhum canal selecionado —</option>
+    </select>
   </div>
 
   <!-- Inputs -->
@@ -1651,6 +1676,7 @@
   <div class="relatorio-card">
     <div class="relatorio-titulo">Escolha uma das 3 propostas</div>
     <div id="propostasEscolha"></div>
+    <div id="msgPropostaSelecionada" style="display:none;font-size:12px;color:#1D9E75;padding:8px 12px;background:rgba(29,158,117,0.1);border:1px solid rgba(29,158,117,0.3);border-radius:8px;margin-top:8px"></div>
   </div>
 
   <!-- Gap de edição editável -->
@@ -1666,39 +1692,39 @@
     <div class="form-grid">
       <div class="form-field campo-obrigatorio">
         <label>Nome do canal</label>
-        <input type="text" id="f_canal" placeholder="Ex: Histórias do Sargento" />
+        <input type="text" id="f_canal" placeholder="Ex: Finanças do Seu Aroldo" />
       </div>
       <div class="form-field campo-obrigatorio">
         <label>ID do canal (sem espaços)</label>
-        <input type="text" id="f_id" placeholder="Ex: historias-do-sargento" oninput="verificarCanalExistente()" />
+        <input type="text" id="f_id" placeholder="Ex: financas-do-seu-aroldo" oninput="verificarCanalExistente()" />
       </div>
       <div class="form-field full campo-recomendado">
         <label>Descrição do nicho</label>
-        <input type="text" id="f_nicho" placeholder="Ex: Storytelling emocional de militares para público 40+" />
+        <input type="text" id="f_nicho" placeholder="Ex: Histórias de superação financeira para público 50+" />
       </div>
       <div class="form-field campo-obrigatorio">
         <label>Nome do avatar</label>
-        <input type="text" id="f_avatar_nome" placeholder="Ex: Sargento Menezes" />
+        <input type="text" id="f_avatar_nome" placeholder="Ex: Seu Aroldo" />
       </div>
       <div class="form-field campo-obrigatorio">
         <label>Idade do avatar</label>
-        <input type="number" id="f_avatar_idade" placeholder="Ex: 65" />
+        <input type="number" id="f_avatar_idade" placeholder="Ex: 68" />
       </div>
       <div class="form-field campo-obrigatorio">
         <label>Profissão / histórico</label>
-        <input type="text" id="f_avatar_profissao" placeholder="Ex: Ex-militar, aposentado" />
+        <input type="text" id="f_avatar_profissao" placeholder="Ex: Ex-contador, aposentado" />
       </div>
       <div class="form-field campo-obrigatorio">
         <label>Estado civil / família</label>
-        <input type="text" id="f_avatar_familia" placeholder="Ex: Viúvo, 3 filhos" />
+        <input type="text" id="f_avatar_familia" placeholder="Ex: Casado, 3 filhos, 5 netos" />
       </div>
       <div class="form-field full campo-obrigatorio">
         <label>Estilo de vida atual</label>
-        <input type="text" id="f_avatar_estilo" placeholder="Ex: Mora no interior, vive da aposentadoria, cultiva horta" />
+        <input type="text" id="f_avatar_estilo" placeholder="Ex: Mora no interior, vive da aposentadoria, cuida da horta" />
       </div>
       <div class="form-field full campo-obrigatorio">
         <label>Personalidade</label>
-        <input type="text" id="f_avatar_personalidade" placeholder="Ex: Sábio, direto, carrega peso do passado mas encontrou paz" />
+        <input type="text" id="f_avatar_personalidade" placeholder="Ex: Simples, honesto, carrega arrependimentos mas encontrou paz" />
       </div>
       <div class="form-field full campo-obrigatorio">
         <label>Biografia completa</label>
@@ -1706,23 +1732,23 @@
       </div>
       <div class="form-field full campo-obrigatorio">
         <label>Estilo de escrita e fala do avatar</label>
-        <textarea id="f_avatar_escrita" rows="5" placeholder="Escreva aqui um exemplo real de como o avatar fala. Inclua jargões, bordões, gírias, português informal, palavras abreviadas, expressões regionais. Ex: 'Uai meu fio, eu tô te falando uma coisa que a maioria dos home num quer acreditar não...'"></textarea>
+        <textarea id="f_avatar_escrita" rows="5" placeholder="Escreva como o avatar fala. Inclua expressões, gírias, bordões regionais..."></textarea>
       </div>
       <div class="form-field full campo-obrigatorio">
         <label>Tom permitido (separado por vírgulas)</label>
-        <input type="text" id="f_tom_permitido" placeholder="Ex: emocional, verdadeiro, reflexivo, esperançoso" />
+        <input type="text" id="f_tom_permitido" placeholder="Ex: simples, honesto, emocional, esperançoso" />
       </div>
       <div class="form-field full campo-obrigatorio">
         <label>Tom proibido (separado por vírgulas)</label>
-        <input type="text" id="f_tom_proibido" placeholder="Ex: fantasioso, sensacionalista, promessas falsas" />
+        <input type="text" id="f_tom_proibido" placeholder="Ex: exagerado, fantasioso, sensacionalista" />
       </div>
       <div class="form-field campo-obrigatorio">
         <label>Duração ideal dos vídeos</label>
-        <input type="text" id="f_duracao" placeholder="Ex: 15 a 25 minutos" />
+        <input type="text" id="f_duracao" placeholder="Ex: 10 a 20 minutos" />
       </div>
       <div class="form-field campo-obrigatorio">
         <label>Faixa etária do público</label>
-        <input type="text" id="f_publico_idade" placeholder="Ex: 45 anos ou mais" />
+        <input type="text" id="f_publico_idade" placeholder="Ex: 50 anos ou mais" />
       </div>
     </div>
 
@@ -1770,7 +1796,7 @@
       <div id="mensagemFinal" class="relatorio-destaque" style="margin-top:16px"></div>
 
       <!-- Botão confirmar -->
-      <button class="btn-salvar" id="btnConfirmarSalvar" onclick="confirmarESalvar()" style="margin-top:20px">
+      <button class="btn-salvar" id="btnConfirmarSalvar" onclick="confirmarESalvar()" style="margin-top:20px" disabled>
         Confirmar e salvar canal
       </button>
       <div class="erro" id="erroFormulario" style="margin-top:12px"></div>
@@ -2159,7 +2185,25 @@
         <div class="titulo-opcao-texto">${t}</div>
         <button class="btn-usar" id="btntit-${i}" onclick="usarTitulo(${i})">Usar este</button>
       </div>
-    `).join('');
+    `).join('') + `
+      <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
+        <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">
+          Ou escreva seu próprio título
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <input
+            type="text"
+            id="tituloManual"
+            placeholder="Digite seu título aqui — deixe em branco para usar uma das opções acima..."
+            style="flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);color:var(--white);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;padding:12px 14px;transition:border-color 0.2s"
+            oninput="usarTituloManual(this.value)"
+            onfocus="this.style.borderColor='var(--blue)'"
+            onblur="this.style.borderColor='var(--border)'"
+          />
+          <button class="btn-usar" id="btntitManual" style="opacity:0.4;pointer-events:none">Usar este</button>
+        </div>
+      </div>
+    `;
   }
 
   function renderGatilhos(gatilhos) {
@@ -2193,8 +2237,32 @@
     `).join('');
   }
 
+  function usarTituloManual(valor) {
+    const btn = document.getElementById('btntitManual');
+    if (valor.trim()) {
+      btn.style.opacity = '1';
+      btn.style.pointerEvents = 'auto';
+      btn.onclick = () => {
+        document.querySelectorAll('[id^="btntit-"]').forEach(b => b.classList.remove('ativo'));
+        btn.classList.add('ativo');
+        tituloEscolhido = valor.trim();
+        verificarPacote();
+      };
+    } else {
+      btn.style.opacity = '0.4';
+      btn.style.pointerEvents = 'none';
+      btn.classList.remove('ativo');
+      if (tituloEscolhido && !dadosGerados.titulos?.includes(tituloEscolhido)) {
+        tituloEscolhido = null;
+        verificarPacote();
+      }
+    }
+  }
+
   function usarTitulo(idx) {
     document.querySelectorAll('[id^="btntit-"]').forEach(b => b.classList.remove('ativo'));
+    const btnManual = document.getElementById('btntitManual');
+    if (btnManual) btnManual.classList.remove('ativo');
     document.getElementById(`btntit-${idx}`).classList.add('ativo');
     tituloEscolhido = dadosGerados.titulos?.[idx];
     verificarPacote();
@@ -2350,7 +2418,11 @@
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
 
-      if (elemento === 'titulos') renderTitulos(data.titulos || []);
+      if (elemento === 'titulos') {
+        renderTitulos(data.titulos || []);
+        const campoManual = document.getElementById('tituloManual');
+        if (campoManual) campoManual.value = '';
+      }
       else if (elemento === 'sinopse') { el.value = data.sinopse || ''; el.disabled = false; }
       else if (elemento === 'thumbnail') { el.value = data.ideiaDeCapa || ''; el.disabled = false; }
       else if (elemento === 'gatilhos') renderGatilhos(data.gatilhos || []);
@@ -2367,17 +2439,29 @@
     }
   }
 
+  let nichoAtivoValidacao = '';
+
   async function carregarNichos() {
     try {
       const res = await fetch('/api/nichos');
       const nichos = await res.json();
+
+      // Seletor aba Vídeos
       const select = document.getElementById('nichoSelect');
-      if (!select) return;
-      select.innerHTML = '<option value="">— Selecione um canal —</option>' +
-        nichos.map(n => `<option value="${n.id}">${n.nome} · ${n.nicho}</option>`).join('');
-      nichoAtivo = '';
+      if (select) {
+        select.innerHTML = '<option value="">— Selecione um canal —</option>' +
+          nichos.map(n => `<option value="${n.id}">${n.nome} · ${n.nicho}</option>`).join('');
+        nichoAtivo = '';
+      }
       const nichoBarra = document.querySelector('.nicho-bar .nicho-value');
       if (nichoBarra) nichoBarra.textContent = 'Nenhum canal selecionado';
+
+      // Seletor aba Validação
+      const selectVal = document.getElementById('nichoSelectValidacao');
+      if (selectVal) {
+        selectVal.innerHTML = '<option value="">— Nenhum canal selecionado —</option>' +
+          nichos.map(n => `<option value="${n.id}">${n.nome} · ${n.nicho}</option>`).join('');
+      }
     } catch (err) {
       console.error('Erro ao carregar nichos:', err.message);
     }
@@ -2501,6 +2585,8 @@
     dadosGerados = data;
 
     renderTitulos(data.titulos || []);
+    const campoManual = document.getElementById('tituloManual');
+    if (campoManual) campoManual.value = '';
     document.getElementById('sinopse').value = data.sinopse || '';
     document.getElementById('thumbnail').value = data.ideiaDeCapa || '';
     renderGatilhos(data.gatilhos || []);
@@ -2561,6 +2647,8 @@
     return 'score-baixo';
   }
 
+  let basePesquisa = [];
+
   function adicionarInputMineracao() {
     const input = document.getElementById('mineracaoInput');
     const val = input.value.trim();
@@ -2568,10 +2656,50 @@
     if (!window.inputsMineracao) window.inputsMineracao = [];
     if (!window.inputsMineracao.includes(val)) {
       window.inputsMineracao.push(val);
-      renderTagsMineracao();
+      if (!basePesquisa.includes(val)) {
+        basePesquisa.push(val);
+        renderBasePesquisa();
+      }
     }
+    renderTagsMineracao();
     input.value = '';
     input.focus();
+  }
+
+  function renderBasePesquisa() {
+    const area = document.getElementById('basePesquisaArea');
+    const container = document.getElementById('basePesquisaTags');
+    if (!basePesquisa.length) { area.style.display = 'none'; return; }
+    area.style.display = 'block';
+    container.innerHTML = basePesquisa.map((item, i) => `
+      <div class="tag">
+        📌 ${item.length > 45 ? item.substring(0, 45) + '...' : item}
+        <button onclick="removerBasePesquisa(${i})">×</button>
+      </div>
+    `).join('');
+  }
+
+  function removerBasePesquisa(idx) {
+    basePesquisa.splice(idx, 1);
+    renderBasePesquisa();
+  }
+
+  function limparBasePesquisa() {
+    basePesquisa = [];
+    window.inputsMineracao = [];
+    renderBasePesquisa();
+    renderTagsMineracao();
+  }
+
+  function enviarBaseParaValidacao() {
+    basePesquisa.forEach(item => {
+      if (item.includes('youtube.com') || item.includes('youtu.be')) {
+        if (!canais.includes(item)) canais.push(item);
+      }
+    });
+    renderCanaisTags();
+    trocarAba('validacao');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function renderTagsMineracao() {
@@ -2595,6 +2723,10 @@
     if (inputDireto) {
       if (!window.inputsMineracao) window.inputsMineracao = [];
       window.inputsMineracao.push(inputDireto);
+      if (!basePesquisa.includes(inputDireto)) {
+        basePesquisa.push(inputDireto);
+        renderBasePesquisa();
+      }
       document.getElementById('mineracaoInput').value = '';
       renderTagsMineracao();
     }
@@ -2631,7 +2763,7 @@
       const res = await fetch('/api/mineracao', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ input })
+        body: JSON.stringify({ input, nichoId: nichoAtivo || '' })
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Erro na mineração');
@@ -2653,18 +2785,37 @@
     document.getElementById('totalQualificados').textContent = data.canais.length;
     document.getElementById('termosUsados').textContent = `Termos: ${data.termos?.join(', ')}`;
 
+    const dist = data.distribuicao || {};
+    const distEl = document.getElementById('distribuicaoIdiomas');
+    if (distEl) {
+      distEl.textContent = `🇺🇸 ${dist.en || 0} EN · 🇪🇸 ${dist.es || 0} ES · 🇧🇷 ${dist.br || 0} PT`;
+    }
+
+    const idiomaColor = {
+      'EN': '#2563EB', 'EN-GB': '#2563EB',
+      'ES': '#7C3AED',
+      'PT-BR': '#059669'
+    };
+    const idiomaLabel = {
+      'EN': '🇺🇸 EN', 'EN-GB': '🇬🇧 EN',
+      'ES': '🇪🇸 ES',
+      'PT-BR': '🇧🇷 PT'
+    };
+
     document.getElementById('canaisMinerados').innerHTML = data.canais.map((canal, i) => {
-      const urlCanal = canal.urlHandle || canal.url;
+      const urlCanal = canal.urlCanal;
+      const cor = idiomaColor[canal.idioma] || '#6B7280';
+      const label = idiomaLabel[canal.idioma] || canal.idioma;
       return `
       <div class="mineracao-card" id="mcard-${i}">
         <div class="mineracao-card-header">
           <div class="mineracao-canal-info">
-            <div class="mineracao-canal-nome">${canal.nomeCanal}</div>
+            <div class="mineracao-canal-nome">
+              ${canal.nomeCanal}
+              <span style="font-size:10px;padding:2px 8px;border-radius:10px;background:${cor}20;color:${cor};border:1px solid ${cor}40;margin-left:8px">${label}</span>
+            </div>
             <div class="mineracao-canal-stats">
               <span>👥 ${Number(canal.inscritos).toLocaleString()} inscritos</span>
-              <span>📅 ${canal.mesesAtivo} meses ativo</span>
-              <span>🎬 ${canal.totalVideos} vídeos</span>
-              <span>👁️ ${Number(canal.mediaViewsPorVideo).toLocaleString()} views/vídeo</span>
             </div>
           </div>
           <div class="mineracao-canal-acoes">
@@ -2676,43 +2827,34 @@
         </div>
         <div class="mineracao-scores">
           <div class="score-item">
-            <div class="score-label">Potencial</div>
-            <div class="score-valor score-potencial-alto">${canal.scorePotencial}</div>
-          </div>
-          <div class="score-item">
-            <div class="score-label">Demanda</div>
-            <div class="score-valor ${scoreClass(canal.scoreDemanda)}">${canal.scoreDemanda}</div>
-          </div>
-          <div class="score-item">
-            <div class="score-label">Constância</div>
-            <div class="score-valor ${scoreClass(canal.scoreConstancia)}">${canal.scoreConstancia}</div>
-          </div>
-          <div class="score-item">
             <div class="score-label">Recriabilidade</div>
-            <div class="score-valor ${scoreClass(canal.scoreRecriabilidade)}">${canal.scoreRecriabilidade}</div>
+            <div class="score-valor ${scoreClass(canal.scores?.recriabilidade)}">${canal.scores?.recriabilidade}</div>
+          </div>
+          <div class="score-item">
+            <div class="score-label">Oportunidade</div>
+            <div class="score-valor ${scoreClass(canal.scores?.oportunidade)}">${canal.scores?.oportunidade}</div>
           </div>
         </div>
         <div class="mineracao-detalhes">
           <div class="mineracao-detalhe-bloco">
             <div class="mineracao-detalhe-label">Recriabilidade</div>
-            <div class="mineracao-detalhe-texto">${canal.justificativaRecriabilidade}</div>
+            <div class="mineracao-detalhe-texto">${canal.justificativas?.recriabilidade}</div>
           </div>
           <div class="mineracao-detalhe-bloco">
             <div class="mineracao-detalhe-label">Oportunidade</div>
-            <div class="mineracao-detalhe-texto">${canal.justificativaOportunidade}</div>
+            <div class="mineracao-detalhe-texto">${canal.justificativas?.oportunidade}</div>
           </div>
           <div class="mineracao-modelagem">
-            💡 ${canal.potencialModelagem}
+            💡 ${canal.justificativas?.potencial}
           </div>
         </div>
         <div class="mineracao-videos">
           <div class="mineracao-videos-label">Vídeos em alta</div>
-          ${canal.emAlta?.slice(0, 3).map(v => `
+          ${canal.videosEmAlta?.slice(0, 3).map(v => `
             <div class="mineracao-video-item">
               <span>📈</span>
-              ${v.url ? `<img src="https://img.youtube.com/vi/${v.url.split('v=')[1]?.split('&')[0]}/mqdefault.jpg" style="width:80px;height:45px;object-fit:cover;border-radius:4px;flex-shrink:0" onerror="this.style.display='none'">` : ''}
+              ${v.thumbnail ? `<img src="${v.thumbnail}" style="width:80px;height:45px;object-fit:cover;border-radius:4px;flex-shrink:0" onerror="this.style.display='none'">` : ''}
               <a href="${v.url}" target="_blank" style="color:var(--white);text-decoration:none;flex:1;font-size:11px">${v.titulo}</a>
-              <span class="mineracao-video-views">${Number(v.views).toLocaleString()} views</span>
             </div>
           `).join('')}
         </div>
@@ -2792,7 +2934,7 @@
       const res = await fetch('/api/analisar-canais', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ urls: canais, preIdeia })
+        body: JSON.stringify({ urls: canais, preIdeia, nichoId: nichoAtivoValidacao || '' })
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Erro na análise');
@@ -2868,15 +3010,33 @@
     document.getElementById('blocoEscolhas').style.display = 'block';
     document.getElementById('blocoRevisao').style.display = 'none';
     propostaEscolhida = null;
+    const btnSalvar = document.getElementById('btnConfirmarSalvar');
+    if (btnSalvar) btnSalvar.disabled = true;
+    const msgProposta = document.getElementById('msgPropostaSelecionada');
+    if (msgProposta) msgProposta.style.display = 'none';
   }
 
   function selecionarProposta(idx) {
     const propostas = relatorioCompleto?.relatorio?.propostas || [];
     propostaEscolhida = propostas[idx];
+
     document.querySelectorAll('.proposta-card').forEach((card, i) => {
       card.classList.toggle('selecionada', i === idx);
     });
+
     document.getElementById('f_nicho').value = propostaEscolhida.subnicho || '';
+
+    const btnSalvar = document.getElementById('btnConfirmarSalvar');
+    if (btnSalvar) {
+      btnSalvar.disabled = false;
+      btnSalvar.textContent = 'Confirmar e salvar canal';
+    }
+
+    const msgProposta = document.getElementById('msgPropostaSelecionada');
+    if (msgProposta) {
+      msgProposta.textContent = `✓ Proposta "${propostaEscolhida?.titulo || 'selecionada'}" — preencha os dados do avatar e salve.`;
+      msgProposta.style.display = 'block';
+    }
   }
 
   function mostrarErroA(msg) {
@@ -2906,6 +3066,7 @@
     document.getElementById('blocoRevisao').style.display = 'none';
 
     const dadosRevisao = {
+      nichoId: nichoAtivoValidacao || '',
       propostaEscolhida,
       nicho: document.getElementById('f_nicho').value.trim(),
       gapMercado: relatorioCompleto?.relatorio?.padroesDosCanais?.gapIdentificado || '',
@@ -3067,6 +3228,15 @@
       return;
     }
 
+    // Segunda camada de segurança — proposta obrigatória quando há análise nova
+    if (relatorioCompleto?.relatorio && !propostaEscolhida) {
+      document.getElementById('erroFormulario').textContent = '⚠️ Selecione uma das 3 propostas antes de salvar.';
+      document.getElementById('erroFormulario').classList.add('visivel');
+      btn.disabled = false;
+      btn.textContent = 'Confirmar e salvar canal';
+      return;
+    }
+
     const id = document.getElementById('f_id').value.trim().toLowerCase().replace(/\s+/g, '-');
     const canal = document.getElementById('f_canal').value.trim();
     const avatarNome = document.getElementById('f_avatar_nome').value.trim();
@@ -3188,6 +3358,10 @@
         propostaEscolhida = null;
         relatorioCompleto = null;
         canalCarregadoId = null;
+        const btnSalvar = document.getElementById('btnConfirmarSalvar');
+        if (btnSalvar) btnSalvar.disabled = true;
+        const msgProposta = document.getElementById('msgPropostaSelecionada');
+        if (msgProposta) msgProposta.style.display = 'none';
         renderCanaisTags();
         document.getElementById('preIdeiaInput').value = '';
         document.getElementById('relatorioArea').style.display = 'none';

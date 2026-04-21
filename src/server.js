@@ -50,12 +50,19 @@ app.get('/api/historico/:nichoId', (req, res) => {
 });
 
 app.post('/api/analisar-canais', async (req, res) => {
-  const { urls, preIdeia } = req.body;
+  const { urls, preIdeia, nichoId } = req.body;
   if (!urls || !Array.isArray(urls) || urls.length === 0) {
     return res.status(400).json({ error: 'Envie pelo menos uma URL de canal.' });
   }
   if (!preIdeia || preIdeia.trim() === '') {
     return res.status(400).json({ error: 'Descreva sua pré-ideia de abordagem.' });
+  }
+  let nichoAtual = null;
+  if (nichoId) {
+    try {
+      const nichoPath = path.join(NICHOS_DIR, `${nichoId}.json`);
+      if (fs.existsSync(nichoPath)) nichoAtual = JSON.parse(fs.readFileSync(nichoPath, 'utf-8'));
+    } catch {}
   }
   const dadosCanais = [];
   for (const url of urls) {
@@ -68,14 +75,14 @@ app.post('/api/analisar-canais', async (req, res) => {
     }
   }
   if (dadosCanais.length === 0) {
-    return res.status(400).json({ error: 'Não foi possível coletar dados de nenhum canal. Verifique as URLs.' });
+    return res.status(400).json({ error: 'Não foi possível coletar dados de nenhum canal.' });
   }
   try {
-    const relatorio = await analisarCanal(dadosCanais, preIdeia);
+    const relatorio = await analisarCanal(dadosCanais, preIdeia, nichoAtual);
     res.json({ dadosCanais, relatorio });
   } catch (err) {
     console.error('Erro ao analisar canais:', err.message);
-    res.status(500).json({ error: 'Falha ao gerar análise. Tente novamente.' });
+    res.status(500).json({ error: 'Falha ao gerar análise.' });
   }
 });
 
@@ -250,8 +257,8 @@ app.put('/api/nicho/:nichoId/estrategia', (req, res) => {
         ...nichoAtual.publicoAlvo,
         faixaEtaria: novos.publicoAlvo?.faixaEtaria || nichoAtual.publicoAlvo?.faixaEtaria,
         perfil: novos.publicoAlvo?.perfil || nichoAtual.publicoAlvo?.perfil,
-        dores: nichoAtual.publicoAlvo?.dores || [],
-        desejos: nichoAtual.publicoAlvo?.desejos || []
+        dores: novos.publicoAlvo?.dores?.length > 0 ? novos.publicoAlvo.dores : nichoAtual.publicoAlvo?.dores || [],
+        desejos: novos.publicoAlvo?.desejos?.length > 0 ? novos.publicoAlvo.desejos : nichoAtual.publicoAlvo?.desejos || []
       },
 
       // Tom — só atualiza se veio com itens
@@ -310,26 +317,40 @@ app.delete('/api/nicho/:nichoId', (req, res) => {
 });
 
 app.post('/api/revisar-canal', async (req, res) => {
-  const dadosRevisao = req.body;
+  const { nichoId, ...dadosRevisao } = req.body;
   if (!dadosRevisao.propostaEscolhida || !dadosRevisao.avatar?.nome) {
     return res.status(400).json({ error: 'Selecione uma proposta e preencha os dados do avatar antes de revisar.' });
   }
+  let nichoAtual = null;
+  if (nichoId) {
+    try {
+      const nichoPath = path.join(NICHOS_DIR, `${nichoId}.json`);
+      if (fs.existsSync(nichoPath)) nichoAtual = JSON.parse(fs.readFileSync(nichoPath, 'utf-8'));
+    } catch {}
+  }
   try {
-    const revisao = await revisarCanal(dadosRevisao);
+    const revisao = await revisarCanal(dadosRevisao, nichoAtual);
     res.json(revisao);
   } catch (err) {
     console.error('Erro na revisão:', err.message);
-    res.status(500).json({ error: 'Falha na revisão. Tente novamente.' });
+    res.status(500).json({ error: 'Falha na revisão.' });
   }
 });
 
 app.post('/api/mineracao', async (req, res) => {
-  const { input } = req.body;
+  const { input, nichoId } = req.body;
   if (!input || input.trim() === '') {
     return res.status(400).json({ error: 'Digite um tema, título ou cole uma URL para iniciar a mineração.' });
   }
+  let nichoAtual = null;
+  if (nichoId) {
+    try {
+      const nichoPath = path.join(NICHOS_DIR, `${nichoId}.json`);
+      if (fs.existsSync(nichoPath)) nichoAtual = JSON.parse(fs.readFileSync(nichoPath, 'utf-8'));
+    } catch {}
+  }
   try {
-    const resultado = await minerarCanais(input.trim());
+    const resultado = await minerarCanais(input.trim(), nichoAtual);
     res.json(resultado);
   } catch (err) {
     console.error('[minerador] Erro:', err.message);

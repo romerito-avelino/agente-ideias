@@ -4,73 +4,126 @@ const axios = require('axios');
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
-async function gerarTermosDeBusca(input) {
-  let contextoEnriquecido = input;
+function qualificarCanal(canal, limites = {}) {
+  const inscritos = parseInt(canal.statistics?.subscriberCount || 0);
+  const dataPublicacao = canal.snippet?.publishedAt;
+  if (!dataPublicacao) return false;
+  const mesesDesdeInicio = (Date.now() - new Date(dataPublicacao).getTime()) / (1000 * 60 * 60 * 24 * 30);
 
+  if (inscritos > limites.maxInscritos) {
+    console.log(`[minerador] Canal descartado (${inscritos.toLocaleString()} inscritos — limite ${limites.maxInscritos.toLocaleString()}): ${canal.snippet?.title}`);
+    return false;
+  }
+  if (mesesDesdeInicio > limites.maxMeses) {
+    console.log(`[minerador] Canal descartado (${Math.round(mesesDesdeInicio)} meses — limite ${limites.maxMeses}): ${canal.snippet?.title}`);
+    return false;
+  }
+  return true;
+}
+
+async function gerarTermosDeBusca(input, nicho = null) {
+  let contextoEnriquecido = input;
   const isUrl = input.includes('youtube.com') || input.includes('youtu.be');
+
   if (isUrl) {
     try {
-      const regexCanal = /youtube\.com\/@([^/?&\s/]+)/;
-      const match = input.match(regexCanal);
-      if (match) {
-        const apiKey = process.env.YOUTUBE_API_KEY;
+      const apiKey = process.env.YOUTUBE_API_KEY;
+      const handleMatch = input.match(/youtube\.com\/@([^/?&\s/]+)/);
+      const channelIdMatch = input.match(/youtube\.com\/channel\/([^/?&\s/]+)/);
+
+      let channelId = null;
+      if (handleMatch) {
         const searchRes = await axios.get('https://www.googleapis.com/youtube/v3/search', {
-          params: { part: 'snippet', q: match[1], type: 'channel', maxResults: 1, key: apiKey }
+          params: { part: 'snippet', q: handleMatch[1], type: 'channel', maxResults: 1, key: apiKey }
         });
-        const channelId = searchRes.data.items?.[0]?.id?.channelId;
-        if (channelId) {
-          const videosRes = await axios.get('https://www.googleapis.com/youtube/v3/search', {
+        channelId = searchRes.data.items?.[0]?.id?.channelId;
+      } else if (channelIdMatch) {
+        channelId = channelIdMatch[1];
+      }
+
+      if (channelId) {
+        const [videosRes, canalRes] = await Promise.all([
+          axios.get('https://www.googleapis.com/youtube/v3/search', {
             params: { part: 'snippet', channelId, order: 'viewCount', maxResults: 5, type: 'video', key: apiKey }
-          });
-          const titulos = videosRes.data.items?.map(v => v.snippet.title) || [];
-          const canalRes = await axios.get('https://www.googleapis.com/youtube/v3/channels', {
+          }),
+          axios.get('https://www.googleapis.com/youtube/v3/channels', {
             params: { part: 'snippet', id: channelId, key: apiKey }
-          });
-          const descricao = canalRes.data.items?.[0]?.snippet?.description?.substring(0, 200) || '';
-          contextoEnriquecido = `Canal de referência: ${match[1]}. Descrição: ${descricao}. Vídeos mais populares: ${titulos.join(' | ')}`;
-          console.log(`[minerador] URL detectada — contexto extraído do canal: ${match[1]}`);
-        }
+          })
+        ]);
+        const titulos = videosRes.data.items?.map(v => v.snippet.title) || [];
+        const descricao = canalRes.data.items?.[0]?.snippet?.description?.substring(0, 300) || '';
+        const nomeCanal = canalRes.data.items?.[0]?.snippet?.title || '';
+        contextoEnriquecido = `Canal de referência: "${nomeCanal}". Descrição: ${descricao}. Vídeos mais populares: ${titulos.join(' | ')}`;
+        console.log(`[minerador] Contexto extraído do canal: ${nomeCanal}`);
       }
     } catch (err) {
-      console.warn(`[minerador] Não foi possível extrair contexto da URL: ${err.message}`);
+      console.warn(`[minerador] Falha ao extrair contexto da URL — usando input original: ${err.message}`);
+      contextoEnriquecido = input;
     }
   }
+
+  const contextoCanal = nicho ? `Projeto: ${nicho.nicho || ''}. Público: ${nicho.publicoAlvo?.faixaEtaria || 'público mais velho'}.` : '';
 
   const message = await client.messages.create({
     model: 'claude-opus-4-5',
     max_tokens: 500,
-    system: `Você é especialista em canais de YouTube no nicho de histórias. Dado um tema ou contexto de canal, gere termos de busca em português, inglês e espanhol para encontrar canais similares com potencial de modelagem para histórias com avatar. Retorne APENAS um JSON: { "termos": ["termo pt 1", "termo pt 2", "termo en 1", "termo en 2", "termo es 1"] }. Os termos devem ser específicos ao estilo e tema identificado, não genéricos.`,
-    messages: [{ role: 'user', content: `Contexto: ${contextoEnriquecido}` }]
+    system: `Você é especialista em análise de canais do YouTube. Dado um tema, URL ou contexto de canal, gere exatamente 5 termos de busca específicos — 2 em português, 2 em inglês e 1 em espanhol — para encontrar canais similares. Retorne APENAS JSON: { "termos": ["pt1", "pt2", "en1", "en2", "es1"] }. Seja específico ao tema identificado.`,
+    messages: [{ role: 'user', content: `Contexto: ${contextoEnriquecido}\n${contextoCanal}` }]
   });
 
   const texto = message.content[0].text.trim();
   const inicio = texto.indexOf('{');
   const fim = texto.lastIndexOf('}');
-  return JSON.parse(texto.slice(inicio, fim + 1));
+  try {
+    return JSON.parse(texto.slice(inicio, fim + 1));
+  } catch {
+    console.warn('[minerador] Falha ao parsear termos — usando input como termo direto');
+    return { termos: [input.substring(0, 50)] };
+  }
 }
 
 async function buscarCanaisPorTermo(termo, apiKey) {
-  const buscas = await Promise.allSettled([
-    axios.get('https://www.googleapis.com/youtube/v3/search', {
-      params: { part: 'snippet', q: termo, type: 'channel', maxResults: 8, relevanceLanguage: 'pt', regionCode: 'BR', key: apiKey }
-    }),
-    axios.get('https://www.googleapis.com/youtube/v3/search', {
-      params: { part: 'snippet', q: termo, type: 'channel', maxResults: 8, relevanceLanguage: 'en', regionCode: 'US', key: apiKey }
-    }),
-    axios.get('https://www.googleapis.com/youtube/v3/search', {
-      params: { part: 'snippet', q: termo + ' historias', type: 'channel', maxResults: 8, relevanceLanguage: 'es', regionCode: 'ES', key: apiKey }
-    })
-  ]);
-  const ids = new Set();
-  buscas.forEach(b => {
-    if (b.status === 'fulfilled') {
-      b.value.data.items?.forEach(item => ids.add(item.snippet.channelId));
+  const resultados = [];
+
+  // Limites iguais para todos os idiomas — foco em tendências emergentes
+  const limites = { maxInscritos: 100000, maxMeses: 10 };
+
+  const buscas = [
+    { params: { part: 'snippet', q: termo, type: 'channel', maxResults: 10, relevanceLanguage: 'en', regionCode: 'US', key: apiKey }, limites, idioma: 'EN' },
+    { params: { part: 'snippet', q: termo, type: 'channel', maxResults: 10, relevanceLanguage: 'en', regionCode: 'GB', key: apiKey }, limites, idioma: 'EN-GB' },
+    { params: { part: 'snippet', q: termo, type: 'channel', maxResults: 10, relevanceLanguage: 'es', regionCode: 'ES', key: apiKey }, limites, idioma: 'ES' },
+    { params: { part: 'snippet', q: termo, type: 'channel', maxResults: 8, relevanceLanguage: 'es', regionCode: 'MX', key: apiKey }, limites, idioma: 'ES-MX' },
+    { params: { part: 'snippet', q: termo, type: 'channel', maxResults: 6, relevanceLanguage: 'pt', regionCode: 'BR', key: apiKey }, limites, idioma: 'PT-BR' },
+  ];
+
+  const respostas = await Promise.allSettled(
+    buscas.map(b => axios.get('https://www.googleapis.com/youtube/v3/search', { params: b.params }))
+  );
+
+  for (let i = 0; i < respostas.length; i++) {
+    const res = respostas[i];
+    const { limites, idioma } = buscas[i];
+    if (res.status !== 'fulfilled') continue;
+    const canaisIds = res.value.data.items
+      ?.filter(item => item.id?.channelId)
+      .map(item => item.id.channelId) || [];
+    if (!canaisIds.length) continue;
+
+    const detalhes = await axios.get('https://www.googleapis.com/youtube/v3/channels', {
+      params: { part: 'snippet,statistics', id: canaisIds.join(','), key: apiKey }
+    });
+
+    for (const canal of detalhes.data.items || []) {
+      if (qualificarCanal(canal, limites)) {
+        resultados.push({ ...canal, _idioma: idioma });
+      }
     }
-  });
-  return [...ids];
+  }
+
+  return resultados;
 }
 
-async function coletarDadosCanal(channelId, apiKey) {
+async function coletarDadosCanal(channelId, apiKey, limites = {}) {
   const canalRes = await axios.get('https://www.googleapis.com/youtube/v3/channels', {
     params: { part: 'snippet,statistics,contentDetails', id: channelId, key: apiKey }
   });
@@ -78,12 +131,9 @@ async function coletarDadosCanal(channelId, apiKey) {
   const canal = canalRes.data.items?.[0];
   if (!canal) return null;
 
-  const inscritos = parseInt(canal.statistics?.subscriberCount || 0);
-  if (inscritos > 100000) {
-    console.log(`[minerador] Canal descartado (${inscritos.toLocaleString()} inscritos — limite 100k): ${canal.snippet?.title}`);
-    return null;
-  }
+  if (!qualificarCanal(canal, limites)) return null;
 
+  const inscritos = parseInt(canal.statistics?.subscriberCount || 0);
   const playlistId = canal.contentDetails?.relatedPlaylists?.uploads;
   if (!playlistId) return null;
 
@@ -109,14 +159,8 @@ async function coletarDadosCanal(channelId, apiKey) {
 
   if (videos.length === 0) return null;
 
-  // Parâmetro 3: vídeo mais antigo com até 8 meses
   const datas = videos.map(v => new Date(v.data)).sort((a, b) => a - b);
-  const videoMaisAntigo = datas[0];
-  const mesesDesdeInicio = (Date.now() - videoMaisAntigo.getTime()) / (1000 * 60 * 60 * 24 * 30);
-  if (mesesDesdeInicio > 8) {
-    console.log(`[minerador] Canal descartado (${Math.round(mesesDesdeInicio)} meses — limite 8): ${canal.snippet.title}`);
-    return null;
-  }
+  const mesesDesdeInicio = (Date.now() - datas[0].getTime()) / (1000 * 60 * 60 * 24 * 30);
 
   const totalVideos = videos.length;
   const totalViews = videos.reduce((acc, v) => acc + v.views, 0);
@@ -151,33 +195,42 @@ async function coletarDadosCanal(channelId, apiKey) {
   };
 }
 
-async function calcularScoresIA(canais, inputOriginal) {
+async function calcularScoresIA(canais, inputOriginal, nicho = null) {
   const LOTE_SIZE = 5;
   const todasAvaliacoes = [];
 
+  const descricaoContexto = nicho
+    ? `Projeto: ${nicho.canal || 'canal novo'}. Nicho: ${nicho.nicho || ''}. Público-alvo: ${nicho.publicoAlvo?.faixaEtaria || 'público mais velho'}. Proposta: ${nicho.estrategia?.propostaEscolhida?.anguloUnico || ''}.`
+    : `Projeto baseado no input: "${inputOriginal}". Público-alvo: pessoas mais velhas (40+).`;
+
   for (let i = 0; i < canais.length; i += LOTE_SIZE) {
     const lote = canais.slice(i, i + LOTE_SIZE);
-    const listaLote = lote.map((c, j) => `${i + j}|${c.nomeCanal}|${c.titulosParaAnalise.slice(0, 3).join('|')}`).join('\n');
+    const listaLote = lote.map((c, j) =>
+      `${i + j}|${c.nomeCanal}|${c.titulosParaAnalise.slice(0, 3).join('|')}`
+    ).join('\n');
 
     try {
       const message = await client.messages.create({
         model: 'claude-opus-4-5',
         max_tokens: 400,
-        system: `Avalie canais para modelagem em histórias com avatar idoso. Retorne APENAS JSON. Máximo 50 chars por campo de texto. Formato: {"avaliacoes":[{"indice":0,"scoreRecriabilidade":75,"scoreOportunidade":80,"justificativaRecriabilidade":"texto","justificativaOportunidade":"texto","potencialModelagem":"texto"}]}`,
-        messages: [{
-          role: 'user',
-          content: `Input: "${inputOriginal}"\n${listaLote}`
-        }]
+        system: `Avalie canais do YouTube como tendências emergentes para modelagem no seguinte projeto: ${descricaoContexto}
+
+CRITÉRIO PRINCIPAL: Este canal representa uma TENDÊNCIA NOVA no mercado? O conteúdo está crescendo rápido com poucos inscritos? Existe algo nesse canal que ainda não foi explorado no Brasil?
+
+RECRIABILIDADE (0-100): O conteúdo pode ser adaptado para histórias voltadas ao público mais velho? Considere: tema adaptável, formato replicável, ângulo ainda não explorado no Brasil.
+OPORTUNIDADE (0-100): Esse canal representa uma tendência que ainda não chegou ou está chegando no Brasil? Quanto antes melhor.
+
+Retorne APENAS JSON. Máximo 50 chars por campo.
+{"avaliacoes":[{"indice":0,"scoreRecriabilidade":75,"scoreOportunidade":80,"justificativaRecriabilidade":"texto","justificativaOportunidade":"texto","potencialModelagem":"texto"}]}`,
+        messages: [{ role: 'user', content: `Input: "${inputOriginal}"\n${listaLote}` }]
       });
 
       const texto = message.content[0].text.trim()
         .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
         .replace(/\r|\n|\t/g, ' ');
-
       const inicio = texto.indexOf('{');
       const fim = texto.lastIndexOf('}');
       if (inicio === -1 || fim === -1) continue;
-
       let resultado;
       try {
         resultado = JSON.parse(texto.slice(inicio, fim + 1));
@@ -188,97 +241,110 @@ async function calcularScoresIA(canais, inputOriginal) {
           .replace(/[\u2018\u2019\u201C\u201D]/g, '"');
         resultado = JSON.parse(sanitizado);
       }
-
-      if (resultado.avaliacoes) {
-        todasAvaliacoes.push(...resultado.avaliacoes);
-      }
+      if (resultado.avaliacoes) todasAvaliacoes.push(...resultado.avaliacoes);
       console.log(`[minerador] Lote ${Math.floor(i/LOTE_SIZE) + 1} avaliado — ${lote.length} canais`);
     } catch (err) {
       console.warn(`[minerador] Falha no lote ${Math.floor(i/LOTE_SIZE) + 1}: ${err.message}`);
+      console.warn(`[minerador] JSON problemático — aplicando scores neutros para ${lote.length} canais`);
       lote.forEach((_, j) => todasAvaliacoes.push({
         indice: i + j,
         scoreRecriabilidade: 50,
         scoreOportunidade: 50,
-        justificativaRecriabilidade: 'Avaliação indisponível',
-        justificativaOportunidade: 'Avaliação indisponível',
+        justificativaRecriabilidade: 'Avaliação automática indisponível — verificar manualmente',
+        justificativaOportunidade: 'Avaliação automática indisponível — verificar manualmente',
         potencialModelagem: 'Verificar manualmente'
       }));
     }
   }
-
   return { avaliacoes: todasAvaliacoes };
 }
 
-async function minerarCanais(input) {
+async function minerarCanais(input, nicho = null) {
   const apiKey = process.env.YOUTUBE_API_KEY;
   console.log(`[minerador] Iniciando mineração para: "${input}"`);
+  console.log(`[minerador] Estratégia: tendências emergentes — até 100k inscritos, até 10 meses. Prioridade EN e ES.`);
 
-  const { termos } = await gerarTermosDeBusca(input);
+  const { termos } = await gerarTermosDeBusca(input, nicho);
   console.log(`[minerador] Termos gerados: ${termos.join(', ')}`);
 
-  const channelIdsSet = new Set();
-  for (const termo of termos.slice(0, 3)) {
-    try {
-      const ids = await buscarCanaisPorTermo(termo, apiKey);
-      ids.forEach(id => channelIdsSet.add(id));
-    } catch (err) {
-      console.warn(`[minerador] Busca falhou para "${termo}": ${err.message}`);
-    }
-  }
+  const todosCanais = [];
+  const idsVistos = new Set();
 
-  console.log(`[minerador] ${channelIdsSet.size} canais únicos encontrados`);
-
-  const canaisColetados = [];
-  for (const channelId of channelIdsSet) {
-    try {
-      const dados = await coletarDadosCanal(channelId, apiKey);
-      if (dados) {
-        canaisColetados.push(dados);
-        console.log(`[minerador] ✓ ${dados.nomeCanal} — ${dados.inscritos} inscritos, ${dados.mesesAtivo} meses`);
+  for (const termo of termos) {
+    const canaisDoTermo = await buscarCanaisPorTermo(termo, apiKey);
+    for (const canal of canaisDoTermo) {
+      if (!idsVistos.has(canal.id)) {
+        idsVistos.add(canal.id);
+        todosCanais.push(canal);
       }
-    } catch (err) {
-      console.warn(`[minerador] Falha ao coletar canal ${channelId}: ${err.message}`);
     }
   }
 
-  if (canaisColetados.length === 0) {
-    throw new Error('Nenhum canal encontrado dentro dos parâmetros. Tente outro tema ou título.');
+  console.log(`[minerador] ${todosCanais.length} canais únicos encontrados`);
+
+  // Separa por idioma para log e ordenação
+  const canaisEN = todosCanais.filter(c => c._idioma?.startsWith('EN'));
+  const canaisES = todosCanais.filter(c => c._idioma === 'ES');
+  const canaisBR = todosCanais.filter(c => c._idioma === 'PT-BR');
+  console.log(`[minerador] Distribuição: ${canaisEN.length} EN | ${canaisES.length} ES | ${canaisBR.length} PT-BR`);
+
+  // Ordena: EN primeiro, depois ES, depois BR
+  const canaisOrdenados = [...canaisEN, ...canaisES, ...canaisBR];
+
+  // Prepara para o scorer
+  const canaisParaIA = canaisOrdenados.map(canal => ({
+    id: canal.id,
+    nomeCanal: canal.snippet?.title || 'Sem nome',
+    inscritos: parseInt(canal.statistics?.subscriberCount || 0),
+    idioma: canal._idioma || 'desconhecido',
+    titulosParaAnalise: [],
+    canal
+  }));
+
+  // Busca vídeos em alta para cada canal
+  for (const item of canaisParaIA) {
+    try {
+      const videosRes = await axios.get('https://www.googleapis.com/youtube/v3/search', {
+        params: { part: 'snippet', channelId: item.id, order: 'viewCount', maxResults: 5, type: 'video', key: apiKey }
+      });
+      item.titulosParaAnalise = videosRes.data.items?.map(v => v.snippet.title) || [];
+      item.videosEmAlta = videosRes.data.items?.map(v => ({
+        titulo: v.snippet.title,
+        url: `https://youtube.com/watch?v=${v.id.videoId}`,
+        thumbnail: v.snippet.thumbnails?.medium?.url,
+        views: 0
+      })) || [];
+    } catch {}
   }
 
-  const canaisParaIA = canaisColetados
-    .sort((a, b) => (b.scoreDemanda + b.scoreConstancia) - (a.scoreDemanda + a.scoreConstancia))
-    .slice(0, 15);
+  const avaliacoes = await calcularScoresIA(canaisParaIA, input, nicho);
 
-  const avaliacoes = await calcularScoresIA(canaisParaIA, input);
-
-  const canaisFinais = canaisParaIA.map((canal, i) => {
-    const avaliacao = avaliacoes.avaliacoes?.find(a => a.indice === i) || {};
-    const scoreRecriabilidade = avaliacao.scoreRecriabilidade || 50;
-    const scoreOportunidade = avaliacao.scoreOportunidade || 50;
-    const scorePotencial = Math.round(
-      canal.scoreDemanda * 0.30 +
-      canal.scoreConstancia * 0.25 +
-      scoreRecriabilidade * 0.25 +
-      scoreOportunidade * 0.20
-    );
+  // Monta resultado final
+  const canaisQualificados = canaisParaIA.map((item, idx) => {
+    const av = avaliacoes.avaliacoes?.find(a => a.indice === idx) || {};
     return {
-      ...canal,
-      scoreRecriabilidade,
-      scoreOportunidade,
-      scorePotencial,
-      justificativaRecriabilidade: avaliacao.justificativaRecriabilidade || '',
-      justificativaOportunidade: avaliacao.justificativaOportunidade || '',
-      potencialModelagem: avaliacao.potencialModelagem || ''
+      nomeCanal: item.nomeCanal,
+      inscritos: item.inscritos,
+      idioma: item.idioma,
+      urlCanal: `https://youtube.com/channel/${item.id}`,
+      videosEmAlta: item.videosEmAlta || [],
+      scores: {
+        recriabilidade: av.scoreRecriabilidade || 50,
+        oportunidade: av.scoreOportunidade || 50
+      },
+      justificativas: {
+        recriabilidade: av.justificativaRecriabilidade || '',
+        oportunidade: av.justificativaOportunidade || '',
+        potencial: av.potencialModelagem || ''
+      }
     };
   });
 
-  const qualificados = canaisFinais
-    .filter(c => c.scorePotencial >= 60)
-    .sort((a, b) => b.scorePotencial - a.scorePotencial)
-    .slice(0, 10);
-
-  console.log(`[minerador] ${qualificados.length} canais qualificados`);
-  return { termos, totalEncontrados: canaisColetados.length, canais: qualificados };
+  return {
+    canais: canaisQualificados,
+    termos,
+    distribuicao: { en: canaisEN.length, es: canaisES.length, br: canaisBR.length }
+  };
 }
 
 module.exports = { minerarCanais };
