@@ -103,7 +103,17 @@ app.post('/api/criar-canal', (req, res) => {
       instrucao: 'Use essas estruturas como moldes.',
       confissaoVulnerabilidade: [], consequenciaVirada: [],
       endereçamentoDireto: [], revelacaoSegredo: [],
-      tempoArrependimento: [], gatilhoDeIdentidade: []
+      tempoArrependimento: [], gatilhoDeIdentidade: [],
+      funcionais: []
+    },
+    identidadeSemantica: {
+      perguntaCentral: '',
+      estadoDeIntencao: '',
+      clusterSemantico: '',
+      padraoDeSessao: '',
+      scoreDeGapDemanda: 0,
+      saturacaoDoCluster: '',
+      momentoIdealDeConsumo: ''
     },
     historicoGeracoes: []
   };
@@ -316,6 +326,29 @@ app.delete('/api/nicho/:nichoId', (req, res) => {
   }
 });
 
+app.post('/api/nicho/:nichoId/titulo-funcionou', (req, res) => {
+  const { nichoId } = req.params;
+  const { titulo, estrutura } = req.body;
+  if (!titulo) return res.status(400).json({ error: 'Título obrigatório.' });
+  const nichoPath = path.join(NICHOS_DIR, `${nichoId}.json`);
+  if (!fs.existsSync(nichoPath)) return res.status(404).json({ error: 'Nicho não encontrado.' });
+  try {
+    const nicho = JSON.parse(fs.readFileSync(nichoPath, 'utf-8'));
+    if (!nicho.estruturasDeTitulos) nicho.estruturasDeTitulos = {};
+    const funcionais = nicho.estruturasDeTitulos.funcionais || [];
+    const entrada = estrutura ? `${titulo} [${estrutura}]` : titulo;
+    if (!funcionais.includes(entrada)) {
+      funcionais.push(entrada);
+      nicho.estruturasDeTitulos.funcionais = funcionais;
+      fs.writeFileSync(nichoPath, JSON.stringify(nicho, null, 2), 'utf-8');
+      console.log(`[server] Título registrado como funcionou: "${titulo}"`);
+    }
+    res.json({ sucesso: true, total: funcionais.length });
+  } catch (err) {
+    res.status(500).json({ error: 'Falha ao registrar título.' });
+  }
+});
+
 app.post('/api/revisar-canal', async (req, res) => {
   const { nichoId, ...dadosRevisao } = req.body;
   if (!dadosRevisao.propostaEscolhida || !dadosRevisao.avatar?.nome) {
@@ -380,6 +413,19 @@ app.post('/api/gerar-pacote', async (req, res) => {
     }
     pacote.videosReferencia = videosReferencia;
     const { nomeArquivo } = await gerarPacoteRoteirista(pacote);
+
+    // Limpa pacotes antigos — mantém apenas os 20 mais recentes
+    try {
+      const pacotesDir = path.join(__dirname, '..', 'pacotes');
+      const arquivos = fs.readdirSync(pacotesDir)
+        .filter(f => f.endsWith('.docx'))
+        .map(f => ({ nome: f, tempo: fs.statSync(path.join(pacotesDir, f)).mtimeMs }))
+        .sort((a, b) => b.tempo - a.tempo);
+      arquivos.slice(20).forEach(f => {
+        try { fs.unlinkSync(path.join(pacotesDir, f.nome)); } catch {}
+      });
+    } catch {}
+
     res.json({ sucesso: true, nomeArquivo, downloadUrl: `/pacotes/${nomeArquivo}` });
   } catch (err) {
     console.error('[pacote] Erro:', err.message);

@@ -330,11 +330,38 @@ async function minerarCanais(input, nicho = null) {
       item.titulosParaAnalise = videosRes.data.items?.map(v => v.snippet.title) || [];
       item.videosEmAlta = videosRes.data.items?.map(v => ({
         titulo: v.snippet.title,
+        videoId: v.id.videoId,
         url: `https://youtube.com/watch?v=${v.id.videoId}`,
         thumbnail: v.snippet.thumbnails?.medium?.url,
         views: 0
       })) || [];
     } catch {}
+  }
+
+  // Busca views reais dos vídeos em alta (batch — economiza quota)
+  const todosVideoIds = canaisParaIA.flatMap(item =>
+    (item.videosEmAlta || []).map(v => v.videoId).filter(Boolean)
+  );
+  if (todosVideoIds.length > 0) {
+    const statsMap = {};
+    for (let i = 0; i < todosVideoIds.length; i += 50) {
+      try {
+        const statsRes = await axios.get('https://www.googleapis.com/youtube/v3/videos', {
+          params: { part: 'statistics', id: todosVideoIds.slice(i, i + 50).join(','), key: apiKey }
+        });
+        for (const v of statsRes.data.items || []) {
+          statsMap[v.id] = parseInt(v.statistics?.viewCount || 0);
+        }
+      } catch {}
+    }
+    for (const item of canaisParaIA) {
+      for (const video of item.videosEmAlta || []) {
+        if (video.videoId && statsMap[video.videoId] !== undefined) {
+          video.views = statsMap[video.videoId];
+        }
+      }
+    }
+    console.log(`[minerador] Views reais carregados para ${Object.keys(statsMap).length} vídeos`);
   }
 
   const avaliacoes = await calcularScoresIA(canaisParaIA, input, nicho);
