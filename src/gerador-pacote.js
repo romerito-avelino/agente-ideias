@@ -329,6 +329,26 @@ async function gerarPacoteRoteirista(pacote) {
       ? nicho.formatoDeVideo.estrutura.map(e => criarItem(e))
       : [criarTexto('Não definido')]),
 
+    ...(nicho?.identidadeSemantica?.perguntaCentral ? [
+      criarSeparador(),
+      criarLabel('Identidade Semântica do Canal'),
+      criarComentario('Use estas informações para garantir coerência semântica total — o roteiro, o título e a entrega devem responder à mesma pergunta central. Quebra semântica é penalização silenciosa pelo algoritmo.'),
+      criarLabel('Pergunta central que o canal responde'),
+      criarTexto(nicho.identidadeSemantica.perguntaCentral),
+      criarLabel('Estado de intenção do espectador'),
+      criarTexto(nicho.identidadeSemantica.estadoDeIntencao),
+      criarLabel('Cluster semântico'),
+      criarTexto(nicho.identidadeSemantica.clusterSemantico),
+      criarLabel('Padrão de sessão esperado'),
+      criarTexto(nicho.identidadeSemantica.padraoDeSessao),
+      criarLabel('Saturação do cluster'),
+      criarTexto(nicho.identidadeSemantica.saturacaoDoCluster),
+      criarLabel('Momento ideal de consumo'),
+      criarTexto(nicho.identidadeSemantica.momentoIdealDeConsumo),
+    ] : [
+      criarComentario('Identidade semântica não definida — preencher no banco de dados do canal para maximizar a precisão do algoritmo.')
+    ]),
+
     criarSeparador(),
 
     // SEÇÃO 7 — ESTRATÉGIA VALIDADA

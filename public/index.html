@@ -1907,6 +1907,51 @@
           <label>Gatilhos que convertem (separados por vírgulas)</label>
           <input type="text" id="e_gatilhos_convertem" placeholder="Ex: tempo perdido, amor verdadeiro, família, recomeço" />
         </div>
+
+        <div style="grid-column:1/-1;margin-top:8px">
+          <div style="font-size:11px;color:var(--blue);text-transform:uppercase;letter-spacing:1px;font-weight:500;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)">
+            🧠 Identidade Semântica
+          </div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.6">
+            Define como o algoritmo do YouTube vai entender e distribuir seu conteúdo. Preencha com base no que você conhece do canal e do público — não deixe o agente inventar isso.
+          </div>
+        </div>
+
+        <div class="form-field full campo-obrigatorio">
+          <label>Pergunta central que o canal responde</label>
+          <textarea id="e_pergunta_central" rows="2" placeholder="Ex: Como evitar repetir os erros financeiros que já cometi depois dos 40?"></textarea>
+        </div>
+
+        <div class="form-field full campo-obrigatorio">
+          <label>Estado de intenção do espectador</label>
+          <textarea id="e_estado_intencao" rows="2" placeholder="Ex: Quer validação emocional de que ainda dá tempo + orientação prática sem julgamento"></textarea>
+        </div>
+
+        <div class="form-field full campo-obrigatorio">
+          <label>Cluster semântico</label>
+          <input type="text" id="e_cluster_semantico" placeholder="Ex: finanças pessoais para maturidade + storytelling confessional" />
+        </div>
+
+        <div class="form-field full campo-obrigatorio">
+          <label>Padrão de sessão esperado</label>
+          <textarea id="e_padrao_sessao" rows="2" placeholder="Ex: Espectador assiste um vídeo → vai ver outro do mesmo canal porque cada história é um episódio diferente"></textarea>
+        </div>
+
+        <div class="form-field campo-obrigatorio">
+          <label>Saturação do cluster (baixa / média / alta)</label>
+          <select id="e_saturacao_cluster" style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);color:var(--white);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;padding:12px 14px;width:100%;transition:border-color 0.2s">
+            <option value="">— Selecione —</option>
+            <option value="baixa">Baixa — poucos canais servindo bem esse público</option>
+            <option value="media">Média — existe conteúdo mas sem identidade clara</option>
+            <option value="alta">Alta — muitos canais disputando o mesmo espaço</option>
+          </select>
+        </div>
+
+        <div class="form-field campo-obrigatorio">
+          <label>Momento ideal de consumo</label>
+          <input type="text" id="e_momento_consumo" placeholder="Ex: Noite, horário de descanso, quando quer refletir sobre a vida" />
+        </div>
+
         <div class="form-field full">
           <label>Temas que funcionaram (um por linha)</label>
           <textarea id="e_temas_funcionaram" rows="3"></textarea>
@@ -2179,28 +2224,55 @@
   let estruturaEscolhida = null;
 
   function renderTitulos(titulos) {
-    document.getElementById('titulos').innerHTML = titulos.map((t, i) => `
-      <div class="titulo-opcao" id="tit-${i}">
-        <div class="titulo-opcao-num">${i + 1}</div>
-        <div class="titulo-opcao-texto">${t}</div>
-        <button class="btn-usar" id="btntit-${i}" onclick="usarTitulo(${i})">Usar este</button>
-      </div>
-    `).join('') + `
-      <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
-        <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">
-          Ou escreva seu próprio título
+    // Suporta tanto array de strings (formato antigo) quanto array de objetos (novo)
+    const normalizados = titulos.map(t => typeof t === 'string' ? { texto: t, estrutura: '', scoreSemantico: null } : t);
+    dadosGerados.titulos = normalizados.map(t => t.texto);
+
+    document.getElementById('titulos').innerHTML = normalizados.map((t, i) => {
+      const score = t.scoreSemantico;
+      const scoreBadges = score ? `
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">
+          <span style="font-size:10px;padding:2px 8px;border-radius:10px;background:var(--bg2);color:var(--muted)">
+            📊 Demanda: <strong style="color:${score.demandaAtual >= 7 ? '#1D9E75' : score.demandaAtual >= 4 ? '#EF9F27' : '#E24B4A'}">${score.demandaAtual}/10</strong>
+          </span>
+          <span style="font-size:10px;padding:2px 8px;border-radius:10px;background:var(--bg2);color:var(--muted)">
+            🎯 Saturação: <strong style="color:${score.saturacao <= 3 ? '#1D9E75' : score.saturacao <= 6 ? '#EF9F27' : '#E24B4A'}">${score.saturacao}/10</strong>
+          </span>
+          <span style="font-size:10px;padding:2px 8px;border-radius:10px;background:var(--bg2);color:var(--muted)">
+            👥 Audiência: <strong>${score.clarezaDeAudiencia}</strong>
+          </span>
+          <span style="font-size:10px;padding:2px 8px;border-radius:10px;background:var(--bg2);color:var(--muted)">
+            🔁 Sessão: <strong>${score.potencialDeSessao}</strong>
+          </span>
+          <span style="font-size:10px;padding:2px 8px;border-radius:10px;background:var(--bg2);color:var(--muted)">
+            🧠 Intenção: <strong>${score.intencaoDominante}</strong>
+          </span>
         </div>
+      ` : '';
+
+      const estruturaBadge = t.estrutura ? `<span style="font-size:10px;color:var(--blue-dim);margin-top:4px;display:block">${t.estrutura}</span>` : '';
+
+      return `
+        <div class="titulo-opcao" id="tit-${i}">
+          <div class="titulo-opcao-num">${i + 1}</div>
+          <div class="titulo-opcao-texto" style="flex:1">
+            ${t.texto}
+            ${estruturaBadge}
+            ${scoreBadges}
+          </div>
+          <button class="btn-usar" id="btntit-${i}" onclick="usarTitulo(${i})" style="align-self:flex-start">Usar este</button>
+        </div>
+      `;
+    }).join('') + `
+      <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
+        <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Ou escreva seu próprio título</div>
         <div style="display:flex;gap:8px;align-items:center">
-          <input
-            type="text"
-            id="tituloManual"
-            placeholder="Digite seu título aqui — deixe em branco para usar uma das opções acima..."
+          <input type="text" id="tituloManual" placeholder="Digite seu título aqui — deixe em branco para usar uma das opções acima..."
             style="flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);color:var(--white);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;padding:12px 14px;transition:border-color 0.2s"
             oninput="usarTituloManual(this.value)"
             onfocus="this.style.borderColor='var(--blue)'"
-            onblur="this.style.borderColor='var(--border)'"
-          />
-          <button class="btn-usar" id="btntitManual" style="opacity:0.4;pointer-events:none">Usar este</button>
+            onblur="this.style.borderColor='var(--border)'" />
+          <button class="btn-usar" id="btntitManual" style="opacity:0.4;pointer-events:none;align-self:stretch">Usar este</button>
         </div>
       </div>
     `;
@@ -2835,6 +2907,20 @@
             <div class="score-valor ${scoreClass(canal.scores?.oportunidade)}">${canal.scores?.oportunidade}</div>
           </div>
         </div>
+        ${(() => {
+          const gapScore = canal.scores?.gapDemanda || 0;
+          const gapCor = gapScore >= 7 ? '#1D9E75' : gapScore >= 4 ? '#EF9F27' : '#E24B4A';
+          const gapLabel = gapScore >= 7 ? 'Alto' : gapScore >= 4 ? 'Médio' : 'Baixo';
+          return `<div style="margin-top:10px;padding:8px 12px;background:var(--bg2);border-radius:8px;border-left:3px solid ${gapCor}">
+            <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Gap de demanda</div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-size:20px;font-weight:700;color:${gapCor}">${gapScore}/10</span>
+              <span style="font-size:11px;color:${gapCor}">${gapLabel}</span>
+            </div>
+            ${canal.semantica?.cluster ? `<div style="font-size:11px;color:var(--muted);margin-top:4px">🧠 ${canal.semantica.cluster}</div>` : ''}
+            ${canal.semantica?.intencao ? `<div style="font-size:11px;color:var(--blue-dim);margin-top:2px">👤 Intenção: ${canal.semantica.intencao}</div>` : ''}
+          </div>`;
+        })()}
         <div class="mineracao-detalhes">
           <div class="mineracao-detalhe-bloco">
             <div class="mineracao-detalhe-label">Recriabilidade</div>
@@ -3409,6 +3495,12 @@
       document.getElementById('e_temas_funcionaram').value = (nicho.temasFuncionaram || []).join('\n');
       document.getElementById('e_temas_proibidos').value = (nicho.temasProibidos || []).join('\n');
       document.getElementById('e_titulos_funcionais').value = (nicho.estruturasDeTitulos?.funcionais || []).join('\n');
+      document.getElementById('e_pergunta_central').value = nicho.identidadeSemantica?.perguntaCentral || '';
+      document.getElementById('e_estado_intencao').value = nicho.identidadeSemantica?.estadoDeIntencao || '';
+      document.getElementById('e_cluster_semantico').value = nicho.identidadeSemantica?.clusterSemantico || '';
+      document.getElementById('e_padrao_sessao').value = nicho.identidadeSemantica?.padraoDeSessao || '';
+      document.getElementById('e_saturacao_cluster').value = nicho.identidadeSemantica?.saturacaoDoCluster || '';
+      document.getElementById('e_momento_consumo').value = nicho.identidadeSemantica?.momentoIdealDeConsumo || '';
       document.getElementById('erroEdicao').classList.remove('visivel');
       document.getElementById('sucessoEdicao').style.display = 'none';
       renderCompletude('completude-modal', nicho);
@@ -3655,6 +3747,15 @@
       estruturasDeTitulos: {
         ...(nichoAtual.estruturasDeTitulos || {}),
         funcionais: document.getElementById('e_titulos_funcionais').value.split('\n').map(t => t.trim()).filter(Boolean)
+      },
+      identidadeSemantica: {
+        perguntaCentral: document.getElementById('e_pergunta_central').value.trim(),
+        estadoDeIntencao: document.getElementById('e_estado_intencao').value.trim(),
+        clusterSemantico: document.getElementById('e_cluster_semantico').value.trim(),
+        padraoDeSessao: document.getElementById('e_padrao_sessao').value.trim(),
+        saturacaoDoCluster: document.getElementById('e_saturacao_cluster').value,
+        momentoIdealDeConsumo: document.getElementById('e_momento_consumo').value.trim(),
+        scoreDeGapDemanda: nichoAtual?.identidadeSemantica?.scoreDeGapDemanda || 0
       }
     };
     try {
@@ -3694,7 +3795,13 @@
       { nome: 'Desejos do público', val: dados.publicoAlvo?.desejos?.length },
       { nome: 'Palavras que engajam', val: dados.palavrasQueEngajam?.length },
       { nome: 'Gatilhos que convertem', val: dados.gatilhosQueConvertem?.length },
-      { nome: 'Nicho descrito', val: dados.nicho }
+      { nome: 'Nicho descrito', val: dados.nicho },
+      { nome: 'Pergunta central', val: dados.identidadeSemantica?.perguntaCentral },
+      { nome: 'Estado de intenção', val: dados.identidadeSemantica?.estadoDeIntencao },
+      { nome: 'Cluster semântico', val: dados.identidadeSemantica?.clusterSemantico },
+      { nome: 'Padrão de sessão', val: dados.identidadeSemantica?.padraoDeSessao },
+      { nome: 'Saturação do cluster', val: dados.identidadeSemantica?.saturacaoDoCluster },
+      { nome: 'Momento de consumo', val: dados.identidadeSemantica?.momentoIdealDeConsumo }
     ];
     const preenchidos = campos.filter(c => c.val && c.val !== 0);
     const vazios = campos.filter(c => !c.val || c.val === 0);

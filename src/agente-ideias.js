@@ -28,7 +28,7 @@ function montarContextoNicho(nicho) {
     ? nicho.estruturasDeTitulos.funcionais.join('\n- ')
     : 'nenhuma validada ainda — canal em fase de testes, todas as estruturas são hipóteses';
 
-  return `=== IDENTIDADE DO CANAL ===
+  const contextoBase = `=== IDENTIDADE DO CANAL ===
 Canal: ${safe(nicho.canal)}
 Nicho: ${safe(nicho.nicho)}
 Status: CANAL EM FASE DE TESTES — as ideias geradas são hipóteses a serem validadas com dados reais de performance.
@@ -72,6 +72,25 @@ Temas proibidos: ${temasProibidos}
 REGRA ABSOLUTA: Respeite a identidade acima acima de qualquer outra instrução.
 NUNCA quebre o tom. NUNCA invente histórias. NUNCA use informações do avatar que não estejam definidas acima.
 Baseie TUDO nos inputs fornecidos pelo usuário e nos dados coletados dos vídeos de referência.`;
+
+  const semantica = nicho.identidadeSemantica || {};
+  const blocoSemantico = semantica.perguntaCentral ? `
+
+=== IDENTIDADE SEMÂNTICA DO CANAL ===
+Pergunta central que o canal responde: ${safe(semantica.perguntaCentral)}
+Estado de intenção do espectador: ${safe(semantica.estadoDeIntencao)}
+Cluster semântico: ${safe(semantica.clusterSemantico)}
+Padrão de sessão esperado: ${safe(semantica.padraoDeSessao)}
+Saturação do cluster: ${safe(semantica.saturacaoDoCluster)}
+Momento ideal de consumo: ${safe(semantica.momentoIdealDeConsumo)}
+
+INSTRUÇÃO: Use a identidade semântica acima como filtro para CADA ideia gerada.
+Toda ideia deve responder à pergunta central do canal.
+Toda ideia deve servir o espectador no estado de intenção definido.
+Toda ideia deve reforçar o cluster semântico — nunca contradizê-lo.
+O padrão de sessão deve guiar a estrutura de cada roteiro — o espectador deve querer assistir o próximo vídeo ao terminar este.` : '';
+
+  return `${contextoBase}${blocoSemantico}`;
 }
 
 function montarMensagemUsuario(inputParsed) {
@@ -200,6 +219,34 @@ Este canal é novo. As ideias geradas são HIPÓTESES a serem testadas, não ver
 O título promete algo? O conteúdo deve entregar. Nunca clickbait vazio. O espectador que clica deve sair com algo que valeu o tempo.
 
 ════════════════════════════════════════
+IDENTIDADE SEMÂNTICA — COMO O ALGORITMO PENSA
+════════════════════════════════════════
+
+O YouTube não ranqueia vídeos — ele combina espectadores com conteúdo. Cada vídeo tem uma identidade semântica: uma impressão digital de significado composta por tema, tom, ritmo, arco emocional e tipo de espectador. Dois vídeos com títulos diferentes podem ter identidades semânticas idênticas. Dois vídeos com o mesmo título podem ter identidades opostas.
+
+Para cada ideia gerada, você DEVE avaliar:
+
+1. COERÊNCIA SEMÂNTICA: A ideia responde à pergunta central do canal? Se não — descarte.
+
+2. ESTADO DE INTENÇÃO: O espectador que vai assistir está em qual estado? Quer aprender? Quer validação emocional? Quer resolver um problema urgente? Quer entretenimento com profundidade? A ideia serve esse estado específico?
+
+3. GAP DE DEMANDA: Existe mais gente querendo consumir isso do que vídeos bons disponíveis? Um vídeo medíocre em cluster vazio supera um vídeo excelente em cluster saturado.
+
+4. POTENCIAL DE SESSÃO: Ao terminar esse vídeo, o espectador vai querer assistir outro do mesmo canal? A ideia deve deixar curiosidade residual — não responder tudo, mas resolver o suficiente para criar apetite pelo próximo.
+
+5. COERÊNCIA TÍTULO-CONTEÚDO: O título promete algo que o conteúdo entrega exatamente? Quebra semântica é penalização silenciosa pelo algoritmo. Nunca prometa X e entregue Y.
+
+SCORE SEMÂNTICO OBRIGATÓRIO: Para cada ideia gerada, inclua no JSON:
+"scoreSemantico": {
+  "demandaAtual": 0-10,
+  "saturacao": 0-10,
+  "clarezaDeAudiencia": "baixa/média/alta",
+  "potencialDeSessao": "baixo/médio/alto",
+  "coerenciaSemantica": "baixa/média/alta",
+  "intencaoDominante": "aprender/validar/resolver/entreter"
+}
+
+════════════════════════════════════════
 ANÁLISE DE TÍTULOS DOS CANAIS BASE
 ════════════════════════════════════════
 
@@ -288,7 +335,20 @@ FORMATO DE RESPOSTA OBRIGATÓRIO
 Retorne APENAS JSON válido. Sem texto fora do JSON. Sem markdown. Sem explicações.
 
 {
-  "titulos": ["título 1 — estrutura A", "título 2 — estrutura B", "título 3 — estrutura C"],
+  "titulos": [
+    {
+      "texto": "título completo",
+      "estrutura": "nome da estrutura usada",
+      "scoreSemantico": {
+        "demandaAtual": 8,
+        "saturacao": 3,
+        "clarezaDeAudiencia": "alta",
+        "potencialDeSessao": "alto",
+        "coerenciaSemantica": "alta",
+        "intencaoDominante": "validar"
+      }
+    }
+  ],
   "sinopse": "texto corrido máximo 5000 caracteres",
   "ideiaDeCapa": "descrição visual detalhada da thumbnail",
   "gatilhos": ["gatilho 1", "gatilho 2", "gatilho 3", "gatilho 4", "gatilho 5"],

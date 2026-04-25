@@ -213,15 +213,32 @@ async function calcularScoresIA(canais, inputOriginal, nicho = null) {
       const message = await client.messages.create({
         model: 'claude-opus-4-5',
         max_tokens: 400,
-        system: `Avalie canais do YouTube como tendências emergentes para modelagem no seguinte projeto: ${descricaoContexto}
+        system: `Avalie canais do YouTube como tendências emergentes para o projeto: ${descricaoContexto}
 
-CRITÉRIO PRINCIPAL: Este canal representa uma TENDÊNCIA NOVA no mercado? O conteúdo está crescendo rápido com poucos inscritos? Existe algo nesse canal que ainda não foi explorado no Brasil?
+Para cada canal, avalie:
 
-RECRIABILIDADE (0-100): O conteúdo pode ser adaptado para histórias voltadas ao público mais velho? Considere: tema adaptável, formato replicável, ângulo ainda não explorado no Brasil.
-OPORTUNIDADE (0-100): Esse canal representa uma tendência que ainda não chegou ou está chegando no Brasil? Quanto antes melhor.
+RECRIABILIDADE (0-100): O conteúdo pode ser adaptado para histórias voltadas ao público mais velho?
 
-Retorne APENAS JSON. Máximo 50 chars por campo.
-{"avaliacoes":[{"indice":0,"scoreRecriabilidade":75,"scoreOportunidade":80,"justificativaRecriabilidade":"texto","justificativaOportunidade":"texto","potencialModelagem":"texto"}]}`,
+OPORTUNIDADE (0-100): Existe demanda não atendida que esse canal está começando a servir?
+
+GAP DE DEMANDA (0-10): Quanto maior, mais gente quer esse conteúdo e menos canais bons existem servindo. Canais com crescimento rápido e poucos vídeos = gap alto. Canais grandes estagnados = gap baixo.
+
+CLUSTER SEMANTICO: Em poucas palavras, qual é a identidade semântica desse canal? Que pergunta ele responde? Para qual espectador em qual momento?
+
+INTENCAO DO PUBLICO: O espectador quer aprender, validar emocionalmente, resolver problema urgente ou se entreter com profundidade?
+
+Retorne APENAS JSON. Máximo 80 chars por campo de texto.
+{"avaliacoes":[{
+  "indice":0,
+  "scoreRecriabilidade":75,
+  "scoreOportunidade":80,
+  "scoreGapDemanda":7,
+  "clusterSemantico":"texto",
+  "intencaoPublico":"aprender/validar/resolver/entreter",
+  "justificativaRecriabilidade":"texto",
+  "justificativaOportunidade":"texto",
+  "potencialModelagem":"texto"
+}]}`,
         messages: [{ role: 'user', content: `Input: "${inputOriginal}"\n${listaLote}` }]
       });
 
@@ -250,6 +267,9 @@ Retorne APENAS JSON. Máximo 50 chars por campo.
         indice: i + j,
         scoreRecriabilidade: 50,
         scoreOportunidade: 50,
+        scoreGapDemanda: 5,
+        clusterSemantico: '',
+        intencaoPublico: '',
         justificativaRecriabilidade: 'Avaliação automática indisponível — verificar manualmente',
         justificativaOportunidade: 'Avaliação automática indisponível — verificar manualmente',
         potencialModelagem: 'Verificar manualmente'
@@ -330,7 +350,12 @@ async function minerarCanais(input, nicho = null) {
       videosEmAlta: item.videosEmAlta || [],
       scores: {
         recriabilidade: av.scoreRecriabilidade || 50,
-        oportunidade: av.scoreOportunidade || 50
+        oportunidade: av.scoreOportunidade || 50,
+        gapDemanda: av.scoreGapDemanda || 5
+      },
+      semantica: {
+        cluster: av.clusterSemantico || '',
+        intencao: av.intencaoPublico || ''
       },
       justificativas: {
         recriabilidade: av.justificativaRecriabilidade || '',
@@ -338,6 +363,13 @@ async function minerarCanais(input, nicho = null) {
         potencial: av.potencialModelagem || ''
       }
     };
+  });
+
+  // Ordena por gap de demanda primeiro, depois por recriabilidade
+  canaisQualificados.sort((a, b) => {
+    const scoreA = (a.scores.gapDemanda * 10) + a.scores.recriabilidade;
+    const scoreB = (b.scores.gapDemanda * 10) + b.scores.recriabilidade;
+    return scoreB - scoreA;
   });
 
   return {

@@ -129,6 +129,15 @@
       "anguloProibido": null
     }
   ],
+  "identidadeSemantica": {
+    "perguntaCentral": "",
+    "estadoDeIntencao": "",
+    "clusterSemantico": "",
+    "padraoDeSessao": "",
+    "scoreDeGapDemanda": 0,
+    "saturacaoDoCluster": "",
+    "momentoIdealDeConsumo": ""
+  },
   "ultimaRevisao": {
     "probabilidadeSucesso": {
       "percentual": 78,
