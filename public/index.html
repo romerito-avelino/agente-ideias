@@ -1509,6 +1509,131 @@
   color: var(--muted);
   line-height: 1.6;
 }
+.resultado-card-limpo {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+.card-header-limpo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg3);
+}
+.card-titulo-limpo {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--blue);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.titulo-opcao-limpa {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.15s;
+}
+.titulo-opcao-limpa:last-child { border-bottom: none; }
+.titulo-opcao-limpa:hover { background: var(--bg3); }
+.titulo-opcao-limpa.selecionada { background: var(--blue-glow); border-left: 3px solid var(--blue); }
+.titulo-num-limpo {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  color: var(--blue-dim);
+  min-width: 28px;
+  line-height: 1.2;
+  flex-shrink: 0;
+}
+.titulo-opcao-limpa.selecionada .titulo-num-limpo { color: var(--blue); }
+.titulo-corpo {
+  flex: 1;
+}
+.titulo-texto-limpo {
+  font-size: 14px;
+  color: var(--white);
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+.titulo-scores {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 6px;
+}
+.score-badge {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: var(--bg3);
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+.score-badge strong { color: var(--white); }
+.titulo-estrutura-badge {
+  font-size: 10px;
+  color: var(--blue-dim);
+  margin-bottom: 4px;
+  display: block;
+}
+.campo-manual-area {
+  padding: 12px 16px;
+  background: var(--bg3);
+  border-top: 1px solid var(--border);
+}
+.campo-manual-label {
+  font-size: 10px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  display: block;
+}
+.campo-manual-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.campo-manual-input {
+  flex: 1;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  outline: none;
+  padding: 10px 12px;
+  transition: border-color 0.2s;
+}
+.campo-manual-input:focus { border-color: var(--blue); }
+.thumb-titulo-opcao {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.thumb-titulo-opcao:last-child { border-bottom: none; }
+.thumb-titulo-opcao:hover { background: var(--bg3); }
+.thumb-titulo-opcao.selecionada { background: var(--blue-glow); border-left: 3px solid var(--blue); }
+.thumb-titulo-texto {
+  flex: 1;
+  font-size: 13px;
+  color: var(--white);
+  line-height: 1.4;
+  font-weight: 500;
+}
 </style>
 </head>
 <body>
@@ -1974,6 +2099,131 @@
           <input type="text" id="e_momento_consumo" placeholder="Ex: Noite, horário de descanso, quando quer refletir sobre a vida" />
         </div>
 
+        <div style="grid-column:1/-1;margin-top:8px">
+          <div style="font-size:11px;color:var(--blue);text-transform:uppercase;letter-spacing:1px;font-weight:500;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)">
+            🎨 Identidade Visual — Paleta de Cores
+          </div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.6">
+            Define as cores do canal. Usadas pelo Agente-Editor para manter consistência visual entre thumbnails e vídeos.
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label>Cor primária</label>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input type="color" id="e_cor_primaria" style="width:48px;height:40px;border:none;border-radius:8px;cursor:pointer;background:none;padding:0">
+            <input type="text" id="e_cor_primaria_hex" placeholder="#D4651A" maxlength="7"
+              style="flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);color:var(--white);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;padding:12px 14px"
+              oninput="sincronizarCor('e_cor_primaria', this.value)" />
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label>Cor secundária</label>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input type="color" id="e_cor_secundaria" style="width:48px;height:40px;border:none;border-radius:8px;cursor:pointer;background:none;padding:0">
+            <input type="text" id="e_cor_secundaria_hex" placeholder="#8B4513" maxlength="7"
+              style="flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);color:var(--white);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;padding:12px 14px"
+              oninput="sincronizarCor('e_cor_secundaria', this.value)" />
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label>Cor de destaque</label>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input type="color" id="e_cor_destaque" style="width:48px;height:40px;border:none;border-radius:8px;cursor:pointer;background:none;padding:0">
+            <input type="text" id="e_cor_destaque_hex" placeholder="#F5C842" maxlength="7"
+              style="flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);color:var(--white);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;padding:12px 14px"
+              oninput="sincronizarCor('e_cor_destaque', this.value)" />
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label>Cor do texto</label>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input type="color" id="e_cor_texto" style="width:48px;height:40px;border:none;border-radius:8px;cursor:pointer;background:none;padding:0">
+            <input type="text" id="e_cor_texto_hex" placeholder="#FFFFFF" maxlength="7"
+              style="flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);color:var(--white);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;padding:12px 14px"
+              oninput="sincronizarCor('e_cor_texto', this.value)" />
+          </div>
+        </div>
+
+        <div class="form-field full">
+          <label>Cor de fundo</label>
+          <input type="text" id="e_cor_fundo" placeholder="rgba(0,0,0,0.85)"
+            style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);color:var(--white);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;padding:12px 14px;width:100%" />
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">Aceita hex (#000000) ou rgba(0,0,0,0.85)</div>
+        </div>
+
+        <!-- Preview da paleta -->
+        <div class="form-field full">
+          <label>Preview da paleta</label>
+          <div id="previewPaleta" style="display:flex;gap:8px;height:40px;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border)">
+            <div id="prev_primaria" style="flex:1"></div>
+            <div id="prev_secundaria" style="flex:1"></div>
+            <div id="prev_destaque" style="flex:1"></div>
+            <div id="prev_texto" style="flex:1"></div>
+          </div>
+        </div>
+
+        <div style="grid-column:1/-1;margin-top:8px">
+          <div style="font-size:11px;color:var(--blue);text-transform:uppercase;letter-spacing:1px;font-weight:500;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)">
+            🎓 Edutainment do Canal
+          </div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.6">
+            Defina o perfil educativo do canal. O agente usa esses dados para calibrar a camada de valor em cada vídeo.
+          </div>
+        </div>
+
+        <div class="form-field full">
+          <label>Extrações que mais engajam (separadas por vírgulas)</label>
+          <input type="text" id="e_extracoes_engajam" placeholder="Ex: reflexao, pergunta-provocadora" />
+        </div>
+
+        <div class="form-field full">
+          <label>Dados e estatísticas do nicho (um por linha)</label>
+          <textarea id="e_dados_estatisticas" rows="4" placeholder="Ex: 73% dos brasileiros não têm reserva de emergência&#10;Após os 50, risco de inadimplência cai 40%"></textarea>
+        </div>
+
+        <div class="form-field full">
+          <label>Reflexões recorrentes que o público valida (uma por linha)</label>
+          <textarea id="e_reflexoes_recorrentes" rows="4" placeholder="Ex: dinheiro fácil não é respeitado&#10;emoção e finanças não combinam"></textarea>
+        </div>
+
+        <div style="grid-column:1/-1;margin-top:8px">
+          <div style="font-size:11px;color:var(--blue);text-transform:uppercase;letter-spacing:1px;font-weight:500;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)">
+            📺 Vídeos Publicados
+          </div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.6">
+            Registre cada vídeo publicado. O agente usa esses dados para evitar repetição de tema, estrutura e formato.
+          </div>
+        </div>
+
+        <div class="form-field full" id="videosPublicadosLista" style="grid-column:1/-1">
+          <!-- preenchido dinamicamente -->
+        </div>
+
+        <div style="grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+          <input type="text" id="vp_titulo" placeholder="Título do vídeo publicado"
+            style="flex:2;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);color:var(--white);font-family:'DM Sans',sans-serif;font-size:13px;padding:10px 14px;outline:none" />
+          <select id="vp_formato"
+            style="flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);color:var(--white);font-family:'DM Sans',sans-serif;font-size:13px;padding:10px 14px;outline:none">
+            <option value="">Formato</option>
+            <option value="causo-confessional">Causo Confessional</option>
+            <option value="reflexao-filosofica">Reflexão Filosófica</option>
+            <option value="historia-terceiro">História de Terceiro</option>
+            <option value="licao-pratica">Lição Prática</option>
+          </select>
+          <input type="text" id="vp_tema" placeholder="Tema central"
+            style="flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);color:var(--white);font-family:'DM Sans',sans-serif;font-size:13px;padding:10px 14px;outline:none" />
+          <input type="date" id="vp_data"
+            style="flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);color:var(--white);font-family:'DM Sans',sans-serif;font-size:13px;padding:10px 14px;outline:none" />
+          <button onclick="adicionarVideoPublicado()"
+            style="flex:0 0 auto;background:var(--blue-glow);border:1px solid var(--blue);border-radius:var(--radius);color:var(--blue);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;padding:10px 16px;transition:all 0.2s">
+            + Registrar
+          </button>
+        </div>
+
         <div class="form-field full">
           <label>Temas que funcionaram (um por linha)</label>
           <textarea id="e_temas_funcionaram" rows="3"></textarea>
@@ -2063,7 +2313,7 @@
 
       <!-- Temas -->
       <div class="input-group">
-        <label>Temas (pressione + para adicionar)</label>
+        <label>Temas (pressione + para adicionar) *</label>
         <div class="input-wrap">
           <input type="text" id="temaInput" placeholder="Ex: O dia que perdi tudo e recomeçei do zero..." />
           <button class="btn-add" onclick="adicionarTema()">+ Tema</button>
@@ -2073,7 +2323,7 @@
 
       <!-- Vídeos -->
       <div class="input-group">
-        <label>Vídeos de referência (URL do YouTube)</label>
+        <label>Vídeos de referência (URL do YouTube) *</label>
         <div class="input-wrap">
           <input type="text" id="videoInput" placeholder="https://youtube.com/watch?v=..." />
           <button class="btn-add" onclick="adicionarVideo()">+ Vídeo</button>
@@ -2131,10 +2381,19 @@
       <textarea id="sinopse" class="gap-editavel" rows="6"></textarea>
     </div>
 
-    <!-- THUMBNAIL -->
+    <!-- TÍTULO DA THUMBNAIL -->
+    <div class="resultado-card full" id="cardThumbTitulo" style="display:none">
+      <div class="card-header">
+        <div class="card-title"><span>🔤</span> Título da thumbnail</div>
+        <button class="btn-copy" onclick="regerarElemento('thumbTitulo')">↺ Gerar novamente</button>
+      </div>
+      <div id="thumbTitulos"></div>
+    </div>
+
+    <!-- CONCEITO DA THUMBNAIL -->
     <div class="resultado-card full">
       <div class="card-header">
-        <div class="card-title"><span>🖼️</span> Rascunho de Thumbnail</div>
+        <div class="card-title"><span>🖼️</span> Conceito visual da thumbnail</div>
         <button class="btn-copy" onclick="regerarElemento('thumbnail')">↺ Gerar novamente</button>
       </div>
       <textarea id="thumbnail" class="gap-editavel" rows="3"></textarea>
@@ -2246,58 +2505,53 @@
   let estruturaEscolhida = null;
 
   function renderTitulos(titulos) {
-    // Suporta tanto array de strings (formato antigo) quanto array de objetos (novo)
-    const normalizados = titulos.map(t => typeof t === 'string' ? { texto: t, estrutura: '', scoreSemantico: null } : t);
+    const normalizados = titulos.map(t =>
+      typeof t === 'string' ? { texto: t, estrutura: '', scoreSemantico: null } : t
+    );
     dadosGerados.titulos = normalizados.map(t => t.texto);
 
-    document.getElementById('titulos').innerHTML = normalizados.map((t, i) => {
+    const opcoesHtml = normalizados.map((t, i) => {
       const score = t.scoreSemantico;
       const scoreBadges = score ? `
-        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">
-          <span style="font-size:10px;padding:2px 8px;border-radius:10px;background:var(--bg2);color:var(--muted)">
-            📊 Demanda: <strong style="color:${score.demandaAtual >= 7 ? '#1D9E75' : score.demandaAtual >= 4 ? '#EF9F27' : '#E24B4A'}">${score.demandaAtual}/10</strong>
-          </span>
-          <span style="font-size:10px;padding:2px 8px;border-radius:10px;background:var(--bg2);color:var(--muted)">
-            🎯 Saturação: <strong style="color:${score.saturacao <= 3 ? '#1D9E75' : score.saturacao <= 6 ? '#EF9F27' : '#E24B4A'}">${score.saturacao}/10</strong>
-          </span>
-          <span style="font-size:10px;padding:2px 8px;border-radius:10px;background:var(--bg2);color:var(--muted)">
-            👥 Audiência: <strong>${score.clarezaDeAudiencia}</strong>
-          </span>
-          <span style="font-size:10px;padding:2px 8px;border-radius:10px;background:var(--bg2);color:var(--muted)">
-            🔁 Sessão: <strong>${score.potencialDeSessao}</strong>
-          </span>
-          <span style="font-size:10px;padding:2px 8px;border-radius:10px;background:var(--bg2);color:var(--muted)">
-            🧠 Intenção: <strong>${score.intencaoDominante}</strong>
-          </span>
-        </div>
-      ` : '';
-
-      const estruturaBadge = t.estrutura ? `<span style="font-size:10px;color:var(--blue-dim);margin-top:4px;display:block">${t.estrutura}</span>` : '';
-
+        <div class="titulo-scores">
+          <span class="score-badge">📊 Demanda: <strong style="color:${score.demandaAtual >= 7 ? '#1D9E75' : score.demandaAtual >= 4 ? '#EF9F27' : '#E24B4A'}">${score.demandaAtual}/10</strong></span>
+          <span class="score-badge">🎯 Saturação: <strong style="color:${score.saturacao <= 3 ? '#1D9E75' : score.saturacao <= 6 ? '#EF9F27' : '#E24B4A'}">${score.saturacao}/10</strong></span>
+          <span class="score-badge">👥 <strong>${score.clarezaDeAudiencia}</strong></span>
+          <span class="score-badge">🔁 Sessão: <strong>${score.potencialDeSessao}</strong></span>
+          <span class="score-badge">🧠 <strong>${score.intencaoDominante}</strong></span>
+        </div>` : '';
+      const estruturaBadge = t.estrutura ? `<span class="titulo-estrutura-badge">${t.estrutura}</span>` : '';
       return `
-        <div class="titulo-opcao" id="tit-${i}">
-          <div class="titulo-opcao-num">${i + 1}</div>
-          <div class="titulo-opcao-texto" style="flex:1">
-            ${t.texto}
+        <div class="titulo-opcao-limpa" id="tit-${i}" onclick="usarTitulo(${i})">
+          <div class="titulo-num-limpo">${i + 1}</div>
+          <div class="titulo-corpo">
             ${estruturaBadge}
+            <div class="titulo-texto-limpo">${t.texto}</div>
             ${scoreBadges}
           </div>
-          <button class="btn-usar" id="btntit-${i}" onclick="usarTitulo(${i})" style="align-self:flex-start">Usar este</button>
+          <button class="btn-usar" id="btntit-${i}" onclick="event.stopPropagation();usarTitulo(${i})" style="align-self:flex-start;flex-shrink:0">Usar</button>
+        </div>`;
+    }).join('');
+
+    document.getElementById('titulos').innerHTML = `
+      <div class="resultado-card-limpo">
+        <div class="card-header-limpo">
+          <div class="card-titulo-limpo"><span>🎯</span> Opções geradas pelo agente</div>
+          <button class="btn-copy" onclick="regerarElemento('titulos')">↺ Gerar novamente</button>
         </div>
-      `;
-    }).join('') + `
-      <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
-        <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Ou escreva seu próprio título</div>
-        <div style="display:flex;gap:8px;align-items:center">
-          <input type="text" id="tituloManual" placeholder="Digite seu título aqui — deixe em branco para usar uma das opções acima..."
-            style="flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);color:var(--white);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;padding:12px 14px;transition:border-color 0.2s"
-            oninput="usarTituloManual(this.value)"
-            onfocus="this.style.borderColor='var(--blue)'"
-            onblur="this.style.borderColor='var(--border)'" />
-          <button class="btn-usar" id="btntitManual" style="opacity:0.4;pointer-events:none;align-self:stretch">Usar este</button>
+        ${opcoesHtml}
+        <div class="campo-manual-area">
+          <span class="campo-manual-label">✏️ Ou escreva seu próprio título</span>
+          <div class="campo-manual-row">
+            <input type="text" id="tituloManual" class="campo-manual-input"
+              placeholder="Digite seu título aqui — deixe em branco para usar uma das opções acima..."
+              oninput="usarTituloManual(this.value)"
+              onfocus="this.style.borderColor='var(--blue)'"
+              onblur="this.style.borderColor='var(--border)'" />
+            <button class="btn-usar" id="btntitManual" style="opacity:0.4;pointer-events:none;flex-shrink:0">Usar</button>
+          </div>
         </div>
-      </div>
-    `;
+      </div>`;
   }
 
   function renderGatilhos(gatilhos) {
@@ -2354,9 +2608,12 @@
   }
 
   function usarTitulo(idx) {
+    document.querySelectorAll('.titulo-opcao-limpa').forEach(el => el.classList.remove('selecionada'));
     document.querySelectorAll('[id^="btntit-"]').forEach(b => b.classList.remove('ativo'));
     const btnManual = document.getElementById('btntitManual');
     if (btnManual) btnManual.classList.remove('ativo');
+    const linha = document.getElementById(`tit-${idx}`);
+    if (linha) linha.classList.add('selecionada');
     document.getElementById(`btntit-${idx}`).classList.add('ativo');
     tituloEscolhido = dadosGerados.titulos?.[idx];
     verificarPacote();
@@ -2394,6 +2651,24 @@
         <div class="revisao-preview-label">Título escolhido</div>
         <div class="revisao-preview-texto">${tituloEscolhido}</div>
       </div>
+      <div class="revisao-preview-bloco">
+        <div class="revisao-preview-label">Título da thumbnail</div>
+        <div class="revisao-preview-texto">${thumbTituloEscolhido || '(nenhum selecionado)'}</div>
+      </div>
+      ${thumbnailTitleEscolhido ? `
+      <div class="revisao-preview-bloco">
+        <div class="revisao-preview-label">Título Thumbnail</div>
+        <div class="revisao-preview-texto" style="font-weight:600;letter-spacing:1px;
+          text-transform:uppercase;color:var(--blue)">${thumbnailTitleEscolhido}</div>
+      </div>
+      ` : `
+      <div class="revisao-preview-bloco">
+        <div class="revisao-preview-label">Título Thumbnail</div>
+        <div class="revisao-preview-texto" style="color:var(--muted)">
+          Não definido — o título principal carregará o peso sozinho (Modo Solo)
+        </div>
+      </div>
+      `}
       <div class="revisao-preview-bloco">
         <div class="revisao-preview-label">Sinopse</div>
         <div class="revisao-preview-texto">${document.getElementById('sinopse').value}</div>
@@ -2446,6 +2721,8 @@
         avatar: nicho.avatar,
         estrategia: nicho.estrategia || {},
         tituloEscolhido,
+        thumbnailTitle: thumbnailTitleEscolhido || null,
+        thumbTituloEscolhido: thumbTituloEscolhido || '',
         estruturaEscolhida,
         sinopse: document.getElementById('sinopse').value,
         ideiaDeCapa: document.getElementById('thumbnail').value,
@@ -2664,9 +2941,15 @@
       return;
     }
     tituloEscolhido = null;
+    thumbnailTitleEscolhido = null;
     estruturaEscolhida = null;
-    if (temas.length === 0 && videos.length === 0) {
-      mostrarErro('Adicione pelo menos um tema ou vídeo de referência.');
+    if (temas.length === 0) {
+      mostrarErro('Campo obrigatório: adicione pelo menos um tema antes de gerar ideias.');
+      return;
+    }
+
+    if (videos.length === 0) {
+      mostrarErro('Campo obrigatório: adicione pelo menos um vídeo de referência antes de gerar ideias. O agente precisa analisar um canal concorrente para gerar títulos e ideias calibrados.');
       return;
     }
 
@@ -2715,6 +2998,10 @@
     renderTitulos(data.titulos || []);
     const campoManual = document.getElementById('tituloManual');
     if (campoManual) campoManual.value = '';
+    renderThumbTitulos(data.thumbTitulos || []);
+    const campoThumbManual = document.getElementById('thumbTituloManual');
+    if (campoThumbManual) campoThumbManual.value = '';
+    thumbTituloEscolhido = null;
     document.getElementById('sinopse').value = data.sinopse || '';
     document.getElementById('thumbnail').value = data.ideiaDeCapa || '';
     renderGatilhos(data.gatilhos || []);
@@ -2722,6 +3009,7 @@
     renderEstruturas(data.estruturaRoteiro || []);
 
     tituloEscolhido = null;
+    thumbnailTitleEscolhido = null;
     estruturaEscolhida = null;
     document.getElementById('barraPacote').style.display = 'none';
     document.getElementById('resultado').style.display = 'block';
@@ -3525,6 +3813,27 @@
     }
   }
 
+  function sincronizarCor(inputColorId, hexValue) {
+    if (/^#[0-9A-Fa-f]{6}$/.test(hexValue)) {
+      const colorInput = document.getElementById(inputColorId);
+      if (colorInput) colorInput.value = hexValue;
+    }
+    atualizarPreviewPaleta();
+  }
+
+  function atualizarPreviewPaleta() {
+    const cores = {
+      primaria: document.getElementById('e_cor_primaria_hex')?.value || '#D4651A',
+      secundaria: document.getElementById('e_cor_secundaria_hex')?.value || '#8B4513',
+      destaque: document.getElementById('e_cor_destaque_hex')?.value || '#F5C842',
+      texto: document.getElementById('e_cor_texto_hex')?.value || '#FFFFFF'
+    };
+    Object.entries(cores).forEach(([nome, cor]) => {
+      const el = document.getElementById(`prev_${nome}`);
+      if (el && /^#[0-9A-Fa-f]{6}$/.test(cor)) el.style.background = cor;
+    });
+  }
+
   async function abrirModalEditar() {
     const nichoId = nichoAtivo;
     try {
@@ -3557,6 +3866,34 @@
       document.getElementById('e_padrao_sessao').value = nicho.identidadeSemantica?.padraoDeSessao || '';
       document.getElementById('e_saturacao_cluster').value = nicho.identidadeSemantica?.saturacaoDoCluster || '';
       document.getElementById('e_momento_consumo').value = nicho.identidadeSemantica?.momentoIdealDeConsumo || '';
+      // Paleta de cores
+      const paleta = nicho.paleta || {};
+      document.getElementById('e_cor_primaria').value = paleta.primaria || '#D4651A';
+      document.getElementById('e_cor_primaria_hex').value = paleta.primaria || '';
+      document.getElementById('e_cor_secundaria').value = paleta.secundaria || '#8B4513';
+      document.getElementById('e_cor_secundaria_hex').value = paleta.secundaria || '';
+      document.getElementById('e_cor_destaque').value = paleta.destaque || '#F5C842';
+      document.getElementById('e_cor_destaque_hex').value = paleta.destaque || '';
+      document.getElementById('e_cor_texto').value = paleta.texto || '#FFFFFF';
+      document.getElementById('e_cor_texto_hex').value = paleta.texto || '';
+      document.getElementById('e_cor_fundo').value = paleta.fundo || 'rgba(0,0,0,0.85)';
+      atualizarPreviewPaleta();
+      // Sincroniza input color com input text ao mudar pelo seletor visual
+      ['primaria','secundaria','destaque','texto'].forEach(nome => {
+        const colorInput = document.getElementById(`e_cor_${nome}`);
+        const hexInput = document.getElementById(`e_cor_${nome}_hex`);
+        if (colorInput && hexInput) {
+          colorInput.addEventListener('input', () => {
+            hexInput.value = colorInput.value;
+            atualizarPreviewPaleta();
+          });
+        }
+      });
+      document.getElementById('e_extracoes_engajam').value = (nicho.edutainment?.extracoesQueEngajam || []).join(', ');
+      document.getElementById('e_dados_estatisticas').value = (nicho.edutainment?.dadosEstatisticasDoNicho || []).join('\n');
+      document.getElementById('e_reflexoes_recorrentes').value = (nicho.edutainment?.reflexoesRecorrentes || []).join('\n');
+      videosPublicadosTemp = JSON.parse(JSON.stringify(nicho.videosPublicados || []));
+      renderVideosPublicados();
       document.getElementById('erroEdicao').classList.remove('visivel');
       document.getElementById('sucessoEdicao').style.display = 'none';
       renderCompletude('completude-modal', nicho);
@@ -3812,7 +4149,20 @@
         saturacaoDoCluster: document.getElementById('e_saturacao_cluster').value,
         momentoIdealDeConsumo: document.getElementById('e_momento_consumo').value.trim(),
         scoreDeGapDemanda: nichoAtual?.identidadeSemantica?.scoreDeGapDemanda || 0
-      }
+      },
+      edutainment: {
+        extracoesQueEngajam: document.getElementById('e_extracoes_engajam').value.split(',').map(t => t.trim()).filter(Boolean),
+        dadosEstatisticasDoNicho: document.getElementById('e_dados_estatisticas').value.split('\n').map(t => t.trim()).filter(Boolean),
+        reflexoesRecorrentes: document.getElementById('e_reflexoes_recorrentes').value.split('\n').map(t => t.trim()).filter(Boolean)
+      },
+      videosPublicados: videosPublicadosTemp,
+      paleta: {
+        primaria: document.getElementById('e_cor_primaria_hex').value.trim() || '#D4651A',
+        secundaria: document.getElementById('e_cor_secundaria_hex').value.trim() || '#8B4513',
+        destaque: document.getElementById('e_cor_destaque_hex').value.trim() || '#F5C842',
+        texto: document.getElementById('e_cor_texto_hex').value.trim() || '#FFFFFF',
+        fundo: document.getElementById('e_cor_fundo').value.trim() || 'rgba(0,0,0,0.85)'
+      },
     };
     try {
       const res = await fetch(`/api/nicho/${nichoId}`, {
@@ -3902,6 +4252,150 @@
       alert('Nicho deletado com sucesso.');
     } catch (err) {
       alert('Erro ao deletar: ' + err.message);
+    }
+  }
+
+  let videosPublicadosTemp = [];
+
+  function renderVideosPublicados() {
+    const container = document.getElementById('videosPublicadosLista');
+    if (!container) return;
+    if (!videosPublicadosTemp.length) {
+      container.innerHTML = '<div style="font-size:12px;color:var(--muted);padding:8px 0">Nenhum vídeo registrado ainda.</div>';
+      return;
+    }
+    container.innerHTML = videosPublicadosTemp.slice().reverse().map((v, i) => {
+      const idx = videosPublicadosTemp.length - 1 - i;
+      const formatoLabel = {
+        'causo-confessional': 'Causo Confessional',
+        'reflexao-filosofica': 'Reflexão Filosófica',
+        'historia-terceiro': 'História de Terceiro',
+        'licao-pratica': 'Lição Prática'
+      }[v.formato] || v.formato || '—';
+      return `<div style="display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px">
+        <div style="flex:1;color:var(--white)">${v.titulo}</div>
+        <div style="color:var(--blue);white-space:nowrap">${formatoLabel}</div>
+        <div style="color:var(--muted);white-space:nowrap">${v.tema || '—'}</div>
+        <div style="color:var(--muted);white-space:nowrap">${v.dataPublicacao || v.dataExportacao?.slice(0,10) || '—'}</div>
+        <button onclick="removerVideoPublicado(${idx})" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;padding:0;line-height:1">×</button>
+      </div>`;
+    }).join('');
+  }
+
+  function adicionarVideoPublicado() {
+    const titulo = document.getElementById('vp_titulo').value.trim();
+    const formato = document.getElementById('vp_formato').value;
+    const tema = document.getElementById('vp_tema').value.trim();
+    const data = document.getElementById('vp_data').value;
+    if (!titulo) { alert('Preencha o título do vídeo.'); return; }
+    videosPublicadosTemp.push({
+      id: Date.now().toString(),
+      titulo,
+      formato,
+      tema,
+      estrutura: formato,
+      dataPublicacao: data || null,
+      dataExportacao: new Date().toISOString()
+    });
+    document.getElementById('vp_titulo').value = '';
+    document.getElementById('vp_formato').value = '';
+    document.getElementById('vp_tema').value = '';
+    document.getElementById('vp_data').value = '';
+    renderVideosPublicados();
+  }
+
+  function removerVideoPublicado(idx) {
+    videosPublicadosTemp.splice(idx, 1);
+    renderVideosPublicados();
+  }
+
+  let thumbnailTitleEscolhido = null;
+
+  function usarThumbnailTitle(tituloIdx, sugestaoIdx, valor) {
+    document.querySelectorAll(`[id^="thumb-${tituloIdx}-"]`).forEach(b => {
+      b.style.background = 'var(--bg3)';
+      b.style.borderColor = 'var(--border)';
+      b.style.color = 'var(--white)';
+    });
+    const btn = document.getElementById(`thumb-${tituloIdx}-${sugestaoIdx}`);
+    if (btn) {
+      btn.style.background = 'var(--blue-glow)';
+      btn.style.borderColor = 'var(--blue)';
+      btn.style.color = 'var(--blue)';
+    }
+    const input = document.getElementById(`thumbInput-${tituloIdx}`);
+    if (input) input.value = '';
+    thumbnailTitleEscolhido = valor;
+  }
+
+  function usarThumbnailTitleManual(tituloIdx, valor) {
+    document.querySelectorAll(`[id^="thumb-${tituloIdx}-"]`).forEach(b => {
+      b.style.background = 'var(--bg3)';
+      b.style.borderColor = 'var(--border)';
+      b.style.color = 'var(--white)';
+    });
+    thumbnailTitleEscolhido = valor.trim().toUpperCase() || null;
+  }
+
+  let thumbTituloEscolhido = null;
+
+  function renderThumbTitulos(titulos) {
+    if (!titulos || titulos.length === 0) return;
+    document.getElementById('cardThumbTitulo').style.display = 'block';
+
+    const opcoesHtml = titulos.map((t, i) => `
+      <div class="thumb-titulo-opcao" id="thtit-${i}" onclick="usarThumbTitulo(${i})">
+        <div class="titulo-num-limpo" style="font-size:16px">${i + 1}</div>
+        <div class="thumb-titulo-texto">${t}</div>
+        <button class="btn-usar" id="btnth-${i}" onclick="event.stopPropagation();usarThumbTitulo(${i})" style="flex-shrink:0">Usar</button>
+      </div>
+    `).join('');
+
+    document.getElementById('thumbTitulos').innerHTML = `
+      <div class="resultado-card-limpo">
+        ${opcoesHtml}
+        <div class="campo-manual-area">
+          <span class="campo-manual-label">✏️ Ou escreva seu próprio título da thumbnail</span>
+          <div class="campo-manual-row">
+            <input type="text" id="thumbTituloManual" class="campo-manual-input"
+              placeholder="Ex: EU PERDI TUDO AOS 47"
+              oninput="usarThumbTituloManual(this.value)"
+              onfocus="this.style.borderColor='var(--blue)'"
+              onblur="this.style.borderColor='var(--border)'" />
+            <button class="btn-usar" id="btnthManual" style="opacity:0.4;pointer-events:none;flex-shrink:0">Usar</button>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  function usarThumbTitulo(idx) {
+    document.querySelectorAll('.thumb-titulo-opcao').forEach(el => el.classList.remove('selecionada'));
+    document.querySelectorAll('[id^="btnth-"]').forEach(b => b.classList.remove('ativo'));
+    const btnManual = document.getElementById('btnthManual');
+    if (btnManual) btnManual.classList.remove('ativo');
+    document.getElementById(`thtit-${idx}`).classList.add('selecionada');
+    document.getElementById(`btnth-${idx}`).classList.add('ativo');
+    thumbTituloEscolhido = dadosGerados.thumbTitulos?.[idx];
+  }
+
+  function usarThumbTituloManual(valor) {
+    const btn = document.getElementById('btnthManual');
+    if (valor.trim()) {
+      btn.style.opacity = '1';
+      btn.style.pointerEvents = 'auto';
+      btn.onclick = () => {
+        document.querySelectorAll('[id^="btnth-"]').forEach(b => b.classList.remove('ativo'));
+        document.querySelectorAll('.thumb-titulo-opcao').forEach(el => el.classList.remove('selecionada'));
+        btn.classList.add('ativo');
+        thumbTituloEscolhido = valor.trim();
+      };
+    } else {
+      btn.style.opacity = '0.4';
+      btn.style.pointerEvents = 'none';
+      btn.classList.remove('ativo');
+      if (!dadosGerados.thumbTitulos?.includes(thumbTituloEscolhido)) {
+        thumbTituloEscolhido = null;
+      }
     }
   }
 </script>

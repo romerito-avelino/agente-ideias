@@ -212,6 +212,17 @@ async function gerarPacoteRoteirista(pacote) {
       children: [new TextRun({ text: tituloEscolhido || '—', bold: true, size: 28, font: 'Arial', color: '1E40AF' })],
       spacing: { before: 80, after: 120 }
     }),
+    criarLabel('Título da thumbnail'),
+    new Paragraph({
+      children: [new TextRun({
+        text: pacote.thumbTituloEscolhido || 'Não definido',
+        bold: true,
+        size: 24,
+        font: 'Arial',
+        color: pacote.thumbTituloEscolhido ? 'D97706' : '9CA3AF'
+      })],
+      spacing: { before: 60, after: 120 }
+    }),
     criarLabel('Sinopse'),
     criarTexto(sinopse),
     criarLabel('Ideia de thumbnail'),
@@ -348,6 +359,16 @@ async function gerarPacoteRoteirista(pacote) {
     ] : [
       criarComentario('Identidade semântica não definida — preencher no banco de dados do canal para maximizar a precisão do algoritmo.')
     ]),
+
+    ...(nicho?.paleta?.primaria ? [
+      criarLabel('Identidade Visual — Paleta de Cores'),
+      criarComentario('Use estas cores como referência para thumbnails, textos sobrepostos e elementos visuais. Manter consistência visual ajuda o algoritmo a associar o conteúdo ao canal.'),
+      criarTexto(`Cor primária: ${nicho.paleta.primaria}`),
+      criarTexto(`Cor secundária: ${nicho.paleta.secundaria}`),
+      criarTexto(`Cor de destaque: ${nicho.paleta.destaque}`),
+      criarTexto(`Cor do texto: ${nicho.paleta.texto}`),
+      criarTexto(`Cor de fundo: ${nicho.paleta.fundo}`),
+    ] : []),
 
     criarSeparador(),
 

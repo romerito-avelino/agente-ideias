@@ -13,6 +13,32 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const NICHOS_DIR = path.join(__dirname, 'data/nichos');
 
+// ── Mente Colmeia: sync automático com cerebro/config.json ──
+const CEREBRO_CONFIG = path.join(__dirname, '..', '..', 'cerebro', 'config.json');
+
+function syncCerebroConfig() {
+  try {
+    if (!fs.existsSync(CEREBRO_CONFIG)) return;
+    const config = JSON.parse(fs.readFileSync(CEREBRO_CONFIG, 'utf-8'));
+    const arquivos = fs.readdirSync(NICHOS_DIR).filter(f => f.endsWith('.json'));
+    config.canais_ativos = arquivos.map(arquivo => {
+      const id = arquivo.replace('.json', '');
+      const dados = JSON.parse(fs.readFileSync(path.join(NICHOS_DIR, arquivo), 'utf-8'));
+      return {
+        id,
+        nome: dados.canal || id,
+        nicho: dados.nicho || '',
+        json_path: path.join(NICHOS_DIR, arquivo)
+      };
+    });
+    fs.writeFileSync(CEREBRO_CONFIG, JSON.stringify(config, null, 2), 'utf-8');
+    console.log(`[cerebro] config.json sincronizado — ${config.canais_ativos.length} canal(is) ativo(s)`);
+  } catch (err) {
+    console.warn('[cerebro] Falha ao sincronizar config.json:', err.message);
+  }
+}
+// ── fim sync ──
+
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
@@ -115,11 +141,17 @@ app.post('/api/criar-canal', (req, res) => {
       saturacaoDoCluster: '',
       momentoIdealDeConsumo: ''
     },
+    edutainment: {
+      extracoesQueEngajam: [],
+      dadosEstatisticasDoNicho: [],
+      reflexoesRecorrentes: []
+    },
     historicoGeracoes: []
   };
   try {
     fs.writeFileSync(nichoPath, JSON.stringify(novoNicho, null, 2), 'utf-8');
     console.log(`[server] Canal criado: ${canal} (${id})`);
+    syncCerebroConfig();
     res.json({ sucesso: true, id, canal });
   } catch (err) {
     res.status(500).json({ error: 'Falha ao salvar o canal.' });
@@ -195,6 +227,19 @@ app.post('/api/gerar-ideias', async (req, res) => {
   }
 });
 
+app.get('/api/nicho/:nichoId/videos-publicados', (req, res) => {
+  const { nichoId } = req.params;
+  const nichoPath = path.join(NICHOS_DIR, `${nichoId}.json`);
+  if (!fs.existsSync(nichoPath)) return res.status(404).json({ error: 'Nicho não encontrado.' });
+  try {
+    const nicho = JSON.parse(fs.readFileSync(nichoPath, 'utf-8'));
+    const videos = (nicho.videosPublicados || []).slice().reverse();
+    res.json(videos);
+  } catch (err) {
+    res.status(500).json({ error: 'Falha ao carregar vídeos publicados.' });
+  }
+});
+
 app.get('/api/nicho/:nichoId', (req, res) => {
   const { nichoId } = req.params;
   const nichoPath = path.join(NICHOS_DIR, `${nichoId}.json`);
@@ -217,10 +262,16 @@ app.put('/api/nicho/:nichoId', (req, res) => {
       ...nichoAtual,
       ...req.body,
       historicoGeracoes: nichoAtual.historicoGeracoes || [],
+      videosPublicados: nichoAtual.videosPublicados || [],
       estrategia: nichoAtual.estrategia || req.body.estrategia || {},
-      estruturasDeTitulos: nichoAtual.estruturasDeTitulos || req.body.estruturasDeTitulos || {}
+      estruturasDeTitulos: nichoAtual.estruturasDeTitulos || req.body.estruturasDeTitulos || {},
+      edutainment: {
+        ...(nichoAtual.edutainment || {}),
+        ...(req.body.edutainment || {})
+      }
     };
     fs.writeFileSync(nichoPath, JSON.stringify(atualizado, null, 2), 'utf-8');
+    syncCerebroConfig();
     res.json({ sucesso: true });
   } catch (err) {
     res.status(500).json({ error: 'Falha ao salvar alterações.' });
@@ -300,6 +351,11 @@ app.put('/api/nicho/:nichoId/estrategia', (req, res) => {
       historicoGeracoes: nichoAtual.historicoGeracoes || [],
       ultimaRevisao: nichoAtual.ultimaRevisao || null,
 
+      paleta: novos.paleta || nichoAtual.paleta || {
+        primaria: '', secundaria: '', destaque: '',
+        texto: '#FFFFFF', fundo: 'rgba(0,0,0,0.85)'
+      },
+
       // Estratégia — só atualiza se veio uma nova análise
       estrategia: novos.estrategia?.dataAnalise
         ? novos.estrategia
@@ -308,6 +364,7 @@ app.put('/api/nicho/:nichoId/estrategia', (req, res) => {
 
     fs.writeFileSync(nichoPath, JSON.stringify(atualizado, null, 2), 'utf-8');
     console.log(`[server] Canal atualizado com merge seguro: ${atualizado.canal}`);
+    syncCerebroConfig();
     res.json({ sucesso: true });
   } catch (err) {
     res.status(500).json({ error: 'Falha ao atualizar canal.' });
@@ -320,6 +377,7 @@ app.delete('/api/nicho/:nichoId', (req, res) => {
   if (!fs.existsSync(nichoPath)) return res.status(404).json({ error: 'Nicho não encontrado.' });
   try {
     fs.unlinkSync(nichoPath);
+    syncCerebroConfig();
     res.json({ sucesso: true });
   } catch (err) {
     res.status(500).json({ error: 'Falha ao deletar nicho.' });
@@ -414,6 +472,32 @@ app.post('/api/gerar-pacote', async (req, res) => {
     pacote.videosReferencia = videosReferencia;
     const { nomeArquivo } = await gerarPacoteRoteirista(pacote);
 
+    // Registra o vídeo exportado no banco do canal
+    try {
+      const nichoId = pacote.nichoId || (typeof pacote.nicho === 'string' ? pacote.nicho : pacote.nicho?.canal);
+      if (nichoId) {
+        const nichoPath = path.join(NICHOS_DIR, `${nichoId}.json`);
+        if (fs.existsSync(nichoPath)) {
+          const nicho = JSON.parse(fs.readFileSync(nichoPath, 'utf-8'));
+          const registro = {
+            id: Date.now().toString(),
+            titulo: pacote.tituloEscolhido,
+            estrutura: (pacote.estruturaEscolhida || '').slice(0, 80),
+            sinopse: (pacote.sinopse || '').slice(0, 120),
+            gatilhos: pacote.gatilhos || [],
+            dataExportacao: new Date().toISOString(),
+            dataPublicacao: null
+          };
+          nicho.videosPublicados = nicho.videosPublicados || [];
+          nicho.videosPublicados.push(registro);
+          fs.writeFileSync(nichoPath, JSON.stringify(nicho, null, 2), 'utf-8');
+          console.log(`[pacote] Vídeo registrado em videosPublicados: "${pacote.tituloEscolhido}"`);
+        }
+      }
+    } catch (err) {
+      console.warn('[pacote] Falha ao registrar vídeo em videosPublicados:', err.message);
+    }
+
     // Limpa pacotes antigos — mantém apenas os 20 mais recentes
     try {
       const pacotesDir = path.join(__dirname, '..', 'pacotes');
@@ -437,4 +521,5 @@ app.use('/pacotes', express.static(path.join(__dirname, '..', 'pacotes')));
 
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
+  syncCerebroConfig();
 });

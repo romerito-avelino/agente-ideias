@@ -97,6 +97,7 @@
     "Eu vou fazer"
   ],
   "estruturasDeTitulos": {
+    "funcionais": [],
     "instrucao": "Use essas estruturas como moldes.",
     "confissaoVulnerabilidade": [],
     "consequenciaVirada": [],
@@ -127,6 +128,135 @@
         "Por que homem de 50 anos trabalha até morrer enquanto outros descansam aos 55"
       ],
       "anguloProibido": null
+    },
+    {
+      "data": "2026-05-13T19:33:42.422Z",
+      "temas": [
+        "Hábitos conscientes para economizar os primeiros R$ 100.000,00"
+      ],
+      "titulosGerados": [
+        {
+          "texto": "Eu tinha 47 anos quando entendi que economizar R$ 100 mil não é sobre ganhar mais — é sobre parar de sangrar",
+          "thumbnailTitle": {
+            "sugestoes": [
+              "EU SANGRAVA",
+              "NÃO ERA O SALÁRIO",
+              "DESCOBRI TARDE"
+            ],
+            "modo": "dupla",
+            "justificativa": "O thumbnail cria tensão com a metáfora de 'sangrar' dinheiro, e o título completa revelando que o problema nunca foi o quanto se ganha"
+          },
+          "estrutura": "Confissão Temporal",
+          "scoreSemantico": {
+            "demandaAtual": 8,
+            "saturacao": 4,
+            "clarezaDeAudiencia": "alta",
+            "potencialDeSessao": "alto",
+            "coerenciaSemantica": "alta",
+            "intencaoDominante": "validar"
+          },
+          "extracaoDeValor": {
+            "tipo": "reflexao",
+            "conteudo": "A maioria das pessoas culpa o salário baixo pela falta de patrimônio, mas o verdadeiro problema são os vazamentos invisíveis — pequenos gastos repetidos que, somados, consomem fortunas ao longo dos anos"
+          }
+        },
+        {
+          "texto": "Por que homem de 50 anos tem vergonha de anotar gasto de R$ 3 — e isso custa R$ 100 mil em 10 anos",
+          "thumbnailTitle": {
+            "sugestoes": [
+              "R$ 3 REAIS",
+              "VERGONHA DE QUÊ?",
+              "EU TAMBÉM TINHA"
+            ],
+            "modo": "dupla",
+            "justificativa": "O thumbnail destaca o valor aparentemente insignificante que choca, enquanto o título revela a consequência brutal dessa vergonha"
+          },
+          "estrutura": "Endereçamento Direto",
+          "scoreSemantico": {
+            "demandaAtual": 7,
+            "saturacao": 3,
+            "clarezaDeAudiencia": "alta",
+            "potencialDeSessao": "médio",
+            "coerenciaSemantica": "alta",
+            "intencaoDominante": "aprender"
+          },
+          "extracaoDeValor": {
+            "tipo": "dado",
+            "conteudo": "R$ 10 por dia em gastos 'pequenos demais pra anotar' viram R$ 3.650 por ano — em 10 anos com correção, passa de R$ 50 mil perdidos. Quem anota, vê. Quem vê, para. Quem para, acumula"
+          }
+        },
+        {
+          "texto": "O caderninho de R$ 5 que me ensinou mais sobre dinheiro do que 40 anos de trabalho",
+          "thumbnailTitle": {
+            "sugestoes": [
+              "R$ 5 REAIS",
+              "SÓ ISSO?",
+              "MEU PROFESSOR"
+            ],
+            "modo": "dupla",
+            "justificativa": "O thumbnail provoca curiosidade com o valor baixo, o título entrega que a ferramenta mais simples superou décadas de experiência"
+          },
+          "estrutura": "Virada Narrativa",
+          "scoreSemantico": {
+            "demandaAtual": 8,
+            "saturacao": 2,
+            "clarezaDeAudiencia": "alta",
+            "potencialDeSessao": "alto",
+            "coerenciaSemantica": "alta",
+            "intencaoDominante": "aprender"
+          },
+          "extracaoDeValor": {
+            "tipo": "ensinamento",
+            "conteudo": "Registrar cada gasto num caderno físico — vendo o dinheiro sair da mão e anotando na hora — cria uma dor consciente que cartão e app não causam. É essa dor que muda comportamento"
+          }
+        }
+      ],
+      "anguloProibido": "Jogos de Azar"
+    },
+    {
+      "data": "2026-05-13T20:18:53.975Z",
+      "temas": [
+        "10 hábitos reais para economizar os primeiros R$ 100.000,00"
+      ],
+      "titulosGerados": [
+        {
+          "texto": "Eu tinha 47 anos quando entendi que economizar R$ 100 mil não é sobre ganhar mais — é sobre parar de sangrar",
+          "estrutura": "Confissão Temporal",
+          "scoreSemantico": {
+            "demandaAtual": 8,
+            "saturacao": 3,
+            "clarezaDeAudiencia": "alta",
+            "potencialDeSessao": "alto",
+            "coerenciaSemantica": "alta",
+            "intencaoDominante": "validar"
+          }
+        },
+        {
+          "texto": "Por que homem de 50 anos tem vergonha de anotar gasto de R$ 3 — e isso custa R$ 100 mil em 10 anos",
+          "estrutura": "Endereçamento Direto",
+          "scoreSemantico": {
+            "demandaAtual": 7,
+            "saturacao": 2,
+            "clarezaDeAudiencia": "alta",
+            "potencialDeSessao": "alto",
+            "coerenciaSemantica": "alta",
+            "intencaoDominante": "aprender"
+          }
+        },
+        {
+          "texto": "O caderninho de R$ 5 que me ensinou mais sobre dinheiro do que 40 anos de trabalho",
+          "estrutura": "Revelação de Segredo",
+          "scoreSemantico": {
+            "demandaAtual": 7,
+            "saturacao": 3,
+            "clarezaDeAudiencia": "média",
+            "potencialDeSessao": "médio",
+            "coerenciaSemantica": "alta",
+            "intencaoDominante": "resolver"
+          }
+        }
+      ],
+      "anguloProibido": "Jogos de Azar"
     }
   ],
   "identidadeSemantica": {
@@ -137,6 +267,18 @@
     "scoreDeGapDemanda": 0,
     "saturacaoDoCluster": "",
     "momentoIdealDeConsumo": ""
+  },
+  "paleta": {
+    "primaria": "#D4651A",
+    "secundaria": "#8B4513",
+    "destaque": "#F5C842",
+    "texto": "#FFFFFF",
+    "fundo": "rgba(0,0,0,0.85)"
+  },
+  "edutainment": {
+    "extracoesQueEngajam": [],
+    "dadosEstatisticasDoNicho": [],
+    "reflexoesRecorrentes": []
   },
   "ultimaRevisao": {
     "probabilidadeSucesso": {
