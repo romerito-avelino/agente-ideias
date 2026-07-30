@@ -2,11 +2,11 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
-const { gerarIdeias } = require('./agente-ideias');
+const { gerarIdeias } = require('./ideias');
 const { coletarDadosVideo } = require('./coletor-youtube');
-const { analisarCanal, revisarCanal } = require('./agente-sessao-a');
+const { analisarCanal, revisarCanal } = require('./canais');
 const { coletarDadosCanal } = require('./coletor-youtube');
-const { minerarCanais } = require('./agente-minerador');
+const { minerarCanais } = require('./pesquisa');
 const { gerarPacoteRoteirista } = require('./gerador-pacote');
 
 const app = express();
