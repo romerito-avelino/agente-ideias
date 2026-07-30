@@ -2713,7 +2713,7 @@
       .map(el => el.querySelector('.check-texto')?.textContent?.trim()).filter(Boolean);
 
     try {
-      const nichoRes = await fetch(`/api/nicho/${nichoAtivo}`);
+      const nichoRes = await fetch(`/api/canais/${nichoAtivo}`);
       const nicho = await nichoRes.json();
 
       const pacote = {
@@ -2814,7 +2814,7 @@
 
   async function carregarNichos() {
     try {
-      const res = await fetch('/api/nichos');
+      const res = await fetch('/api/canais');
       const nichos = await res.json();
 
       // Seletor aba Vídeos
@@ -2842,7 +2842,7 @@
     const panel = document.getElementById('historicoPanel');
     const lista = document.getElementById('historicoLista');
     try {
-      const res = await fetch(`/api/historico/${nichoId}`);
+      const res = await fetch(`/api/canais/${nichoId}/historico`);
       const historico = await res.json();
       if (!historico.length) {
         panel.classList.remove('visivel');
@@ -2875,7 +2875,7 @@
     btn.disabled = true;
     btn.textContent = '...';
     try {
-      const res = await fetch(`/api/nicho/${nichoId}/titulo-funcionou`, {
+      const res = await fetch(`/api/canais/${nichoId}/titulo-funcionou`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ titulo, estrutura })
@@ -3361,7 +3361,7 @@
     document.getElementById('relatorioArea').style.display = 'none';
     document.getElementById('erroA').classList.remove('visivel');
     try {
-      const res = await fetch('/api/analisar-canais', {
+      const res = await fetch('/api/canais/analisar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ urls: canais, preIdeia, nichoId: nichoAtivoValidacao || '' })
@@ -3521,7 +3521,7 @@
     };
 
     try {
-      const res = await fetch('/api/revisar-canal', {
+      const res = await fetch('/api/canais/revisar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(dadosRevisao)
@@ -3588,7 +3588,7 @@
     }
 
     try {
-      const res = await fetch(`/api/nicho/${id}`);
+      const res = await fetch(`/api/canais/${id}`);
       if (!res.ok) {
         document.getElementById('avisoCanal')?.remove();
         canalCarregadoId = null;
@@ -3678,7 +3678,7 @@
     let nichoBase = {};
     if (canalCarregadoId === id) {
       try {
-        const resBase = await fetch(`/api/nicho/${id}`);
+        const resBase = await fetch(`/api/canais/${id}`);
         if (resBase.ok) nichoBase = await resBase.json();
       } catch {}
     }
@@ -3758,14 +3758,14 @@
     };
 
     try {
-      const verificacao = await fetch(`/api/nicho/${id}`);
+      const verificacao = await fetch(`/api/canais/${id}`);
       let endpoint, method;
       if (verificacao.ok) {
-        endpoint = `/api/nicho/${id}/estrategia`;
+        endpoint = `/api/canais/${id}/estrategia`;
         method = 'PUT';
         btn.textContent = 'Atualizando canal...';
       } else {
-        endpoint = '/api/criar-canal';
+        endpoint = '/api/canais/criar';
         method = 'POST';
       }
 
@@ -3837,7 +3837,7 @@
   async function abrirModalEditar() {
     const nichoId = nichoAtivo;
     try {
-      const res = await fetch(`/api/nicho/${nichoId}`);
+      const res = await fetch(`/api/canais/${nichoId}`);
       const nicho = await res.json();
       document.getElementById('e_canal').value = nicho.canal || '';
       document.getElementById('e_nicho').value = nicho.nicho || '';
@@ -3909,7 +3909,7 @@
 
   async function abrirModalEstrategia() {
     try {
-      const res = await fetch(`/api/nicho/${nichoAtivo}`);
+      const res = await fetch(`/api/canais/${nichoAtivo}`);
       const nicho = await res.json();
       const e = nicho.estrategia || {};
 
@@ -4001,7 +4001,7 @@
     if (loading) loading.classList.add('ativo');
 
     try {
-      const res = await fetch(`/api/nicho/${nichoAtivo}`);
+      const res = await fetch(`/api/canais/${nichoAtivo}`);
       const nicho = await res.json();
 
       const dadosRevisao = {
@@ -4015,7 +4015,7 @@
         publicoAlvo: nicho.publicoAlvo
       };
 
-      const resRevisao = await fetch('/api/revisar-canal', {
+      const resRevisao = await fetch('/api/canais/revisar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(dadosRevisao)
@@ -4024,7 +4024,7 @@
       if (!resRevisao.ok) throw new Error(revisao.error);
 
       // Salva a revisão no nicho
-      await fetch(`/api/nicho/${nichoAtivo}`, {
+      await fetch(`/api/canais/${nichoAtivo}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ultimaRevisao: { ...revisao, data: new Date().toISOString() } })
@@ -4101,7 +4101,7 @@
       return;
     }
     const nichoId = nichoAtivo;
-    const nichoAtualRes = await fetch(`/api/nicho/${nichoId}`);
+    const nichoAtualRes = await fetch(`/api/canais/${nichoId}`);
     const nichoAtual = await nichoAtualRes.json();
     const payload = {
       canal: document.getElementById('e_canal').value.trim(),
@@ -4165,7 +4165,7 @@
       },
     };
     try {
-      const res = await fetch(`/api/nicho/${nichoId}`, {
+      const res = await fetch(`/api/canais/${nichoId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -4245,7 +4245,7 @@
     const confirma = confirm(`Tem certeza que deseja deletar o nicho "${nichoAtivo}"? Essa ação não pode ser desfeita.`);
     if (!confirma) return;
     try {
-      const res = await fetch(`/api/nicho/${nichoAtivo}`, { method: 'DELETE' });
+      const res = await fetch(`/api/canais/${nichoAtivo}`, { method: 'DELETE' });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
       await carregarNichos();

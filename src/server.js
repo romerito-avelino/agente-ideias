@@ -46,7 +46,7 @@ app.get('/api/status', (_req, res) => {
   res.json({ status: 'ok', message: 'Agente-Ideias rodando' });
 });
 
-app.get('/api/nichos', (_req, res) => {
+app.get('/api/canais', (_req, res) => {
   try {
     const arquivos = fs.readdirSync(NICHOS_DIR).filter(f => f.endsWith('.json'));
     const nichos = arquivos.map(arquivo => {
@@ -61,7 +61,7 @@ app.get('/api/nichos', (_req, res) => {
   }
 });
 
-app.get('/api/historico/:nichoId', (req, res) => {
+app.get('/api/canais/:nichoId/historico', (req, res) => {
   const { nichoId } = req.params;
   const nichoPath = path.join(NICHOS_DIR, `${nichoId}.json`);
   if (!fs.existsSync(nichoPath)) {
@@ -75,7 +75,7 @@ app.get('/api/historico/:nichoId', (req, res) => {
   }
 });
 
-app.post('/api/analisar-canais', async (req, res) => {
+app.post('/api/canais/analisar', async (req, res) => {
   const { urls, preIdeia, nichoId } = req.body;
   if (!urls || !Array.isArray(urls) || urls.length === 0) {
     return res.status(400).json({ error: 'Envie pelo menos uma URL de canal.' });
@@ -112,7 +112,7 @@ app.post('/api/analisar-canais', async (req, res) => {
   }
 });
 
-app.post('/api/criar-canal', (req, res) => {
+app.post('/api/canais/criar', (req, res) => {
   const { id, canal, nicho, avatar, publicoAlvo, tom, formatoDeVideo } = req.body;
   if (!id || !canal) {
     return res.status(400).json({ error: 'ID e nome do canal são obrigatórios.' });
@@ -227,7 +227,7 @@ app.post('/api/gerar-ideias', async (req, res) => {
   }
 });
 
-app.get('/api/nicho/:nichoId/videos-publicados', (req, res) => {
+app.get('/api/canais/:nichoId/videos-publicados', (req, res) => {
   const { nichoId } = req.params;
   const nichoPath = path.join(NICHOS_DIR, `${nichoId}.json`);
   if (!fs.existsSync(nichoPath)) return res.status(404).json({ error: 'Nicho não encontrado.' });
@@ -240,7 +240,7 @@ app.get('/api/nicho/:nichoId/videos-publicados', (req, res) => {
   }
 });
 
-app.get('/api/nicho/:nichoId', (req, res) => {
+app.get('/api/canais/:nichoId', (req, res) => {
   const { nichoId } = req.params;
   const nichoPath = path.join(NICHOS_DIR, `${nichoId}.json`);
   if (!fs.existsSync(nichoPath)) return res.status(404).json({ error: 'Nicho não encontrado.' });
@@ -252,7 +252,7 @@ app.get('/api/nicho/:nichoId', (req, res) => {
   }
 });
 
-app.put('/api/nicho/:nichoId', (req, res) => {
+app.put('/api/canais/:nichoId', (req, res) => {
   const { nichoId } = req.params;
   const nichoPath = path.join(NICHOS_DIR, `${nichoId}.json`);
   if (!fs.existsSync(nichoPath)) return res.status(404).json({ error: 'Nicho não encontrado.' });
@@ -278,7 +278,7 @@ app.put('/api/nicho/:nichoId', (req, res) => {
   }
 });
 
-app.put('/api/nicho/:nichoId/estrategia', (req, res) => {
+app.put('/api/canais/:nichoId/estrategia', (req, res) => {
   const { nichoId } = req.params;
   const nichoPath = path.join(NICHOS_DIR, `${nichoId}.json`);
   if (!fs.existsSync(nichoPath)) {
@@ -371,7 +371,7 @@ app.put('/api/nicho/:nichoId/estrategia', (req, res) => {
   }
 });
 
-app.delete('/api/nicho/:nichoId', (req, res) => {
+app.delete('/api/canais/:nichoId', (req, res) => {
   const { nichoId } = req.params;
   const nichoPath = path.join(NICHOS_DIR, `${nichoId}.json`);
   if (!fs.existsSync(nichoPath)) return res.status(404).json({ error: 'Nicho não encontrado.' });
@@ -384,7 +384,7 @@ app.delete('/api/nicho/:nichoId', (req, res) => {
   }
 });
 
-app.post('/api/nicho/:nichoId/titulo-funcionou', (req, res) => {
+app.post('/api/canais/:nichoId/titulo-funcionou', (req, res) => {
   const { nichoId } = req.params;
   const { titulo, estrutura } = req.body;
   if (!titulo) return res.status(400).json({ error: 'Título obrigatório.' });
@@ -407,7 +407,7 @@ app.post('/api/nicho/:nichoId/titulo-funcionou', (req, res) => {
   }
 });
 
-app.post('/api/revisar-canal', async (req, res) => {
+app.post('/api/canais/revisar', async (req, res) => {
   const { nichoId, ...dadosRevisao } = req.body;
   if (!dadosRevisao.propostaEscolhida || !dadosRevisao.avatar?.nome) {
     return res.status(400).json({ error: 'Selecione uma proposta e preencha os dados do avatar antes de revisar.' });
