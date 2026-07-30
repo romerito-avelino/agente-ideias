@@ -2735,7 +2735,7 @@
         urlsVideosReferencia: videos
       };
 
-      const res = await fetch('/api/gerar-pacote', {
+      const res = await fetch('/api/ideias/gerar-pacote', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(pacote)
@@ -2781,7 +2781,7 @@
     }
 
     try {
-      const res = await fetch('/api/gerar-ideias', {
+      const res = await fetch('/api/ideias/gerar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ input: JSON.stringify(input), nichoId: nichoAtivo })
@@ -2971,7 +2971,7 @@
     };
 
     try {
-      const res = await fetch('/api/gerar-ideias', {
+      const res = await fetch('/api/ideias/gerar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ input: JSON.stringify(input), nichoId: nichoAtivo })

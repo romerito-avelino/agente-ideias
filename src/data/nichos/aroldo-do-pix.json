@@ -257,6 +257,51 @@
         }
       ],
       "anguloProibido": "Jogos de Azar"
+    },
+    {
+      "data": "2026-07-30T21:52:32.602Z",
+      "temas": [
+        "O dia que perdi minha aposentadoria"
+      ],
+      "titulosGerados": [
+        {
+          "texto": "Eu tinha 58 anos quando uma carta do INSS destruiu o que eu tinha construído a vida inteira",
+          "estrutura": "Confissão temporal",
+          "scoreSemantico": {
+            "demandaAtual": 9,
+            "saturacao": 4,
+            "clarezaDeAudiencia": "alta",
+            "potencialDeSessao": "alto",
+            "coerenciaSemantica": "alta",
+            "intencaoDominante": "validar"
+          }
+        },
+        {
+          "texto": "Por que homem que trabalhou 40 anos perde benefício enquanto quem nunca contribuiu continua recebendo",
+          "estrutura": "Endereçamento direto",
+          "scoreSemantico": {
+            "demandaAtual": 8,
+            "saturacao": 3,
+            "clarezaDeAudiencia": "alta",
+            "potencialDeSessao": "alto",
+            "coerenciaSemantica": "alta",
+            "intencaoDominante": "resolver"
+          }
+        },
+        {
+          "texto": "O erro que fiz aos 45 que me custou a aposentadoria aos 60 — e ninguém tinha me avisado",
+          "estrutura": "Consequência revelada",
+          "scoreSemantico": {
+            "demandaAtual": 8,
+            "saturacao": 4,
+            "clarezaDeAudiencia": "alta",
+            "potencialDeSessao": "médio",
+            "coerenciaSemantica": "alta",
+            "intencaoDominante": "aprender"
+          }
+        }
+      ],
+      "anguloProibido": null
     }
   ],
   "identidadeSemantica": {

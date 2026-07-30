@@ -158,7 +158,7 @@ app.post('/api/canais/criar', (req, res) => {
   }
 });
 
-app.post('/api/gerar-ideias', async (req, res) => {
+app.post('/api/ideias/gerar', async (req, res) => {
   const { input, nichoId } = req.body;
 
   if (!nichoId || nichoId.trim() === '') {
@@ -449,7 +449,7 @@ app.post('/api/pesquisa', async (req, res) => {
   }
 });
 
-app.post('/api/gerar-pacote', async (req, res) => {
+app.post('/api/ideias/gerar-pacote', async (req, res) => {
   const pacote = req.body;
   if (!pacote.tituloEscolhido || !pacote.estruturaEscolhida) {
     return res.status(400).json({ error: 'Título e estrutura são obrigatórios para gerar o pacote.' });

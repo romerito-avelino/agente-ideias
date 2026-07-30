@@ -14,7 +14,7 @@ Os outros agentes (roteiros, thumbs, edições) consultam os dados daqui — nun
 **agente-ideias** — Agente de mineração e geração de ideias para YouTube.
 
 Stack: Node.js + Express + Claude API (claude-opus-4-5) + YouTube Data API v3.
-Estrutura: /src (server.js, agente-ideias.js, agente-sessao-a.js, coletor-youtube.js, gerador-pacote.js), /public (index.html, app.js, style.css), /data/nichos (JSONs por canal), /pacotes
+Estrutura: /src (server.js, agente-ideias.js, agente-sessao-a.js, coletor-youtube.js, gerador-pacote.js), /public (index.html), /data/nichos (JSONs por canal), /pacotes
 Em produção — v1.3 estável. NÃO remova nem reorganize arquivos sem instrução explícita.
 
 ## Fonte de verdade — JSONs dos canais
