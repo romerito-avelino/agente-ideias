@@ -3176,7 +3176,7 @@
     }, 4000);
 
     try {
-      const res = await fetch('/api/mineracao', {
+      const res = await fetch('/api/pesquisa', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ input, nichoId: nichoAtivo || '' })

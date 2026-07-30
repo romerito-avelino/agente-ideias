@@ -428,7 +428,7 @@ app.post('/api/revisar-canal', async (req, res) => {
   }
 });
 
-app.post('/api/mineracao', async (req, res) => {
+app.post('/api/pesquisa', async (req, res) => {
   const { input, nichoId } = req.body;
   if (!input || input.trim() === '') {
     return res.status(400).json({ error: 'Digite um tema, título ou cole uma URL para iniciar a mineração.' });
