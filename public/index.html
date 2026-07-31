@@ -754,8 +754,8 @@
   align-items: flex-start;
   justify-content: center;
   padding: 40px 20px;
-  position: absolute;
-  z-index: 100;
+  position: fixed;
+  z-index: 1000;
   overflow-y: auto;
 }
 .modal-overlay.aberto { display: flex; }
@@ -1707,6 +1707,20 @@
 
 <div class="aba-conteudo" id="aba-validacao">
 
+  <div class="secao-label-a">MEUS CANAIS</div>
+  <div class="nicho-bar" style="margin-bottom:20px">
+    <div class="nicho-dot"></div>
+    <select class="nicho-select" id="canalSelectGerenciar" onchange="canalGerenciar = this.value">
+      <option value="">— Selecione um canal para gerenciar —</option>
+    </select>
+  </div>
+
+  <div style="display:flex;gap:8px;margin-top:8px;margin-bottom:16px;flex-wrap:wrap">
+    <button class="gerenciar-btn" onclick="gerenciarEditar()">✏️ Editar banco de dados</button>
+    <button class="gerenciar-btn" onclick="gerenciarEstrategia()">📊 Ver estratégia</button>
+    <button class="gerenciar-btn danger" onclick="gerenciarDeletar()">🗑️ Deletar canal</button>
+  </div>
+
   <div class="greeting">
     <h1>Validar <span>canal</span> e ideia</h1>
     <p>Minerou canais? Cole as URLs abaixo e descreva sua pré-ideia. O agente analisa e valida.</p>
@@ -1950,6 +1964,7 @@
       <div id="sucessoFormulario" style="display:none;margin-top:12px;background:rgba(29,158,117,0.1);border:1px solid rgba(29,158,117,0.3);border-radius:var(--radius);padding:14px 18px;color:#1D9E75;font-size:13px"></div>
     </div>
   </div>
+
 </div>
 
 <div class="aba-conteudo" id="aba-videos">
@@ -1973,8 +1988,198 @@
 <button class="gerenciar-btn danger" onclick="confirmarDeletar()">🗑️ Deletar nicho</button>
   </div>
 
+  <!-- Inputs -->
+  <div class="input-section">
+    <div class="section-label">Inputs</div>
+    <div class="input-row">
+
+      <!-- Temas -->
+      <div class="input-group">
+        <label>Temas (pressione + para adicionar) *</label>
+        <div class="input-wrap">
+          <input type="text" id="temaInput" placeholder="Ex: O dia que perdi tudo e recomeçei do zero..." />
+          <button class="btn-add" onclick="adicionarTema()">+ Tema</button>
+        </div>
+        <div class="tags-area" id="temasTags"></div>
+      </div>
+
+      <!-- Vídeos -->
+      <div class="input-group">
+        <label>Vídeos de referência (URL do YouTube) *</label>
+        <div class="input-wrap">
+          <input type="text" id="videoInput" placeholder="https://youtube.com/watch?v=..." />
+          <button class="btn-add" onclick="adicionarVideo()">+ Vídeo</button>
+        </div>
+        <div class="tags-area" id="videosTags"></div>
+      </div>
+
+      <!-- Ângulo a evitar -->
+      <div class="input-group">
+        <label>Ângulo a evitar (opcional)</label>
+        <div class="input-wrap">
+          <input type="text" id="anguloProibidoInput" placeholder="Ex: não quero falar sobre traição nessa geração..." />
+        </div>
+      </div>
+
+    </div>
+
+    <button class="btn-gerar" id="btnGerar" onclick="gerarIdeias()">
+      Gerar Ideias com IA
+    </button>
+
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      <span>O agente está pesquisando e criando suas ideias...</span>
+    </div>
+
+    <div class="erro" id="erro"></div>
+
+    <div class="historico-panel" id="historicoPanel">
+      <div class="historico-label">Últimas ideias geradas</div>
+      <div id="historicoLista"></div>
+    </div>
+  </div>
+
+  <!-- Resultados -->
+  <div id="resultado" style="display:none;margin-top:32px">
+
+    <div class="resultado-divider">Novo Tema</div>
+
+    <!-- TÍTULOS -->
+    <div class="resultado-card">
+      <div class="card-header">
+        <div class="card-title"><span>🎯</span> Títulos</div>
+        <button class="btn-copy" onclick="regerarElemento('titulos')">↺ Gerar novamente</button>
+      </div>
+      <div id="titulos"></div>
+    </div>
+
+    <!-- SINOPSE -->
+    <div class="resultado-card">
+      <div class="card-header">
+        <div class="card-title"><span>📋</span> Sinopse</div>
+        <button class="btn-copy" onclick="regerarElemento('sinopse')">↺ Gerar novamente</button>
+      </div>
+      <textarea id="sinopse" class="gap-editavel" rows="6"></textarea>
+    </div>
+
+    <!-- TÍTULO DA THUMBNAIL -->
+    <div class="resultado-card full" id="cardThumbTitulo" style="display:none">
+      <div class="card-header">
+        <div class="card-title"><span>🔤</span> Título da thumbnail</div>
+        <button class="btn-copy" onclick="regerarElemento('thumbTitulo')">↺ Gerar novamente</button>
+      </div>
+      <div id="thumbTitulos"></div>
+    </div>
+
+    <!-- CONCEITO DA THUMBNAIL -->
+    <div class="resultado-card full">
+      <div class="card-header">
+        <div class="card-title"><span>🖼️</span> Conceito visual da thumbnail</div>
+        <button class="btn-copy" onclick="regerarElemento('thumbnail')">↺ Gerar novamente</button>
+      </div>
+      <textarea id="thumbnail" class="gap-editavel" rows="3"></textarea>
+    </div>
+
+    <div class="resultado-divider">Nova Abordagem</div>
+
+    <!-- GATILHOS -->
+    <div class="resultado-card">
+      <div class="card-header">
+        <div class="card-title"><span>⚡</span> Gatilhos Emocionais</div>
+        <button class="btn-copy" onclick="regerarElemento('gatilhos')">↺ Gerar novamente</button>
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:10px">Selecione os que deseja incluir no pacote</div>
+      <div id="gatilhos"></div>
+    </div>
+
+    <!-- GANCHOS -->
+    <div class="resultado-card">
+      <div class="card-header">
+        <div class="card-title"><span>🪝</span> Ganchos</div>
+        <button class="btn-copy" onclick="regerarElemento('ganchos')">↺ Gerar novamente</button>
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:10px">Selecione os que deseja incluir no pacote</div>
+      <div id="ganchos"></div>
+    </div>
+
+    <!-- ESTRUTURA ROTEIRO -->
+    <div class="resultado-card full">
+      <div class="card-header">
+        <div class="card-title"><span>📝</span> Estrutura do Roteiro</div>
+        <button class="btn-copy" onclick="regerarElemento('roteiro')">↺ Gerar novamente</button>
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:10px">Escolha uma estrutura para o roteiro</div>
+      <div id="roteiro"></div>
+    </div>
+
+    <!-- BOTÃO PREPARAR PACOTE -->
+    <div id="barraPacote" style="display:none;margin-top:24px">
+      <button class="btn-preparar-pacote" onclick="abrirModalVoz()">
+        Preparar pacote para o Roteirista →
+      </button>
+    </div>
+
+  </div>
+
+  <!-- Modal de voz do criador -->
+  <div class="modal-overlay" id="modalVoz">
+    <div class="modal-box" style="max-width:700px">
+      <div class="modal-header">
+        <div class="modal-titulo">Sua voz — elementos manuais</div>
+        <button class="modal-fechar" onclick="fecharModalVoz()">×</button>
+      </div>
+
+      <div style="font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.6">
+        Esses elementos serão inseridos no roteiro exatamente como você escrever. O Agente-Roteirista não vai reescrever — apenas posicionar nos momentos certos.
+      </div>
+
+      <div class="modal-voz-field">
+        <label>Hook pessoal</label>
+        <div class="instrucao">Será inserido na abertura — primeiros 30 segundos. Escreva como você falaria naturalmente.</div>
+        <textarea id="hookPessoal" rows="3" placeholder="Ex: Eu nunca contei isso pra ninguém. Mas hoje, com 70 anos, sinto que está na hora..."></textarea>
+      </div>
+
+      <div class="modal-voz-field">
+        <label>Ensinamento próprio</label>
+        <div class="instrucao">A lição de vida que VOCÊ tira desse tema — da sua experiência real. Será inserida antes do encerramento.</div>
+        <textarea id="ensinamentoProprio" rows="3" placeholder="Ex: O que aprendi é que a gente não perde o dinheiro — perde o tempo que gastou ganhando ele..."></textarea>
+      </div>
+
+      <div class="modal-voz-field">
+        <label>CTA específico</label>
+        <div class="instrucao">Chamada para ação do encerramento. Pode ser para comentar, compartilhar, se inscrever — com as suas palavras.</div>
+        <textarea id="ctaEspecifico" rows="2" placeholder="Ex: Se você também já passou por isso, me conta aqui nos comentários. Quero ler cada história..."></textarea>
+      </div>
+
+      <div class="modal-voz-field">
+        <label>Observações para o Roteirista (opcional)</label>
+        <div class="instrucao">Qualquer instrução especial que o Agente-Roteirista precisa saber sobre este vídeo específico.</div>
+        <textarea id="obsRoteirista" rows="3" placeholder="Ex: Esse vídeo é mais leve, sem drama excessivo. Quero que o tom seja esperançoso do início ao fim..."></textarea>
+      </div>
+
+      <!-- Revisão final -->
+      <div class="resultado-divider" style="margin:20px 0 16px">Revisão final do pacote</div>
+      <div id="revisaoFinal"></div>
+
+      <button class="btn-exportar" id="btnExportar" onclick="exportarPacote()">
+        Gerar pacote .docx para o Roteirista
+      </button>
+      <div class="erro" id="erroExportacao" style="margin-top:12px"></div>
+      <div class="download-sucesso" id="downloadSucesso">
+        <div style="color:#1D9E75;font-size:14px;font-weight:500">✓ Pacote gerado com sucesso!</div>
+        <div style="color:var(--muted);font-size:13px;margin-top:4px">Clique abaixo para baixar o arquivo Word</div>
+        <a id="downloadLink" href="#" class="download-link">⬇ Baixar pacote .docx</a>
+      </div>
+      <button onclick="fecharModalVoz()" style="width:100%;margin-top:10px;padding:12px;background:none;border:1px solid var(--border);border-radius:var(--radius);color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:14px;transition:all 0.2s">Fechar</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- Modais de gerenciamento de canal (fora de qualquer aba/bloco oculto) -->
   <!-- Modal de edição -->
-  <div class="modal-overlay" id="modalEditar" style="position:fixed">
+  <div class="modal-overlay" id="modalEditar">
     <div class="modal-box">
       <div class="modal-header">
         <div class="modal-titulo">Editar banco de dados do nicho</div>
@@ -2247,7 +2452,7 @@
   </div>
 
   <!-- Modal de estratégia -->
-  <div class="modal-overlay" id="modalEstrategia" style="position:fixed">
+  <div class="modal-overlay" id="modalEstrategia">
     <div class="modal-box" style="max-width:800px">
       <div class="modal-header">
         <div class="modal-titulo">Estratégia do canal</div>
@@ -2306,194 +2511,6 @@
     </div>
   </div>
 
-  <!-- Inputs -->
-  <div class="input-section">
-    <div class="section-label">Inputs</div>
-    <div class="input-row">
-
-      <!-- Temas -->
-      <div class="input-group">
-        <label>Temas (pressione + para adicionar) *</label>
-        <div class="input-wrap">
-          <input type="text" id="temaInput" placeholder="Ex: O dia que perdi tudo e recomeçei do zero..." />
-          <button class="btn-add" onclick="adicionarTema()">+ Tema</button>
-        </div>
-        <div class="tags-area" id="temasTags"></div>
-      </div>
-
-      <!-- Vídeos -->
-      <div class="input-group">
-        <label>Vídeos de referência (URL do YouTube) *</label>
-        <div class="input-wrap">
-          <input type="text" id="videoInput" placeholder="https://youtube.com/watch?v=..." />
-          <button class="btn-add" onclick="adicionarVideo()">+ Vídeo</button>
-        </div>
-        <div class="tags-area" id="videosTags"></div>
-      </div>
-
-      <!-- Ângulo a evitar -->
-      <div class="input-group">
-        <label>Ângulo a evitar (opcional)</label>
-        <div class="input-wrap">
-          <input type="text" id="anguloProibidoInput" placeholder="Ex: não quero falar sobre traição nessa geração..." />
-        </div>
-      </div>
-
-    </div>
-
-    <button class="btn-gerar" id="btnGerar" onclick="gerarIdeias()">
-      Gerar Ideias com IA
-    </button>
-
-    <div class="loading" id="loading">
-      <div class="spinner"></div>
-      <span>O agente está pesquisando e criando suas ideias...</span>
-    </div>
-
-    <div class="erro" id="erro"></div>
-
-    <div class="historico-panel" id="historicoPanel">
-      <div class="historico-label">Últimas ideias geradas</div>
-      <div id="historicoLista"></div>
-    </div>
-  </div>
-
-  <!-- Resultados -->
-  <div id="resultado" style="display:none;margin-top:32px">
-
-    <div class="resultado-divider">Novo Tema</div>
-
-    <!-- TÍTULOS -->
-    <div class="resultado-card">
-      <div class="card-header">
-        <div class="card-title"><span>🎯</span> Títulos</div>
-        <button class="btn-copy" onclick="regerarElemento('titulos')">↺ Gerar novamente</button>
-      </div>
-      <div id="titulos"></div>
-    </div>
-
-    <!-- SINOPSE -->
-    <div class="resultado-card">
-      <div class="card-header">
-        <div class="card-title"><span>📋</span> Sinopse</div>
-        <button class="btn-copy" onclick="regerarElemento('sinopse')">↺ Gerar novamente</button>
-      </div>
-      <textarea id="sinopse" class="gap-editavel" rows="6"></textarea>
-    </div>
-
-    <!-- TÍTULO DA THUMBNAIL -->
-    <div class="resultado-card full" id="cardThumbTitulo" style="display:none">
-      <div class="card-header">
-        <div class="card-title"><span>🔤</span> Título da thumbnail</div>
-        <button class="btn-copy" onclick="regerarElemento('thumbTitulo')">↺ Gerar novamente</button>
-      </div>
-      <div id="thumbTitulos"></div>
-    </div>
-
-    <!-- CONCEITO DA THUMBNAIL -->
-    <div class="resultado-card full">
-      <div class="card-header">
-        <div class="card-title"><span>🖼️</span> Conceito visual da thumbnail</div>
-        <button class="btn-copy" onclick="regerarElemento('thumbnail')">↺ Gerar novamente</button>
-      </div>
-      <textarea id="thumbnail" class="gap-editavel" rows="3"></textarea>
-    </div>
-
-    <div class="resultado-divider">Nova Abordagem</div>
-
-    <!-- GATILHOS -->
-    <div class="resultado-card">
-      <div class="card-header">
-        <div class="card-title"><span>⚡</span> Gatilhos Emocionais</div>
-        <button class="btn-copy" onclick="regerarElemento('gatilhos')">↺ Gerar novamente</button>
-      </div>
-      <div style="font-size:11px;color:var(--muted);margin-bottom:10px">Selecione os que deseja incluir no pacote</div>
-      <div id="gatilhos"></div>
-    </div>
-
-    <!-- GANCHOS -->
-    <div class="resultado-card">
-      <div class="card-header">
-        <div class="card-title"><span>🪝</span> Ganchos</div>
-        <button class="btn-copy" onclick="regerarElemento('ganchos')">↺ Gerar novamente</button>
-      </div>
-      <div style="font-size:11px;color:var(--muted);margin-bottom:10px">Selecione os que deseja incluir no pacote</div>
-      <div id="ganchos"></div>
-    </div>
-
-    <!-- ESTRUTURA ROTEIRO -->
-    <div class="resultado-card full">
-      <div class="card-header">
-        <div class="card-title"><span>📝</span> Estrutura do Roteiro</div>
-        <button class="btn-copy" onclick="regerarElemento('roteiro')">↺ Gerar novamente</button>
-      </div>
-      <div style="font-size:11px;color:var(--muted);margin-bottom:10px">Escolha uma estrutura para o roteiro</div>
-      <div id="roteiro"></div>
-    </div>
-
-    <!-- BOTÃO PREPARAR PACOTE -->
-    <div id="barraPacote" style="display:none;margin-top:24px">
-      <button class="btn-preparar-pacote" onclick="abrirModalVoz()">
-        Preparar pacote para o Roteirista →
-      </button>
-    </div>
-
-  </div>
-
-  <!-- Modal de voz do criador -->
-  <div class="modal-overlay" id="modalVoz" style="position:fixed">
-    <div class="modal-box" style="max-width:700px">
-      <div class="modal-header">
-        <div class="modal-titulo">Sua voz — elementos manuais</div>
-        <button class="modal-fechar" onclick="fecharModalVoz()">×</button>
-      </div>
-
-      <div style="font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.6">
-        Esses elementos serão inseridos no roteiro exatamente como você escrever. O Agente-Roteirista não vai reescrever — apenas posicionar nos momentos certos.
-      </div>
-
-      <div class="modal-voz-field">
-        <label>Hook pessoal</label>
-        <div class="instrucao">Será inserido na abertura — primeiros 30 segundos. Escreva como você falaria naturalmente.</div>
-        <textarea id="hookPessoal" rows="3" placeholder="Ex: Eu nunca contei isso pra ninguém. Mas hoje, com 70 anos, sinto que está na hora..."></textarea>
-      </div>
-
-      <div class="modal-voz-field">
-        <label>Ensinamento próprio</label>
-        <div class="instrucao">A lição de vida que VOCÊ tira desse tema — da sua experiência real. Será inserida antes do encerramento.</div>
-        <textarea id="ensinamentoProprio" rows="3" placeholder="Ex: O que aprendi é que a gente não perde o dinheiro — perde o tempo que gastou ganhando ele..."></textarea>
-      </div>
-
-      <div class="modal-voz-field">
-        <label>CTA específico</label>
-        <div class="instrucao">Chamada para ação do encerramento. Pode ser para comentar, compartilhar, se inscrever — com as suas palavras.</div>
-        <textarea id="ctaEspecifico" rows="2" placeholder="Ex: Se você também já passou por isso, me conta aqui nos comentários. Quero ler cada história..."></textarea>
-      </div>
-
-      <div class="modal-voz-field">
-        <label>Observações para o Roteirista (opcional)</label>
-        <div class="instrucao">Qualquer instrução especial que o Agente-Roteirista precisa saber sobre este vídeo específico.</div>
-        <textarea id="obsRoteirista" rows="3" placeholder="Ex: Esse vídeo é mais leve, sem drama excessivo. Quero que o tom seja esperançoso do início ao fim..."></textarea>
-      </div>
-
-      <!-- Revisão final -->
-      <div class="resultado-divider" style="margin:20px 0 16px">Revisão final do pacote</div>
-      <div id="revisaoFinal"></div>
-
-      <button class="btn-exportar" id="btnExportar" onclick="exportarPacote()">
-        Gerar pacote .docx para o Roteirista
-      </button>
-      <div class="erro" id="erroExportacao" style="margin-top:12px"></div>
-      <div class="download-sucesso" id="downloadSucesso">
-        <div style="color:#1D9E75;font-size:14px;font-weight:500">✓ Pacote gerado com sucesso!</div>
-        <div style="color:var(--muted);font-size:13px;margin-top:4px">Clique abaixo para baixar o arquivo Word</div>
-        <a id="downloadLink" href="#" class="download-link">⬇ Baixar pacote .docx</a>
-      </div>
-      <button onclick="fecharModalVoz()" style="width:100%;margin-top:10px;padding:12px;background:none;border:1px solid var(--border);border-radius:var(--radius);color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:14px;transition:all 0.2s">Fechar</button>
-    </div>
-  </div>
-
-</div>
 </main>
 
 <script>
@@ -2503,6 +2520,7 @@
   let nichoAtivo = '';
   let tituloEscolhido = null;
   let estruturaEscolhida = null;
+  let canalGerenciar = '';
 
   function renderTitulos(titulos) {
     const normalizados = titulos.map(t =>
@@ -2832,6 +2850,14 @@
       if (selectVal) {
         selectVal.innerHTML = '<option value="">— Nenhum canal selecionado —</option>' +
           nichos.map(n => `<option value="${n.id}">${n.nome} · ${n.nicho}</option>`).join('');
+      }
+
+      // Seletor "Meus canais" (gerenciar) na aba Validação
+      const selectGerenciar = document.getElementById('canalSelectGerenciar');
+      if (selectGerenciar) {
+        selectGerenciar.innerHTML = '<option value="">— Selecione um canal para gerenciar —</option>' +
+          nichos.map(n => `<option value="${n.id}">${n.nome} · ${n.nicho}</option>`).join('');
+        canalGerenciar = '';
       }
     } catch (err) {
       console.error('Erro ao carregar nichos:', err.message);
@@ -4253,6 +4279,33 @@
     } catch (err) {
       alert('Erro ao deletar: ' + err.message);
     }
+  }
+
+  function gerenciarEditar() {
+    if (!canalGerenciar) {
+      window.alert('Selecione um canal primeiro.');
+      return;
+    }
+    nichoAtivo = canalGerenciar;
+    abrirModalEditar();
+  }
+
+  function gerenciarEstrategia() {
+    if (!canalGerenciar) {
+      window.alert('Selecione um canal primeiro.');
+      return;
+    }
+    nichoAtivo = canalGerenciar;
+    abrirModalEstrategia();
+  }
+
+  function gerenciarDeletar() {
+    if (!canalGerenciar) {
+      window.alert('Selecione um canal primeiro.');
+      return;
+    }
+    nichoAtivo = canalGerenciar;
+    confirmarDeletar();
   }
 
   let videosPublicadosTemp = [];

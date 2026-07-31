@@ -302,6 +302,96 @@
         }
       ],
       "anguloProibido": null
+    },
+    {
+      "data": "2026-07-31T22:56:23.747Z",
+      "temas": [
+        "Rendas extras após 1 ano de aposentado"
+      ],
+      "titulosGerados": [
+        {
+          "texto": "Eu tinha 1 ano de aposentado quando descobri que descansar era o maior erro que eu podia cometer",
+          "estrutura": "Confissão Temporal",
+          "scoreSemantico": {
+            "demandaAtual": 9,
+            "saturacao": 2,
+            "clarezaDeAudiencia": "alta",
+            "potencialDeSessao": "alto",
+            "coerenciaSemantica": "alta",
+            "intencaoDominante": "validar"
+          }
+        },
+        {
+          "texto": "Por que aposentado que fica parado perde mais dinheiro do que quem nunca parou de trabalhar",
+          "estrutura": "Endereçamento Direto",
+          "scoreSemantico": {
+            "demandaAtual": 8,
+            "saturacao": 3,
+            "clarezaDeAudiencia": "alta",
+            "potencialDeSessao": "alto",
+            "coerenciaSemantica": "alta",
+            "intencaoDominante": "aprender"
+          }
+        },
+        {
+          "texto": "O tanque de tilápia que me ensinou mais sobre dinheiro do que 40 anos de carteira assinada",
+          "estrutura": "Virada Narrativa",
+          "scoreSemantico": {
+            "demandaAtual": 8,
+            "saturacao": 2,
+            "clarezaDeAudiencia": "alta",
+            "potencialDeSessao": "alto",
+            "coerenciaSemantica": "alta",
+            "intencaoDominante": "resolver"
+          }
+        }
+      ],
+      "anguloProibido": null
+    },
+    {
+      "data": "2026-07-31T23:22:56.262Z",
+      "temas": [
+        "Rendas extras após 2 anos de aposentadoria"
+      ],
+      "titulosGerados": [
+        {
+          "texto": "Eu tinha 2 anos de aposentado quando descobri que descansar era o maior erro que eu podia cometer",
+          "estrutura": "Confissão Temporal",
+          "scoreSemantico": {
+            "demandaAtual": 9,
+            "saturacao": 2,
+            "clarezaDeAudiencia": "alta",
+            "potencialDeSessao": "alto",
+            "coerenciaSemantica": "alta",
+            "intencaoDominante": "validar"
+          }
+        },
+        {
+          "texto": "Por que aposentado que fica parado perde mais dinheiro do que quem nunca parou de trabalhar",
+          "estrutura": "Endereçamento Direto",
+          "scoreSemantico": {
+            "demandaAtual": 8,
+            "saturacao": 3,
+            "clarezaDeAudiencia": "alta",
+            "potencialDeSessao": "alto",
+            "coerenciaSemantica": "alta",
+            "intencaoDominante": "aprender"
+          }
+        },
+        {
+          "texto": "O tanque de tilápia que me ensinou mais sobre dinheiro do que 40 anos de carteira assinada",
+          "estrutura": "Revelação de Segredo",
+          "scoreSemantico": {
+            "demandaAtual": 7,
+            "saturacao": 2,
+            "clarezaDeAudiencia": "média",
+            "potencialDeSessao": "alto",
+            "coerenciaSemantica": "alta",
+            "intencaoDominante": "resolver"
+          }
+        }
+      ],
+      "anguloProibido": null
     }
   ],
   "identidadeSemantica": {
