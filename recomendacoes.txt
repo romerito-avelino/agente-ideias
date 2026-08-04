@@ -1,0 +1,13 @@
+Guarde este bloco — é o estado do agente-ideias para o cérebro plugar:
+
+Arquitetura de rotas (3 famílias):
+
+Pesquisa: POST /api/pesquisa
+Canais: GET /api/canais · GET/PUT/DELETE /api/canais/:nichoId · /api/canais/:nichoId/historico · /estrategia · /videos-publicados · /titulo-funcionou · POST /api/canais/criar · /analisar · /revisar
+Ideias: POST /api/ideias/gerar · POST /api/ideias/gerar-pacote
+
+Arquivos: pesquisa.js, canais.js, ideias.js (motores) + coletor-youtube.js, gerador-pacote.js (ferramentas compartilhadas). Os antigos agente-minerador.js, agente-sessao-a.js, agente-ideias.js, app.js, style.css não existem mais.
+
+Divisão de responsabilidades por aba (o cérebro deve respeitar ao montar a UI): Pesquisa = descoberta, sem seletor de canal. Canais = todo o gerenciamento (criar, validar, editar, estratégia, deletar; modais de edição/estratégia vivem aqui). Ideias = só produção (seletor + geração + exportação; modal "voz do criador" vive aqui). Seletor de canal em Canais e Ideias, nunca em Pesquisa.
+
+Pendências que o cérebro precisa saber: o parâmetro de URL ainda se chama :nichoId (vocabulário "nicho" continua vivo por dentro e na pasta src/data/nichos/ — limpeza profunda ficou para depois). O config.json do cérebro precisa atualizar o mapa de portas (agente-ideias vai para 3001, ver abaixo) e o fonte_de_verdade continua em ...\data\nichos. Divergências no CEREBRO.md/METODOLOGIA.md já mapeadas: campos paleta (não paleta_base), nomes reais dos frameworks no banco (confissaoVulnerabilidade etc.), e a voz do avatar está em avatar.estiloDeEscrita (não jeitoDeFalar). Detalhe menor: o Git está versionando .docx de teste da pasta pacotes/ — vale um .gitignore.

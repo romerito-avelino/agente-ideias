@@ -10,7 +10,7 @@ const { minerarCanais } = require('./pesquisa');
 const { gerarPacoteRoteirista } = require('./gerador-pacote');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 const NICHOS_DIR = path.join(__dirname, 'data/nichos');
 
 // ── Mente Colmeia: sync automático com cerebro/config.json ──
