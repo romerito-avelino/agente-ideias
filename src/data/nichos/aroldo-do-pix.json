@@ -392,6 +392,51 @@
         }
       ],
       "anguloProibido": null
+    },
+    {
+      "data": "2026-08-04T21:45:26.747Z",
+      "temas": [
+        "10 fontes de rendas extras para complementar a aposentadoria"
+      ],
+      "titulosGerados": [
+        {
+          "texto": "Eu tinha 58 anos quando descobri que o INSS não ia me salvar — e comecei do zero",
+          "estrutura": "Confissão Temporal",
+          "scoreSemantico": {
+            "demandaAtual": 9,
+            "saturacao": 4,
+            "clarezaDeAudiencia": "alta",
+            "potencialDeSessao": "alto",
+            "coerenciaSemantica": "alta",
+            "intencaoDominante": "validar"
+          }
+        },
+        {
+          "texto": "Por que aposentado de 65 anos trabalha até morrer enquanto outros vivem de renda aos 60",
+          "estrutura": "Endereçamento Direto",
+          "scoreSemantico": {
+            "demandaAtual": 8,
+            "saturacao": 5,
+            "clarezaDeAudiencia": "alta",
+            "potencialDeSessao": "alto",
+            "coerenciaSemantica": "alta",
+            "intencaoDominante": "aprender"
+          }
+        },
+        {
+          "texto": "O tanque de tilápia que me ensinou que aposentadoria não é parar — é começar diferente",
+          "estrutura": "Virada Narrativa",
+          "scoreSemantico": {
+            "demandaAtual": 7,
+            "saturacao": 2,
+            "clarezaDeAudiencia": "média",
+            "potencialDeSessao": "alto",
+            "coerenciaSemantica": "alta",
+            "intencaoDominante": "resolver"
+          }
+        }
+      ],
+      "anguloProibido": null
     }
   ],
   "identidadeSemantica": {
