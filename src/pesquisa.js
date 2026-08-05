@@ -205,9 +205,12 @@ async function calcularScoresIA(canais, inputOriginal, nicho = null) {
 
   for (let i = 0; i < canais.length; i += LOTE_SIZE) {
     const lote = canais.slice(i, i + LOTE_SIZE);
-    const listaLote = lote.map((c, j) =>
-      `${i + j}|${c.nomeCanal}|${c.titulosParaAnalise.slice(0, 3).join('|')}`
-    ).join('\n');
+    const listaLote = lote.map((c, j) => {
+      const views = (c.videosEmAlta || []).map(v => v.views || 0);
+      const mediaViews = views.length > 0 ? Math.round(views.reduce((a, b) => a + b, 0) / views.length) : 0;
+      const qtdVideosEmAlta = (c.videosEmAlta || []).length;
+      return `${i + j}|${c.nomeCanal}|${c.inscritos}|${mediaViews}|${qtdVideosEmAlta}|${c.titulosParaAnalise.slice(0, 3).join('|')}`;
+    }).join('\n');
 
     try {
       const message = await client.messages.create({
@@ -222,6 +225,8 @@ RECRIABILIDADE (0-100): O conteúdo pode ser adaptado para histórias voltadas a
 OPORTUNIDADE (0-100): Existe demanda não atendida que esse canal está começando a servir?
 
 GAP DE DEMANDA (0-10): Quanto maior, mais gente quer esse conteúdo e menos canais bons existem servindo. Canais com crescimento rápido e poucos vídeos = gap alto. Canais grandes estagnados = gap baixo.
+
+Cada linha de canal traz, após o nome: número de inscritos, média de views dos vídeos em alta, e quantidade de vídeos em alta encontrados. Um canal com POUCOS vídeos em alta e média de views ALTA é o sinal mais forte de oportunidade emergente — uma ideia nova pegando tração. Um canal com média de views perto de zero, ou sem vídeos em alta, é fraco e deve receber gap de demanda baixo, mesmo que os títulos pareçam bons.
 
 CLUSTER SEMANTICO: Em poucas palavras, qual é a identidade semântica desse canal? Que pergunta ele responde? Para qual espectador em qual momento?
 
