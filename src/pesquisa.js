@@ -212,7 +212,7 @@ async function calcularScoresIA(canais, inputOriginal, nicho = null) {
     try {
       const message = await client.messages.create({
         model: 'claude-opus-4-5',
-        max_tokens: 400,
+        max_tokens: 2000,
         system: `Avalie canais do YouTube como tendências emergentes para o projeto: ${descricaoContexto}
 
 Para cada canal, avalie:
