@@ -201,7 +201,7 @@ async function calcularScoresIA(canais, inputOriginal, nicho = null) {
 
   const descricaoContexto = nicho
     ? `Projeto: ${nicho.canal || 'canal novo'}. Nicho: ${nicho.nicho || ''}. Público-alvo: ${nicho.publicoAlvo?.faixaEtaria || 'público mais velho'}. Proposta: ${nicho.estrategia?.propostaEscolhida?.anguloUnico || ''}.`
-    : `Projeto baseado no input: "${inputOriginal}". Público-alvo: pessoas mais velhas (40+).`;
+    : `Projeto baseado no input: "${inputOriginal}".`;
 
   for (let i = 0; i < canais.length; i += LOTE_SIZE) {
     const lote = canais.slice(i, i + LOTE_SIZE);
@@ -220,17 +220,19 @@ async function calcularScoresIA(canais, inputOriginal, nicho = null) {
 
 Para cada canal, avalie:
 
-RECRIABILIDADE (0-100): O conteúdo pode ser adaptado para histórias voltadas ao público mais velho?
+RECRIABILIDADE (0-100): O formato e a ideia central deste canal podem ser remodelados e aprimorados por outro criador, servindo de molde replicável? Considere que o criador tem como alvo um público mais maduro (30+) e é hábil em adaptar temas diversos para esse público. Portanto, um tema que não seja obviamente voltado a esse público ainda pode receber nota ALTA se houver um ângulo plausível de adaptação. Não penalize um canal só por o tema parecer distante do público 30+; avalie se existe uma ponte de adaptação.
 
 OPORTUNIDADE (0-100): Existe demanda não atendida que esse canal está começando a servir?
 
 GAP DE DEMANDA (0-10): Quanto maior, mais gente quer esse conteúdo e menos canais bons existem servindo. Canais com crescimento rápido e poucos vídeos = gap alto. Canais grandes estagnados = gap baixo.
 
-Cada linha de canal traz, após o nome: número de inscritos, média de views dos vídeos em alta, e quantidade de vídeos em alta encontrados. Um canal com POUCOS vídeos em alta e média de views ALTA é o sinal mais forte de oportunidade emergente — uma ideia nova pegando tração. Um canal com média de views perto de zero, ou sem vídeos em alta, é fraco e deve receber gap de demanda baixo, mesmo que os títulos pareçam bons.
+Cada linha de canal traz, após o nome: número de inscritos, média de views dos vídeos em alta, e quantidade de vídeos em alta encontrados. Interprete esses números assim: um canal com VÁRIOS vídeos mantendo uma média de views razoável é o sinal MAIS FORTE de oportunidade — indica ideia consistente e repetível, ideal para modelar (gap de demanda alto). Um canal com apenas 1 ou 2 vídeos com muitas views e o restante zerado NÃO é sinal forte: pode ser sorte ou ideia sem fôlego; trate como ALERTA e dê gap de demanda intermediário (nem topo, nem fundo) — a ideia pode ser boa mas mal executada. Um canal com média de views perto de zero, ou sem vídeos em alta, é fraco (gap de demanda baixo), mesmo que os títulos pareçam bons.
 
 CLUSTER SEMANTICO: Em poucas palavras, qual é a identidade semântica desse canal? Que pergunta ele responde? Para qual espectador em qual momento?
 
 INTENCAO DO PUBLICO: O espectador quer aprender, validar emocionalmente, resolver problema urgente ou se entreter com profundidade?
+
+No campo potencialModelagem, se o tema não for obviamente para público 30+, sugira em uma linha um ângulo concreto de como adaptar esse tema para esse público.
 
 Retorne APENAS JSON. Máximo 80 chars por campo de texto.
 {"avaliacoes":[{
