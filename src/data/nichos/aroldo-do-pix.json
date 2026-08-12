@@ -437,6 +437,141 @@
         }
       ],
       "anguloProibido": null
+    },
+    {
+      "data": "2026-08-12T21:09:03.567Z",
+      "temas": [
+        "Rendas extras após os 40, além da aposentadoria"
+      ],
+      "titulosGerados": [
+        {
+          "texto": "Eu tinha 58 anos quando entendi que trabalhar mais nunca ia me deixar rico — e comecei diferente",
+          "estrutura": "Confissão temporal",
+          "scoreSemantico": {
+            "demandaAtual": 9,
+            "saturacao": 3,
+            "clarezaDeAudiencia": "alta",
+            "potencialDeSessao": "alto",
+            "coerenciaSemantica": "alta",
+            "intencaoDominante": "validar"
+          }
+        },
+        {
+          "texto": "Por que homem de 50 anos trabalha o dobro e ganha a metade — enquanto outros ganham dormindo",
+          "estrutura": "Endereçamento direto",
+          "scoreSemantico": {
+            "demandaAtual": 8,
+            "saturacao": 4,
+            "clarezaDeAudiencia": "alta",
+            "potencialDeSessao": "alto",
+            "coerenciaSemantica": "alta",
+            "intencaoDominante": "resolver"
+          }
+        },
+        {
+          "texto": "O tanque de tilápia que me paga mais que 40 anos de carteira assinada — e ninguém me ensinou isso antes",
+          "estrutura": "Revelação de segredo",
+          "scoreSemantico": {
+            "demandaAtual": 7,
+            "saturacao": 2,
+            "clarezaDeAudiencia": "alta",
+            "potencialDeSessao": "médio",
+            "coerenciaSemantica": "alta",
+            "intencaoDominante": "aprender"
+          }
+        }
+      ],
+      "anguloProibido": null
+    },
+    {
+      "data": "2026-08-12T21:26:01.092Z",
+      "temas": [
+        "Rendas extras após os 40, além da aposentadoria"
+      ],
+      "titulosGerados": [
+        {
+          "texto": "Eu tinha 58 anos quando entendi que trabalhar mais nunca ia me deixar rico — e comecei diferente",
+          "estrutura": "Confissão Temporal",
+          "scoreSemantico": {
+            "demandaAtual": 9,
+            "saturacao": 3,
+            "clarezaDeAudiencia": "alta",
+            "potencialDeSessao": "alto",
+            "coerenciaSemantica": "alta",
+            "intencaoDominante": "validar"
+          }
+        },
+        {
+          "texto": "Por que homem de 50 anos trabalha o dobro e ganha a metade — enquanto outros ganham dormindo",
+          "estrutura": "Endereçamento Direto",
+          "scoreSemantico": {
+            "demandaAtual": 8,
+            "saturacao": 4,
+            "clarezaDeAudiencia": "alta",
+            "potencialDeSessao": "alto",
+            "coerenciaSemantica": "alta",
+            "intencaoDominante": "resolver"
+          }
+        },
+        {
+          "texto": "O tanque de tilápia que me paga mais que 40 anos de carteira assinada — e ninguém me ensinou isso antes",
+          "estrutura": "Revelação de Segredo",
+          "scoreSemantico": {
+            "demandaAtual": 8,
+            "saturacao": 2,
+            "clarezaDeAudiencia": "alta",
+            "potencialDeSessao": "alto",
+            "coerenciaSemantica": "alta",
+            "intencaoDominante": "aprender"
+          }
+        }
+      ],
+      "anguloProibido": null
+    },
+    {
+      "data": "2026-08-12T21:43:12.101Z",
+      "temas": [
+        "Rendas extras após os 40, além da aposentadoria"
+      ],
+      "titulosGerados": [
+        {
+          "texto": "Eu tinha 58 anos quando entendi que meu salário nunca ia me deixar rico — e comecei a criar renda do jeito certo",
+          "estrutura": "Confissão Temporal",
+          "scoreSemantico": {
+            "demandaAtual": 8,
+            "saturacao": 3,
+            "clarezaDeAudiencia": "alta",
+            "potencialDeSessao": "alto",
+            "coerenciaSemantica": "alta",
+            "intencaoDominante": "aprender"
+          }
+        },
+        {
+          "texto": "Por que homem de 50 anos trabalha a vida inteira e nunca sobra nada — enquanto outros ganham dormindo",
+          "estrutura": "Endereçamento Direto",
+          "scoreSemantico": {
+            "demandaAtual": 9,
+            "saturacao": 4,
+            "clarezaDeAudiencia": "alta",
+            "potencialDeSessao": "alto",
+            "coerenciaSemantica": "alta",
+            "intencaoDominante": "validar"
+          }
+        },
+        {
+          "texto": "O erro que cometi aos 45 achando que aposentadoria ia me salvar — e os 3 caminhos que descobri tarde demais",
+          "estrutura": "Consequência Revelada",
+          "scoreSemantico": {
+            "demandaAtual": 8,
+            "saturacao": 3,
+            "clarezaDeAudiencia": "alta",
+            "potencialDeSessao": "médio",
+            "coerenciaSemantica": "alta",
+            "intencaoDominante": "resolver"
+          }
+        }
+      ],
+      "anguloProibido": null
     }
   ],
   "identidadeSemantica": {

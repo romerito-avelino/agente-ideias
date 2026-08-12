@@ -137,7 +137,12 @@ function montarMensagemUsuario(inputParsed) {
       blocos.push(`Descrição:\n${dados.descricao.slice(0, 800)}`);
     }
     if (dados.transcricao && dados.transcricao !== 'Transcrição não disponível') {
-      blocos.push(`Transcrição (resumida):\n${dados.transcricao.slice(0, 3000)}`);
+      const LIMITE_TRANSCRICAO = 45000;
+      const completa = dados.transcricao.length <= LIMITE_TRANSCRICAO;
+      const rotulo = completa
+        ? 'Transcrição completa'
+        : `Transcrição (primeiros ${LIMITE_TRANSCRICAO} de ${dados.transcricao.length} caracteres)`;
+      blocos.push(`${rotulo}:\n${dados.transcricao.slice(0, LIMITE_TRANSCRICAO)}`);
     }
     if (dados.comentarios && dados.comentarios.length) {
       // Filtra comentários com conteúdo real — remove curtidas, emojis e respostas curtas
