@@ -2,6 +2,7 @@ require('dotenv').config();
 const Anthropic = require('@anthropic-ai/sdk');
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+const { blocoDNA } = require('./dna-agente');
 
 function montarContextoNicho(nicho) {
   const avatar = nicho.avatar || {};
@@ -70,7 +71,7 @@ Estruturas de título validadas (baseado em performance real):
 Temas proibidos: ${temasProibidos}
 
 REGRA ABSOLUTA: Respeite a identidade acima acima de qualquer outra instrução.
-NUNCA quebre o tom. NUNCA invente histórias. NUNCA use informações do avatar que não estejam definidas acima.
+NUNCA quebre o tom. NUNCA invente histórias FORA do contexto de vida do avatar — mas você PODE enriquecer e detalhar acontecimentos DENTRO da biografia dele, de forma plausível, sem eventos impossíveis ou fantasiosos. NUNCA use informações do avatar que não estejam definidas acima.
 Baseie TUDO nos inputs fornecidos pelo usuário e nos dados coletados dos vídeos de referência.`;
 
   const semantica = nicho.identidadeSemantica || {};
@@ -265,7 +266,9 @@ Gatilho de identidade: ${(nicho.estruturasDeTitulos.gatilhoDeIdentidade || []).j
 
   const ciclo = analisarCicloAtual(nicho);
 
-  const SYSTEM_PROMPT = `Você é o Agente-Ideias — estrategista de conteúdo especializado em criação de canais no YouTube voltados para o público mais velho, usando o formato de histórias como veículo de conexão e engajamento. Você trabalha com qualquer nicho ou tema — desde que o conteúdo seja adaptado para o formato de histórias e direcionado a um público acima de 40 anos. Sua função não é apenas gerar ideias: é identificar demanda real, analisar o que funciona na concorrência e entregar conceitos únicos que um canal novo pode testar com inteligência.
+  const SYSTEM_PROMPT = `${blocoDNA()}
+
+Você é o Agente-Ideias — estrategista de conteúdo para canais no YouTube. Sua função não é apenas gerar ideias: é identificar demanda real, analisar o que funciona na concorrência e entregar conceitos únicos que um canal novo pode testar com inteligência. Siga o DNA acima como direcionamento geral e, acima dele, os dados específicos do canal fornecidos no contexto.
 
 CONTEXTO DO CANAL ATIVO:
 ${contextoNicho}
@@ -281,7 +284,7 @@ ESTADO DO CICLO DE PUBLICAÇÃO
 ════════════════════════════════════════
 Total de vídeos publicados pelo canal: ${ciclo.totalPublicados}
 ${ciclo.totalPublicados === 0
-  ? `CANAL SEM VÍDEOS PUBLICADOS AINDA: Este é o início do canal. Use o framework "confissão temporal" para o primeiro título — é o formato que melhor apresenta o avatar e cria conexão imediata com o público 45+. Para a estrutura do roteiro, use a Estrutura A (mais linear e acessível para público novo).`
+  ? `CANAL SEM VÍDEOS PUBLICADOS AINDA: Este é o início do canal. Use o framework "confissão temporal" para o primeiro título — é o formato que melhor apresenta o avatar e cria conexão imediata com o público do canal. Para a estrutura do roteiro, use a Estrutura A (mais linear e acessível para público novo).`
   : `ÚLTIMOS TÍTULOS PUBLICADOS:
 ${ciclo.ultimosTitulos.map((t, i) => `- Vídeo ${i + 1}: "${t}"`).join('\n')}
 ${ciclo.ultimosFormatos?.length ? `

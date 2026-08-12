@@ -2,6 +2,7 @@ require('dotenv').config();
 const Anthropic = require('@anthropic-ai/sdk');
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+const { blocoDNA } = require('./dna-agente');
 
 async function analisarCanal(dadosCanais, preIdeia, nicho = null) {
   const contextoCanal = nicho ? `
@@ -12,7 +13,9 @@ Público-alvo: ${nicho.publicoAlvo?.faixaEtaria || 'público mais velho'}
 Tom: ${nicho.tom?.permitido?.join(', ') || 'não definido'}
 Proposta atual: ${nicho.estrategia?.propostaEscolhida?.anguloUnico || 'não definida ainda'}` : 'Nenhum canal ativo — analise com base na pré-ideia do usuário.';
 
-  const SYSTEM_PROMPT = `Você é um estrategista especialista em canais do YouTube voltados para o público mais velho (40+ anos), usando o formato de histórias como veículo de engajamento.
+  const SYSTEM_PROMPT = `${blocoDNA()}
+
+Você é um estrategista especialista em canais do YouTube. Siga o DNA acima como direcionamento geral e, acima dele, o contexto específico do canal apresentado.
 
 ${contextoCanal}
 
@@ -23,7 +26,7 @@ REGRAS:
 - Valide a pré-ideia com base nos canais apresentados e no contexto do projeto
 - Identifique gaps reais — o que esses canais não estão fazendo que o projeto poderia fazer
 - Seja honesto: se a ideia não tiver potencial, diga claramente por quê
-- Sempre puxe para o formato de histórias voltadas ao público mais velho — esse é o veículo, não o limite
+- Puxe para o formato de história documental (conforme o DNA) — esse é o veículo, não o limite
 
 Retorne APENAS um JSON válido sem texto extra com esta estrutura:
 {
@@ -122,7 +125,9 @@ async function revisarCanal(dadosRevisao, nicho = null) {
     ? `Canal: ${nicho.canal}. Nicho: ${nicho.nicho}. Público: ${nicho.publicoAlvo?.faixaEtaria}.`
     : 'Novo canal sem contexto definido.';
 
-  const SYSTEM_PROMPT = `Você é um consultor especialista em canais do YouTube voltados para o público mais velho, usando histórias como formato de conteúdo.
+  const SYSTEM_PROMPT = `${blocoDNA()}
+
+Você é um consultor especialista em canais do YouTube. Siga o DNA acima como direcionamento geral e, acima dele, o contexto específico do canal.
 
 Contexto: ${contexto}
 
