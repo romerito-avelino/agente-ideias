@@ -465,23 +465,32 @@ Essa história pode ser:
 O CONTEÚDO do vídeo de referência vira o NÚCLEO DA HISTÓRIA do avatar.
 A VOZ, o TOM e os DETALHES são sempre do avatar — nunca do vídeo original.
 
+REGRA DE FIDELIDADE (crucial):
+- Se o vídeo de referência é sobre OUTRA pessoa (um terceiro), o avatar usa TESTEMUNHO ("vi acontecer com um conhecido...") ou RELATO OUVIDO ("me contaram de um sujeito que..."). NUNCA finge que a história aconteceu com ele.
+- VIVÊNCIA PRÓPRIA em 1ª pessoa só quando o fato realmente pertence à biografia do avatar definida no canal.
+- PRESERVE os detalhes que tornam a história única (quem é o protagonista, o lugar, o que ele fez de específico, quem o ajudou). Não dilua tudo em generalidade — o específico é o que prende. Ex.: se a história é de um rapaz de 17 anos que juntou colmeias abandonadas e teve um velho apicultor como mestre, esses elementos DEVEM aparecer no relato, não sumir.
+
 REGRA DE OURO DA TRANSFORMAÇÃO:
 O espectador que assistiu ao vídeo de referência deve assistir ao vídeo do canal
 e ter a sensação de: "Eu nunca tinha pensado nisso dessa forma."
 Não é cópia. Não é resumo. É reinterpretação com alma.
 
-ETAPA 3 — EMBALAGEM COMO HISTÓRIA
-Toda ideia gerada deve ter uma estrutura narrativa clara:
-- ABERTURA: o avatar já está no meio da história (in media res) ou faz uma pergunta que prende
-- DESENVOLVIMENTO: os fatos reais embalados em narrativa pessoal do avatar
-- VIRADA: o momento em que o espectador entende a lição sem que ela seja explicitada
-- EXTRAÇÃO: a lição ou informação dita claramente, com as palavras do avatar
-- FECHAMENTO: uma reflexão que fica — algo que o espectador vai repetir para alguém
+ETAPA 3 — EMBALAGEM COMO HISTÓRIA (ESPINHA CANÔNICA)
+Todo roteiro segue esta espinha de ingredientes, adaptada ao ritmo da estrutura escolhida (A/B/C):
+- GANCHO: o avatar abre com uma vivência REAL dele (1ª pessoa) ou uma pergunta que prende — in media res.
+- CAUSO: o conteúdo do vídeo de referência, contado como relato (testemunho ou ouvido), preservando o que o torna específico e único.
+- PONTE: o avatar conecta o causo com a própria vida e com a realidade do público — aqui mora a virada, o momento em que a lição aparece sem ser explicada.
+- OPINIÃO: o avatar TOMA UM LADO. Defende uma posição (lado A ou lado B), usa os comentários A FAVOR para reforçar seu ponto e levanta um comentário CONTRA para refutá-lo. Opinião gera conexão: o avatar pode agradar e desagradar no mesmo vídeo, mas sempre se posiciona e escolhe um lado no final.
+- LIÇÃO + CTA: a lição dita claramente com as palavras do avatar, seguida da chamada para ação — algo que o espectador vai repetir para alguém.
+A estrutura A/B/C define o RITMO e a ORDEM de revelação; a espinha define os INGREDIENTES que não podem faltar em nenhum roteiro.
 
 ETAPA 4 — VERIFICAÇÃO FINAL ANTES DE RETORNAR
 Responda internamente antes de finalizar:
 - A ideia gerada usa fatos reais do vídeo de referência como base? Se não — revise.
 - O avatar conta isso como história, não como análise ou resumo? Se não — reescreva.
+- Se a história é sobre um terceiro, foi contada como relato (testemunho/ouvido) e NÃO como vivência fabricada do avatar? Se não — corrija.
+- Os detalhes específicos do vídeo (protagonista, lugar, o que houve de único) foram preservados? Se viraram genéricos — resgate-os.
+- O avatar tomou um lado claro (opinião) e usou ao menos um comentário a favor e um contra? Se não — inclua.
 - O espectador vai aprender algo real e aplicável ao sair? Se não — reforce a extração.
 - A voz da ideia soa como o avatar falaria — com seu tom, expressões e perspectiva? Se não — recalibre.
 

@@ -572,6 +572,141 @@
         }
       ],
       "anguloProibido": null
+    },
+    {
+      "data": "2026-08-13T20:29:31.479Z",
+      "temas": [
+        "O que esse vídeo tem de mais forte que eu posso adaptar pro meu público"
+      ],
+      "titulosGerados": [
+        {
+          "texto": "Eu tinha 58 anos quando juntei o que todo mundo jogou fora — e construí o que ninguém acreditava",
+          "estrutura": "Confissão temporal",
+          "scoreSemantico": {
+            "demandaAtual": 8,
+            "saturacao": 3,
+            "clarezaDeAudiencia": "alta",
+            "potencialDeSessao": "alto",
+            "coerenciaSemantica": "alta",
+            "intencaoDominante": "validar"
+          }
+        },
+        {
+          "texto": "Por que homem de 50 anos joga fora o que podia ter salvado a aposentadoria dele",
+          "estrutura": "Endereçamento direto",
+          "scoreSemantico": {
+            "demandaAtual": 7,
+            "saturacao": 4,
+            "clarezaDeAudiencia": "alta",
+            "potencialDeSessao": "médio",
+            "coerenciaSemantica": "alta",
+            "intencaoDominante": "aprender"
+          }
+        },
+        {
+          "texto": "O que todo mundo descartou virou minha maior fonte de renda depois dos 60",
+          "estrutura": "Revelação de segredo",
+          "scoreSemantico": {
+            "demandaAtual": 7,
+            "saturacao": 3,
+            "clarezaDeAudiencia": "média",
+            "potencialDeSessao": "alto",
+            "coerenciaSemantica": "alta",
+            "intencaoDominante": "resolver"
+          }
+        }
+      ],
+      "anguloProibido": null
+    },
+    {
+      "data": "2026-08-13T21:40:20.644Z",
+      "temas": [
+        "como aproveitar o que os outros descartam para construir renda na aposentadoria"
+      ],
+      "titulosGerados": [
+        {
+          "texto": "Eu tinha 58 anos quando comecei a juntar o que todo mundo jogava fora — e construí o que ninguém acreditava",
+          "estrutura": "Confissão temporal",
+          "scoreSemantico": {
+            "demandaAtual": 8,
+            "saturacao": 2,
+            "clarezaDeAudiencia": "alta",
+            "potencialDeSessao": "alto",
+            "coerenciaSemantica": "alta",
+            "intencaoDominante": "validar"
+          }
+        },
+        {
+          "texto": "Por que homem de 60 anos vê lixo onde outros veem renda — e paga caro por isso até morrer",
+          "estrutura": "Endereçamento direto",
+          "scoreSemantico": {
+            "demandaAtual": 7,
+            "saturacao": 3,
+            "clarezaDeAudiencia": "alta",
+            "potencialDeSessao": "alto",
+            "coerenciaSemantica": "alta",
+            "intencaoDominante": "resolver"
+          }
+        },
+        {
+          "texto": "O que meu vizinho descartou virou minha maior fonte de renda depois dos 60 — e ninguém me ensinou isso",
+          "estrutura": "Revelação de segredo",
+          "scoreSemantico": {
+            "demandaAtual": 8,
+            "saturacao": 2,
+            "clarezaDeAudiencia": "alta",
+            "potencialDeSessao": "médio",
+            "coerenciaSemantica": "alta",
+            "intencaoDominante": "aprender"
+          }
+        }
+      ],
+      "anguloProibido": null
+    },
+    {
+      "data": "2026-08-28T22:11:06.098Z",
+      "temas": [
+        "como aproveitar o que os outros descartam para construir renda na aposentadoria"
+      ],
+      "titulosGerados": [
+        {
+          "texto": "Eu tinha 58 anos quando comecei a juntar o que todo mundo jogava fora — e construí o que ninguém acreditava",
+          "estrutura": "Confissão temporal",
+          "scoreSemantico": {
+            "demandaAtual": 8,
+            "saturacao": 2,
+            "clarezaDeAudiencia": "alta",
+            "potencialDeSessao": "alto",
+            "coerenciaSemantica": "alta",
+            "intencaoDominante": "validar"
+          }
+        },
+        {
+          "texto": "Por que homem de 60 anos vê lixo onde outros veem renda — e paga caro por isso até morrer",
+          "estrutura": "Endereçamento direto",
+          "scoreSemantico": {
+            "demandaAtual": 7,
+            "saturacao": 3,
+            "clarezaDeAudiencia": "alta",
+            "potencialDeSessao": "alto",
+            "coerenciaSemantica": "alta",
+            "intencaoDominante": "aprender"
+          }
+        },
+        {
+          "texto": "O que meu vizinho descartou virou minha maior fonte de renda depois dos 60 — e ninguém me ensinou isso",
+          "estrutura": "Revelação de segredo",
+          "scoreSemantico": {
+            "demandaAtual": 8,
+            "saturacao": 2,
+            "clarezaDeAudiencia": "alta",
+            "potencialDeSessao": "médio",
+            "coerenciaSemantica": "alta",
+            "intencaoDominante": "resolver"
+          }
+        }
+      ],
+      "anguloProibido": null
     }
   ],
   "identidadeSemantica": {
