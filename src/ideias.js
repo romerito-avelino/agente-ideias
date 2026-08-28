@@ -619,6 +619,16 @@ Antes de finalizar, responda internamente:
 Se qualquer resposta for negativa — corrija antes de retornar.
 
 ════════════════════════════════════════
+ÂNGULO ALTERNATIVO (além do tema fornecido)
+════════════════════════════════════════
+O tema fornecido pelo usuário é PRIORIDADE e deve ser atendido nos títulos e roteiros.
+MAS, se ao analisar o vídeo de referência você identificar um ângulo de MAIOR potencial de
+audiência que foge do tema pedido, NÃO o descarte silenciosamente. Registre-o no campo
+"anguloAlternativo": descreva o ângulo em 1-2 frases e explique por que ele pode performar
+melhor para o público deste canal. Você SUGERE; o criador DECIDE se usa.
+Se não houver nenhum ângulo relevante fora do tema, deixe "anguloAlternativo" como "" (vazio).
+
+════════════════════════════════════════
 FORMATO DE RESPOSTA — SIGA EXATAMENTE ESTA ESTRUTURA, SEM ADICIONAR CAMPOS EXTRAS:
 ════════════════════════════════════════
 
@@ -633,12 +643,13 @@ FORMATO DE RESPOSTA — SIGA EXATAMENTE ESTA ESTRUTURA, SEM ADICIONAR CAMPOS EXT
   "ideiaDeCapa": "descrição visual da thumbnail aqui",
   "gatilhos": ["gatilho 1", "gatilho 2", "gatilho 3", "gatilho 4", "gatilho 5"],
   "ganchos": ["gancho comentários", "gancho compartilhamento", "gancho inscrição"],
-  "estruturaRoteiro": ["estrutura opção 1... DIFERENCIAL EM RELAÇÃO AOS CONCORRENTES: ...", "estrutura opção 2... DIFERENCIAL EM RELAÇÃO AOS CONCORRENTES: ...", "estrutura opção 3... DIFERENCIAL EM RELAÇÃO AOS CONCORRENTES: ..."]
+  "estruturaRoteiro": ["estrutura opção 1... DIFERENCIAL EM RELAÇÃO AOS CONCORRENTES: ...", "estrutura opção 2... DIFERENCIAL EM RELAÇÃO AOS CONCORRENTES: ...", "estrutura opção 3... DIFERENCIAL EM RELAÇÃO AOS CONCORRENTES: ..."],
+  "anguloAlternativo": "vazio \"\" se não houver; caso contrário, o ângulo fora do tema em 1-2 frases + por que pode performar melhor"
 }
 
 REGRAS ABSOLUTAS DO JSON:
 - Retorne APENAS o JSON. Nenhum texto antes ou depois.
-- Não adicione campos que não estão no formato acima (sem extracaoDeValor, sem thumbnailTitle, sem justificativa, sem modo).
+- Não adicione campos que não estão no formato acima. Os campos permitidos são exatamente: titulos, thumbTitulos, sinopse, ideiaDeCapa, gatilhos, ganchos, estruturaRoteiro, anguloAlternativo. Não crie nenhum outro campo.
 - thumbTitulos é um array simples de 3 strings. Máximo 5 palavras cada. Tudo em maiúsculas.
 - titulos é um array de 3 objetos com exatamente os campos: texto, estrutura, scoreSemantico.
 - scoreSemantico tem exatamente 6 campos: demandaAtual (número 0-10), saturacao (número 0-10), clarezaDeAudiencia (string), potencialDeSessao (string), coerenciaSemantica (string), intencaoDominante (string).

@@ -2048,6 +2048,14 @@
       <div id="titulos"></div>
     </div>
 
+    <!-- ÂNGULO ALTERNATIVO -->
+    <div class="resultado-card" id="cardAnguloAlternativo" style="display:none">
+      <div class="card-header">
+        <div class="card-title"><span>💡</span> Ângulo alternativo que o motor enxergou</div>
+      </div>
+      <div id="anguloAlternativo" class="sinopse-text"></div>
+    </div>
+
     <!-- SINOPSE -->
     <div class="resultado-card">
       <div class="card-header">
@@ -3027,6 +3035,14 @@
     renderGatilhos(data.gatilhos || []);
     renderGanchos(data.ganchos || []);
     renderEstruturas(data.estruturaRoteiro || []);
+
+    const cardAngulo = document.getElementById('cardAnguloAlternativo');
+    if (data.anguloAlternativo && data.anguloAlternativo.trim()) {
+      document.getElementById('anguloAlternativo').textContent = data.anguloAlternativo;
+      cardAngulo.style.display = 'block';
+    } else {
+      cardAngulo.style.display = 'none';
+    }
 
     tituloEscolhido = null;
     thumbnailTitleEscolhido = null;
